@@ -21,7 +21,7 @@
 
 
 /** tokeny - cisla od 101 do n */
-//klíèová slova
+//klícová slova
 #define TOK_INT 107         // keyword int
 #define TOK_DOUBLE 108      // keyword double
 #define TOK_ELSE 115    // key word else
