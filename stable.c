@@ -2,7 +2,7 @@
 #include <malloc.h>
 #include "str.h"
 #include "stable.h"
- 
+
 void tableInit(tSymbolTable *T)
 // inicializace tabulky
 {
@@ -111,7 +111,7 @@ void tableItemDelete ( tSymbolTable *T, string *key) {
   if (found){
      preptr->nextItem = ptr->nextItem;
      free(&ptr->key);
-     strFree(&ptr->data.varValue);
+     strFree(&ptr->data.varValue.s);
   }
 }
 
@@ -124,7 +124,7 @@ void tableFree(tSymbolTable *T)
      ptr = T->first;
      T->first = T->first->nextItem;
      // uvolneni dat a klice
-     strFree(&ptr->data.varValue);
+     strFree(&ptr->data.varValue.s);
      strFree(&ptr->key);
      // nakonec uvolnime celou polozku
      free(ptr);
