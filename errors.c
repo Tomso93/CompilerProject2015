@@ -58,7 +58,7 @@ void printerror(int errornumber){
     case SUCCESS:
       break;
 
-    default
+    default:
       fprintf(stderr, "Error %d: intern error", errornumber);
       break;
   }
