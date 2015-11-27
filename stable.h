@@ -1,11 +1,15 @@
 // definice jednotlivych typu
 
-
+typedef union {
+  int i;
+  double d;
+  string s;
+}Tvalue;
 
 typedef struct
 {
   int varType;  // typ dane promenne
-  string varValue;
+  Tvalue varValue;
 } tData;
 
 typedef struct tableItem
