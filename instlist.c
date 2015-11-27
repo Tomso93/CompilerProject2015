@@ -5,8 +5,11 @@
  *	
  */
 
+#include <stdbool.h>
 #include <stdio.h>
 #include <malloc.h>
+#include "str.h"
+#include "stable.h"
 #include "instlist.h"
 #include "define.h"
 
@@ -62,8 +65,12 @@ int ListGoto(TinstList *L, Tdata *dest){
 
   L->act = L->first;
   while ( (!found) || (L->act->nextInst != NULL) ){
-    if ( (L->act->inst.itype == ILABEL) && (*(L->act->inst.src1) == *dest) ){
-      found = true;
+    if (L->act->inst.itype == ILABEL){
+      if (strCmpString(&(L->act->inst.src1->varValue.s), &(dest->varValue.s)) == 0){
+        found = true;
+      }else{
+        L->act = L->act->nextInst;
+      }
     }else{
       L->act = L->act->nextInst;
     }
