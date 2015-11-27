@@ -21,7 +21,7 @@
 
 
 /** tokeny - cisla od 101 do n */
-//klÌcov· slova
+//kl√≠cov√° slova
 #define TOK_INT 107         // keyword int
 #define TOK_DOUBLE 108      // keyword double
 #define TOK_ELSE 115    // key word else
@@ -33,7 +33,7 @@
 #define TOK_FOR 121     // key word for
 #define TOK_COUT 122   // key word count
 
-//oper·tory
+//oper√°tory
 #define TOK_ADDITION 101        // +
 #define TOK_SUBTRACTION 102     // -
 #define TOK_MULTIPLICATION 103  // *
@@ -45,22 +45,22 @@
 #define TOK_COMPARISON 111  // ==
 #define TOK_EQUALS 112      // =
 
-//identifik·tor
+//identifik√°tor
 #define TOK_ID 109          // ID
 
-//¯etÏzecov· konstanta
+//√∏et√¨zecov√° konstanta
 #define TOK_STR 134
 
-//re·ln· konstanta
+//re√°ln√° konstanta
 #define TOK_REAL_NUMBER 133 // realnumber
 
-//celoËÌseln· konstanta
+//celo√®√≠seln√° konstanta
 #define TOK_DECIMAL_NUMBER 113 // cele cislo (rozsah C-int)
 
 //double
 #define TOK_FLOATING_POINT_NUMBER 114 // necele cislo (0.1, 5.889, ...)
 
-//jednotlivÈ znaky
+//jednotliv√© znaky
 #define TOK_LEFT_BRACKET 123    // (
 #define TOK_RIGHT_BRACKET 124    // )
 #define TOK_DOT 125 // .
@@ -79,3 +79,50 @@
 /** ErrorCodes - cisla od  do n */
 #define LEX_ERROR 1 // chyba lex. analyzy
 
+
+//chyby programu
+
+#define LEXICAL_ERROR	1  //lexikalni chyba
+#define SYNTAX_ERROR	2  //syntakticka chyba
+#define DEFINE_ERROR	3  //nedefinovana fce/prom, redefinace fce/prom
+#define TYPE_ERROR	4  //typova nekompatibilita operace, spatny pocet param
+#define CONVERT_ERROR	5  //chyba odvozovani datoveho typu
+#define SEMANTIC_ERROR	6  //ostatni semanticke chyby
+#define READ_NUM_ERROR	7  //chyba pri cteni cisla ze vstupu
+#define UNINIT_ERROR	8  //prace s neinicializovanou prom
+#define ZERO_DIV_ERROR	9  //deleni nuou
+#define RUNTIME_ERROR	10 //ostatni behove chyby
+#define INTERN_ERROR	99 //interni chyba interpretu
+#define SUCCESS		0  //bez chyb
+
+
+// typy instrukci - cisla 900 - 950
+
+#define IMOV	 900	//:=
+#define IADD	 901	//+
+#define ISUB	 902	//-
+#define IMUL	 903	//*
+#define IDIV	 904	//div
+#define IEQUAL	 905	//=
+#define ISMALL	 906	//<
+#define IBIG	 907	//>
+#define IEQSM	 908	//<=
+#define IEQBG	 909	//>=
+#define INOTEQ	 910	//!=
+#define INOT	 911	//not
+//#define IAND	 912	//and -neimplementovano
+//#define IOR	 913	//or  -neimplementovano
+#define ILABEL	 914	//navesti
+#define IGOTO	 915	//skok
+#define IIFGOTO	 916	//podmineny skok
+#define IWRITE	 917	//write
+#define IREAD	 918	//read
+#define IREADI	 919	//read int
+#define IREADD	 920	//read double
+#define IREADS	 921	//read string
+#define IFIND	 922	//find - vestavena
+#define ISORT	 923	//sort - vestavena
+#define IEND	 924	//konec programu
+#define ICAT	 925	//konkatenace retezcu (concat) - vestavena
+#define ILENGTH	 926	//delka retezce (length) - vestavena
+//#define ISUBSTR	 927	//podretezec (substr) - vestavena	-jeste neni -- nevim jak (potrebuje 4 arg)
