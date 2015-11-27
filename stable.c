@@ -2,7 +2,7 @@
 #include <malloc.h>
 #include "str.h"
 #include "stable.h"
-
+ 
 void tableInit(tSymbolTable *T)
 // inicializace tabulky
 {
