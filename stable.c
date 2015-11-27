@@ -9,7 +9,7 @@ void tableInit(tSymbolTable *T)
   T->first = NULL;
 }
 
-tTableItem* tableInsert(tSymbolTable *T, string *key, string varType)
+tTableItem* tableInsert(tSymbolTable *T, string *key, int varType)
 // funkce vlozi do tabulky symbolu novy identifikator
 {
 
@@ -111,7 +111,6 @@ void tableItemDelete ( tSymbolTable *T, string *key) {
   if (found){
      preptr->nextItem = ptr->nextItem;
      free(&ptr->key);
-     strFree(&ptr->data.varType);
      strFree(&ptr->data.varValue);
   }
 }
@@ -125,7 +124,6 @@ void tableFree(tSymbolTable *T)
      ptr = T->first;
      T->first = T->first->nextItem;
      // uvolneni dat a klice
-     strFree(&ptr->data.varType);
      strFree(&ptr->data.varValue);
      strFree(&ptr->key);
      // nakonec uvolnime celou polozku
