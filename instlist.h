@@ -28,5 +28,5 @@ int ListInit(TinstList *L);
 int ListDespose(TinstList *L);
 int ListInsert(TinstList *L, Tinst I);
 int ListSucc(TinstList *L);
-int ListGoto(TinstList *L, Tdata *dest);
+int ListGoto(TinstList *L, tData *dest);
 Tinst *ListGetInst(TinstList *L);
