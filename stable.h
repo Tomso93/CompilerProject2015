@@ -1,8 +1,10 @@
 // definice jednotlivych typu
 
+
+
 typedef struct
 {
-  string varType;  // typ dane promenne
+  int varType;  // typ dane promenne
   string varValue;
 } tData;
 
@@ -19,7 +21,7 @@ typedef struct
 } tSymbolTable;
 
 void tableInit(tSymbolTable *T);
-tTableItem* tableInsert(tSymbolTable *T, string *key, string varType);
+tTableItem* tableInsert(tSymbolTable *T, string *key, int varType);
 tData* tableSearch(tSymbolTable *T, string *key);
 tData* tableRead ( tSymbolTable *T, string *key );
 void tableItemDelete ( tSymbolTable *T, string *key );
