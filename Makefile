@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-Wall -std=c99 -pedantic -g
-OBJECTS=main.o str.o instlist.o stable.o interpret.o errors.o ial.o parser.o lex.o string.o 3ac.o
+OBJECTS=main.o str.o instlist.o stable.o interpret.o errors.o ial.o parser.o lex.o 3ac.o
 
 all: Project
 
@@ -33,9 +33,6 @@ parser.o: parser.c parser.h define.h
 
 lex.o: lex.c lex.h define.h
 	$(CC) $(CFLAGS) -c lex.c
-
-string.o: string.c
-	$(CC) $(CFLAGS) -c string.c
 
 3ac.o: 3ac.c 3ac.h
 	$(CC) $(CFLAGS) -c 3ac.c
