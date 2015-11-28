@@ -20,7 +20,7 @@ int ListInit (TinstList *L){
   return SUCCESS;
 }
 
-int ListDispose (TinstList *L) {
+int ListDespose (TinstList *L) {
   struct listItem *pom;
 
   L->act = NULL;
