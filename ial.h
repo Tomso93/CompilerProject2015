@@ -1,4 +1,12 @@
+/*
+ *	ial.h
+ *	vestavene funkce jazyka.
+ *	Autor: Petr Zufan
+ *	
+ */
 
-string sort(string s);
-int find(string s1, string s2);
+int find(string *s, string *str);
+void FailCreate(char *s, int delka, int fail[]);
+string *sort(string *str);
+void siftdown(char *str1, int left, int right);
 string concat(string s1, string s2);
