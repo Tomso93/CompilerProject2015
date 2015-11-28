@@ -8,6 +8,9 @@
 /* ========================================================================== */
 
 #include <stdio.h>
+#include "string.h"
+#include "instlist.h"
+#include "3ac.h"
 
 int cnt = 1; // counter pro počítání hodnot generovaných proměnných
 
