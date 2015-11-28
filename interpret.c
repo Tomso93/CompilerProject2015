@@ -1,142 +1,139 @@
 /*
  *	interpret.c
- *	interpretace ridiciho programu
+ *	zaverecna interpretace ridiciho programu
  *	Autor: Petr Zufan
  *	
  */
 
 #include <stdio.h>
-#include "instlist.h" //seznamem instrukci
-#include "interpret.h"
 #include <string.h>
 #include "str.h" //soubor od Martin Kvapil. funkce pro praci s retezci
 #include "ial.h" //funkce find a sort a hashovaci tabulka
 #include "stable.h" //tabulka symbolu
+#include "instlist.h" //seznamem instrukci
 #include "define.h" //definice konstant
 #include "errors.h" 
+#include "interpret.h"
 
 
 int interpret (TinstList *LOI){
   int success = SUCCESS;
   Tinst *instr;  
 
-  instr = ListGetInstr(LOI);
+  instr = ListGetInst(LOI);
   if (instr == NULL){
     printerror(INTERN_ERROR);
     return INTERN_ERROR;
   }
 
-  while ( !(inst->itype == IEND) ){
-    switch (inst->itype){
+  while ( !(instr->itype == IEND) ){
+    switch (instr->itype){
 
       case IMOV:
-        success = move(inst->src1, inst->dest);
+        success = move(instr->src1, instr->dest);
         break;
 
       case IADD:
-        success = addition(inst->src1, inst->src2, inst->dest);
+        success = addition(instr->src1, instr->src2, instr->dest);
         break;
 
       case ISUB:
-        success = substraction(inst->src1, inst->src2, inst->dest);
+        success = substraction(instr->src1, instr->src2, instr->dest);
         break;
 
       case IMUL:
-        success = multiplication(inst->src1, inst->src2, inst->dest);
+        success = multiplication(instr->src1, instr->src2, instr->dest);
         break;
 
       case IDIV:
-        success = division(inst->src1, inst->src2, inst->dest);
+        success = division(instr->src1, instr->src2, instr->dest);
         break;
 
       case IEQUAL:
-        success = equal(inst->src1, inst->src2, inst->dest);
+        success = equal(instr->src1, instr->src2, instr->dest);
         break;
 
       case ISMALL:
-        success = smaller(inst->src1, inst->src2, inst->dest);
+        success = smaller(instr->src1, instr->src2, instr->dest);
         break;
 
       case IBIG:
-        success = bigger(inst->src1, inst->src2, inst->dest);
+        success = bigger(instr->src1, instr->src2, instr->dest);
         break;
 
       case IEQSM:
-        success = equalsmaller(inst->src1, inst->src2, inst->dest);
-        if (success){
-          return INTERPRET_ERROR;
-        }
+        success = equalsmaller(instr->src1, instr->src2, instr->dest);
         break;
 
       case IEQBG:
-        success = equalbigger(inst->src1, inst->src2, inst->dest);
+        success = equalbigger(instr->src1, instr->src2, instr->dest);
         break;
 
       case INOTEQ:
-        success = notequal(inst->src1, inst->src2, inst->dest);
+        success = notequal(instr->src1, instr->src2, instr->dest);
         break;
 
       case INOT:
-        success = negation(inst->src1, inst->dest);
+        success = negation(instr->src1, instr->dest);
         break;
 /*
       case IAND:
-        success = konjunction(inst->src1, inst->src2, inst->dest);
+        success = konjunction(instr->src1, instr->src2, instr->dest);
         break;
 
       case IOR:
-        success = disjunction(inst->src1, inst->src2, inst->dest);
+        success = disjunction(instr->src1, instr->src2, instr->dest);
         break;
 */
       case ILABEL:
         break;
 
       case IGOTO:
-        success = jump(inst->dest);
+        success = jump(instr->dest, LOI);
         break;
 
       case IIFGOTO:
-        success = jumpif(inst->src1, inst->dest);
+        success = jumpif(instr->src1, instr->dest, LOI);
         break;
 
       case IREADI:
-        success = readint(inst->dest);
+        success = readint(instr->dest);
         break;
 
       case IREADD:  
-        success = readdouble(inst->dest);
+        success = readdouble(instr->dest);
         break;
 
       case IREADS:  
-        success = readstring(inst->dest);
+        success = readstring(instr->dest);
         break;
 
       case IREAD: 
-        success = read(inst->dest);
+        success = read(instr->dest);
         break;
 
       case IWRITE:  
-        success = write(inst->src1);
+        success = write(instr->src1);
         break;
 
       case IFIND:
-        success = findme(inst->src1, inst->src2, inst->dest);
+        success = findme(instr->src1, instr->src2, instr->dest);
         break;
 
       case ISORT:
-        success = sortme(inst->src1, inst->dest);
+        success = sortme(instr->src1, instr->dest);
         break;
 
       case ICAT:
-        success = concatenate(inst->src1, inst->src2, inst->dest);
+        success = concatenate(instr->src1, instr->src2, instr->dest);
         break;
 
       case ILENGTH:
-        success = lengthstring(inst->src1, inst->dest);
+        success = lengthstring(instr->src1, instr->dest);
         break;
 /*
       case ISUBSTR:
-        success = substring(inst->src1, inst->src2, inst->dest);
+        success = substring(instr->src1, instr->src2, instr->dest);
         break;
 */
       default:
@@ -150,15 +147,20 @@ int interpret (TinstList *LOI){
       return success;
     }
     ListSucc(LOI);
+    instr = ListGetInst(LOI);
+    if (instr == NULL){
+      printerror(INTERN_ERROR);
+      return INTERN_ERROR;
+    }
   }
   ListDespose(LOI);
-  printerror(success)
+  printerror(success);
   return success;
 }
 
 //-------------------IMOV------------------------------------------------------
 
-int move(Tdata *src1, Tdata *dest){
+int move(tData *src1, tData *dest){
 
   if ( (src1->varType == TOK_INT) && (dest->varType == TOK_INT) ){
     dest->varValue.i = src1->varValue.i;
@@ -186,7 +188,7 @@ int move(Tdata *src1, Tdata *dest){
 
 //-------------------IADD------------------------------------------------------
 
-int addition(Tdata *src1, Tdata *src2, Tdata *dest){
+int addition(tData *src1, tData *src2, tData *dest){
 
   if ( (src1->varType == TOK_INT) && (src2->varType == TOK_INT) ){
      if (dest->varType == TOK_INT){
@@ -208,7 +210,7 @@ int addition(Tdata *src1, Tdata *src2, Tdata *dest){
 
   }else if ( (src1->varType == TOK_INT) && (src2->varType == TOK_DOUBLE) ){
      if (dest->varType == TOK_INT){
-       dest->varValue.i = (int)((double)src1->varValue.i + src2->varValue.d;)
+       dest->varValue.i = (int)((double)src1->varValue.i + src2->varValue.d);
        return SUCCESS;
      }else if (dest->varType == TOK_DOUBLE){
        dest->varValue.d = (double)src1->varValue.i + src2->varValue.d;
@@ -231,7 +233,7 @@ int addition(Tdata *src1, Tdata *src2, Tdata *dest){
 }
 
 //-------------------ISUB------------------------------------------------------
-int substraction(Tdata *src1, Tdata *src2, Tdata *dest){
+int substraction(tData *src1, tData *src2, tData *dest){
   
   if ( (src1->varType == TOK_INT) && (src2->varType == TOK_INT) ){
      if (dest->varType == TOK_INT){
@@ -253,7 +255,7 @@ int substraction(Tdata *src1, Tdata *src2, Tdata *dest){
 
   }else if ( (src1->varType == TOK_INT) && (src2->varType == TOK_DOUBLE) ){
      if (dest->varType == TOK_INT){
-       dest->varValue.i = (int)((double)src1->varValue.i - src2->varValue.d;)
+       dest->varValue.i = (int)((double)src1->varValue.i - src2->varValue.d);
        return SUCCESS;
      }else if (dest->varType == TOK_DOUBLE){
        dest->varValue.d = (double)src1->varValue.i - src2->varValue.d;
@@ -275,7 +277,7 @@ int substraction(Tdata *src1, Tdata *src2, Tdata *dest){
 }
 
 //-------------------IMUL------------------------------------------------------
-int multiplication(Tdata *src1, Tdata *src2, Tdata *dest){
+int multiplication(tData *src1, tData *src2, tData *dest){
 
   if ( (src1->varType == TOK_INT) && (src2->varType == TOK_INT) ){
      if (dest->varType == TOK_INT){
@@ -297,7 +299,7 @@ int multiplication(Tdata *src1, Tdata *src2, Tdata *dest){
 
   }else if ( (src1->varType == TOK_INT) && (src2->varType == TOK_DOUBLE) ){
      if (dest->varType == TOK_INT){
-       dest->varValue.i = (int)((double)src1->varValue.i * src2->varValue.d;)
+       dest->varValue.i = (int)((double)src1->varValue.i * src2->varValue.d);
        return SUCCESS;
      }else if (dest->varType == TOK_DOUBLE){
        dest->varValue.d = (double)src1->varValue.i * src2->varValue.d;
@@ -319,7 +321,7 @@ int multiplication(Tdata *src1, Tdata *src2, Tdata *dest){
 }
 
 //-------------------IDIV------------------------------------------------------
-int division(Tdata *src1, Tdata *src2, Tdata *dest){
+int division(tData *src1, tData *src2, tData *dest){
   if ( (src1->varType == TOK_INT) && (src2->varType == TOK_INT) ){
      if (src2->varValue.i == 0){
        return ZERO_DIV_ERROR;
@@ -346,7 +348,7 @@ int division(Tdata *src1, Tdata *src2, Tdata *dest){
      if (src2->varValue.d == 0.0){
        return ZERO_DIV_ERROR;
      }else if (dest->varType == TOK_INT){
-       dest->varValue.i = (int)((double)src1->varValue.i / src2->varValue.d;)
+       dest->varValue.i = (int)((double)src1->varValue.i / src2->varValue.d);
        return SUCCESS;
      }else if (dest->varType == TOK_DOUBLE){
        dest->varValue.d = (double)src1->varValue.i / src2->varValue.d;
@@ -370,7 +372,7 @@ int division(Tdata *src1, Tdata *src2, Tdata *dest){
 }
 
 //-------------------IEQUAL----------------------------------------------------
-int equal(Tdata *src1, Tdata *src2, Tdata *dest){
+int equal(tData *src1, tData *src2, tData *dest){
 
   if (dest->varType != TOK_INT){
     if (dest->varType == TOK_DOUBLE){
@@ -400,7 +402,7 @@ int equal(Tdata *src1, Tdata *src2, Tdata *dest){
 }
 
 //-------------------ISMALL----------------------------------------------------
-int smaller(Tdata *src1, Tdata *src2, Tdata *dest){
+int smaller(tData *src1, tData *src2, tData *dest){
 
   if (dest->varType != TOK_INT){
     if (dest->varType == TOK_DOUBLE){
@@ -430,7 +432,7 @@ int smaller(Tdata *src1, Tdata *src2, Tdata *dest){
 }
 
 //-------------------IBIG------------------------------------------------------
-int bigger(Tdata *src1, Tdata *src2, Tdata *dest){
+int bigger(tData *src1, tData *src2, tData *dest){
 
   if (dest->varType != TOK_INT){
     if (dest->varType == TOK_DOUBLE){
@@ -445,7 +447,7 @@ int bigger(Tdata *src1, Tdata *src2, Tdata *dest){
     dest->varValue.i = (int)(src1->varValue.d > src2->varValue.d);
     return SUCCESS;
   }else if ( (src1->varType == TOK_DOUBLE) && (dest->varType == TOK_INT) ){
-    dest->varVlue.i = (int)(src1->varValue.d > (double)src2->varValue.i);
+    dest->varValue.i = (int)(src1->varValue.d > (double)src2->varValue.i);
     return SUCCESS;
   }else if ( (src1->varType == TOK_INT) && (dest->varType == TOK_DOUBLE) ){
     dest->varValue.i = (int)((double)src1->varValue.i > src2->varValue.d);
@@ -460,7 +462,7 @@ int bigger(Tdata *src1, Tdata *src2, Tdata *dest){
 }
 
 //-------------------IEQSM-----------------------------------------------------
-int equalsmaller(Tdata *src1, Tdata *src2, Tdata *dest){
+int equalsmaller(tData *src1, tData *src2, tData *dest){
 
   if (dest->varType != TOK_INT){
     if (dest->varType == TOK_DOUBLE){
@@ -490,7 +492,7 @@ int equalsmaller(Tdata *src1, Tdata *src2, Tdata *dest){
 }
 
 //-------------------IEQBG-----------------------------------------------------
-int equalbigger(Tdata *src1, Tdata *src2, Tdata *dest){
+int equalbigger(tData *src1, tData *src2, tData *dest){
 
   if (dest->varType != TOK_INT){
     if (dest->varType == TOK_DOUBLE){
@@ -520,7 +522,7 @@ int equalbigger(Tdata *src1, Tdata *src2, Tdata *dest){
 }
 
 //-------------------INOTEQ----------------------------------------------------
-int notequal(Tdata *src1, Tdata *src2, Tdata *dest){
+int notequal(tData *src1, tData *src2, tData *dest){
 
   if (dest->varType != TOK_INT){
     if (dest->varType == TOK_DOUBLE){
@@ -534,7 +536,7 @@ int notequal(Tdata *src1, Tdata *src2, Tdata *dest){
   }else if ( (src1->varType == TOK_DOUBLE) && (dest->varType == TOK_DOUBLE) ){
     dest->varValue.i = (int)(src1->varValue.d != src2->varValue.d);
     return SUCCESS;
-  }else if ( (src1->varType == TOK_DOUBLE) && (dest->varType == ) ){
+  }else if ( (src1->varType == TOK_DOUBLE) && (dest->varType == TOK_INT) ){
     dest->varValue.i = (int)(src1->varValue.d != (double)src2->varValue.i);
     return SUCCESS;
   }else if ( (src1->varType == TOK_INT) && (dest->varType == TOK_DOUBLE) ){
@@ -550,34 +552,35 @@ int notequal(Tdata *src1, Tdata *src2, Tdata *dest){
 }
 
 //-------------------INOT------------------------------------------------------
-int negation(Tdata *src1, Tdata *dest){
+int negation(tData *src1, tData *dest){
 
   if (dest->varType != TOK_INT){
     if (dest->varType == TOK_DOUBLE){
-      dest->varType = ;
-    }else{
-      return TYPE_ERROR;
-    }else if (src1->varType == TOK_INT){
-      dest->varValue.i = (int)(src1->varValue.i == 0);
-      return SUCCESS;
-    }else if (src1->varType == TOK_DOUBLE){
-      dest->varValue.i = (int)((int)src1->varValue.d == 0);
-      return SUCCESS;
+      dest->varType = TOK_INT;
     }else{
       return TYPE_ERROR;
     }
+    
+  }else if (src1->varType == TOK_INT){
+      dest->varValue.i = (int)(src1->varValue.i == 0);
+      return SUCCESS;
+  }else if (src1->varType == TOK_DOUBLE){
+      dest->varValue.i = (int)((int)src1->varValue.d == 0);
+      return SUCCESS;
+  }else{
+      return TYPE_ERROR;
   }
   return INTERN_ERROR;
 }
 
 //-------------------IGOTO-----------------------------------------------------
-int jump(Tdata *dest){ 
+int jump(tData *dest, TinstList *LOI){ 
   return ListGoto(LOI, dest);
 }
 
 //-------------------IIFGOTO---------------------------------------------------
-int jumpif(Tdata *src1, Tdata *dest){
-  if (*src1) {
+int jumpif(tData *src1, tData *dest, TinstList *LOI){
+  if (src1->varValue.i) {
     return ListGoto(LOI, dest);
   }else{
     return SUCCESS;
@@ -586,7 +589,7 @@ int jumpif(Tdata *src1, Tdata *dest){
 }
 
 //-------------------IREADI----------------------------------------------------
-int readint(Tdata *dest){ 
+int readint(tData *dest){ 
   if (dest->varType != TOK_INT){
     return TYPE_ERROR;
   }else if (scanf("%d", &(dest->varValue.i)) < 0){
@@ -596,17 +599,17 @@ int readint(Tdata *dest){
 }
 
 //-------------------IREADD----------------------------------------------------
-int readdouble(Tdata *dest){ 
+int readdouble(tData *dest){ 
   if (dest->varType != TOK_DOUBLE){
     return TYPE_ERROR;
-  }else if (scanf("%g", &(dest->varValue.d)) < 0){
+  }else if (scanf("%lg", &(dest->varValue.d)) < 0){
     return READ_NUM_ERROR;
   }
   return SUCCESS;
 }
 
 //-------------------IREADS----------------------------------------------------
-int readstring(Tdata *dest){
+int readstring(tData *dest){
   char c;
  
   if (dest->varType != TOK_STRING){
@@ -628,7 +631,7 @@ int readstring(Tdata *dest){
 }
 
 //-------------------IREAD----------------------------------------------------
-int read(Tdata *dest){ 
+int read(tData *dest){ 
   if (dest->varType == TOK_INT){
     return readint(dest);
   }else if (dest->varType == TOK_INT){
@@ -641,32 +644,33 @@ int read(Tdata *dest){
 }
 
 //-------------------IWRITE----------------------------------------------------
-int write(Tdata *src1){ 
+int write(tData *dest){ 
   if (dest->varType == TOK_DOUBLE){
-     if (printf("%g", src1->varValue.d) < 0){
+     if (printf("%lg", dest->varValue.d) < 0){
        return RUNTIME_ERROR;
      }else{
        return SUCCESS;
      }
 
   }else if (dest->varType == TOK_INT){
-    if (printf("%d", src1->varValue.i) < 0){
+    if (printf("%d", dest->varValue.i) < 0){
        return RUNTIME_ERROR;
      }else{
        return SUCCESS;
      }
 
   }else if (dest->varType == TOK_STRING){
-    if (printf("%s", src1->varValue.s.str) < 0){
+    if (printf("%s", dest->varValue.s.str) < 0){
        return RUNTIME_ERROR;
      }else{
        return SUCCESS;
      }
+  }
   return INTERN_ERROR;
 }
 
 //-------------------ISORT-----------------------------------------------------
-int sortme(Tdata *src1, Tdata *dest){
+int sortme(tData *src1, tData *dest){
   if ( (dest->varType == TOK_STRING) && (src1->varType == TOK_STRING) ){
     dest->varValue.s = sort(src1->varValue.s);
     return SUCCESS;
@@ -677,13 +681,13 @@ int sortme(Tdata *src1, Tdata *dest){
 }
 
 //-------------------IFIND----------------------------------------------------
-int findme(Tdata *src1, Tdata *src2, Tdata *dest){
+int findme(tData *src1, tData *src2, tData *dest){
   if ( (src1->varType == TOK_STRING) && (src2->varType == TOK_STRING) ){
     if (dest->varType == TOK_INT){
-      dest->varValue.i = find(src1->varValue.s, src2->varValue.s)
+      dest->varValue.i = find(src1->varValue.s, src2->varValue.s);
       return SUCCESS;
     }else if (dest->varType == TOK_DOUBLE){
-      dest->varValue.d = (double)find(src1->varValue.s, src2->varValue.s)
+      dest->varValue.d = (double)find(src1->varValue.s, src2->varValue.s);
       return SUCCESS;
     }else{
       return TYPE_ERROR;
@@ -695,7 +699,7 @@ int findme(Tdata *src1, Tdata *src2, Tdata *dest){
 }
 
 //-------------------ILENGTH-----------------------------------------------------
-int lengthstring(Tdata *src1, Tdata *dest){
+int lengthstring(tData *src1, tData *dest){
   if ( (dest->varType == TOK_INT) && (src1->varType == TOK_STRING) ){
     dest->varValue.i = strGetLength(&(src1->varValue.s));
     return SUCCESS;
@@ -709,9 +713,9 @@ int lengthstring(Tdata *src1, Tdata *dest){
 }
 
 //-------------------ICAT-----------------------------------------------------
-int concatenate(Tdata *src1, Tdata *src2, Tdata *dest){
+int concatenate(tData *src1, tData *src2, tData *dest){
   if ( (src1->varType == TOK_STRING) && (src2->varType == TOK_STRING) && (dest->varType == TOK_STRING) ){
-    dest->varValue.s = concat(src1->varValue.s, src2->varValue.s)
+    dest->varValue.s = concat(src1->varValue.s, src2->varValue.s);
     return SUCCESS;
   }else{
     return TYPE_ERROR;
