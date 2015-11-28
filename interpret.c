@@ -671,12 +671,19 @@ int write(tData *dest){
 
 //-------------------ISORT-----------------------------------------------------
 int sortme(tData *src1, tData *dest){
+  string *sortedstr = NULL;
+  strInit(sortedstr);
+
   if ( (dest->varType == TOK_STRING) && (src1->varType == TOK_STRING) ){
-    dest->varValue.s = sort(src1->varValue.s);
+    sortedstr = sort(&(src1->varValue.s));
+    strCopyString(&(dest->varValue.s), sortedstr);
+    strFree(sortedstr);
     return SUCCESS;
   }else{
+    strFree(sortedstr);
     return TYPE_ERROR;
   }
+  strFree(sortedstr);
   return INTERN_ERROR;
 }
 
@@ -684,10 +691,10 @@ int sortme(tData *src1, tData *dest){
 int findme(tData *src1, tData *src2, tData *dest){
   if ( (src1->varType == TOK_STRING) && (src2->varType == TOK_STRING) ){
     if (dest->varType == TOK_INT){
-      dest->varValue.i = find(src1->varValue.s, src2->varValue.s);
+      dest->varValue.i = find(&(src1->varValue.s), &(src2->varValue.s));
       return SUCCESS;
     }else if (dest->varType == TOK_DOUBLE){
-      dest->varValue.d = (double)find(src1->varValue.s, src2->varValue.s);
+	      dest->varValue.d = (double)find(&(src1->varValue.s), &(src2->varValue.s));
       return SUCCESS;
     }else{
       return TYPE_ERROR;
