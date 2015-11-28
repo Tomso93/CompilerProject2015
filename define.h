@@ -125,7 +125,7 @@
 #define IEND	 924	//konec programu
 #define ICAT	 925	//konkatenace retezcu (concat) - vestavena
 #define ILENGTH	 926	//delka retezce (length) - vestavena
-//#define ISUBSTR	 927	//podretezec (substr) - vestavena	-jeste neni -- nevim jak (potrebuje 4 arg)
+#define ISUBSTR	 927	//podretezec (substr) - vestavena	-jeste neni -- nevim jak (potrebuje 4 arg)
 
 
 
