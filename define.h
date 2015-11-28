@@ -126,3 +126,8 @@
 #define ICAT	 925	//konkatenace retezcu (concat) - vestavena
 #define ILENGTH	 926	//delka retezce (length) - vestavena
 //#define ISUBSTR	 927	//podretezec (substr) - vestavena	-jeste neni -- nevim jak (potrebuje 4 arg)
+
+
+
+#define STR_ERROR   1
+#define STR_SUCCESS 0
