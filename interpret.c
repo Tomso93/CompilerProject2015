@@ -131,11 +131,11 @@ int interpret (TinstList *LOI){
       case ILENGTH:
         success = lengthstring(instr->src1, instr->dest);
         break;
-/*
+
       case ISUBSTR:
         success = substring(instr->src1, instr->src2, instr->dest);
         break;
-*/
+
       default:
         success = INTERN_ERROR;
         break;
@@ -729,4 +729,8 @@ int concatenate(tData *src1, tData *src2, tData *dest){
   }
   return INTERN_ERROR;
 }
-  
+
+//-------------------ISUBSTR--------------------------------------------------
+int substring(instr->src1, instr->src2, instr->dest){
+  return INTERN_ERROR;
+}
