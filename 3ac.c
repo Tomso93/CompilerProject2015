@@ -8,34 +8,35 @@
 /* ========================================================================== */
 
 #include <stdio.h>
-#include "string.c"
+#include "str.h"
+#include "stable.h"
 #include "instlist.h"
 #include "3ac.h"
 
-int cnt = 1; // counter pro počítání hodnot generovaných proměnných
+int cnt = 1; // counter pro poÄŤĂ­tĂˇnĂ­ hodnot generovanĂ˝ch promÄ›nnĂ˝ch
 
-// Funkce na generování nové instrukce, která je následně vložena do seznamu instrukcí
-void genInstr(int InstType, void *src1, void *src2, void *dest)
+// Funkce na generovĂˇnĂ­ novĂ© instrukce, kterĂˇ je nĂˇslednÄ› vloĹľena do seznamu instrukcĂ­
+void genInstr(int InstType, void *src1, void *src2, void *dest, TinstList *list)
 {
     Tinst TItem;
-    TItem.itype = instType;
+    TItem.itype = InstType;
     TItem.src1 = src1;
     TItem.src2 = src2;
     TItem.dest = dest;
     ListInsert(list, TItem); 
 }
 
-// Fuknce na generování nových proměnných
-void GenNewVariable(str *item)
+// Fuknce na generovĂˇnĂ­ novĂ˝ch promÄ›nnĂ˝ch
+void GenNewVariable(string *item)
 {
-    stringClean(item);
-    stringAddItem(item, '#')
+    strClear(item);
+    strAddChar(item, '#');
     int i;
     i = cnt;
     
     while(i != 0)
     {
-        stringAddItem(item, char (i % 10 + '0')
+        strAddChar(item, (char)(i % 10 + '0'));
         i = i / 10;
     }
     cnt++;                             
