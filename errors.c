@@ -52,14 +52,14 @@ void printerror(int errornumber){
       break;
 
     case INTERN_ERROR:
-      fprintf(stderr, "Error %d: intern error", errornumber);
+      fprintf(stderr, "Error %d: intern error. You are not a dumbass. Authors are. Have a nice day.", errornumber);
       break;
 
     case SUCCESS:
       break;
 
     default:
-      fprintf(stderr, "Error %d: intern error", errornumber);
+      fprintf(stderr, "Error %d: intern error. You are not a dumbass. Authors are. Have a nice day.", errornumber);
       break;
   }
 }
