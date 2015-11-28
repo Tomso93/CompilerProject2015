@@ -6,7 +6,7 @@
  */
 
 // to do 
-//int substr();		//najde podretezec
+//int substring();		//najde podretezec
 
 int interpret(TinstList *LOI); 	//hlavni funkce. prochazi seznam instrukci
        				//a vola prislusne funkce
@@ -110,7 +110,6 @@ int lengthstring(tData *src1, tData *dest);
 //funkce v inbuild.c
 int concatenate(tData *src1, tData *src2, tData *dest);
 
-
-
-
-
+//ISUBSTR
+//jeste nedela nic. vrati chybu
+int substring(tData *src1, tData *src2, tData *dest);
