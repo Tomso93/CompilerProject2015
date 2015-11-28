@@ -13,99 +13,104 @@ int interpret(TinstList *LOI); 	//hlavni funkce. prochazi seznam instrukci
 
 //IMOV
 //dest = src1
-int move(Tdata *src1, Tdata *dest);			   
+int move(tData *src1, tData *dest);			   
 
 //IADD
 //dest = src1 + src2
-int addition(Tdata *src1, Tdata *src2, Tdata *dest);	  
+int addition(tData *src1, tData *src2, tData *dest);	  
 
 //ISUB
 //dest = src1 - src2
-int substraction(Tdata *src1, Tdata *src2, Tdata *dest);
+int substraction(tData *src1, tData *src2, tData *dest);
 
 //IMUL
 //dest = src1 * src2
-int multiplication(Tdata *src1, Tdata *src2, Tdata *dest); 
+int multiplication(tData *src1, tData *src2, tData *dest); 
 
 //IDIV
 //dest = src1 / src2
-int division(Tdata *src1, Tdata *src2, Tdata *dest);
+int division(tData *src1, tData *src2, tData *dest);
 
 //IEQUAL
 //dest = (src1 == src2)
-int equal(Tdata *src1, Tdata *src2, Tdata *dest);
+int equal(tData *src1, tData *src2, tData *dest);
 
 //ISMALL
 //dest = (src1 < src2)
-int smaller(Tdata *src1, Tdata *src2, Tdata *dest);
+int smaller(tData *src1, tData *src2, tData *dest);
 
 //IBIG
 //dest = (src1 > src2)
-int bigger(Tdata *src1, Tdata *src2, Tdata *dest);
+int bigger(tData *src1, tData *src2, tData *dest);
 
 //IEQSM
 //dest = (src1 <= src2)
-int equalsmaller(Tdata *src1, Tdata *src2, Tdata *dest);
+int equalsmaller(tData *src1, tData *src2, tData *dest);
 
 //IEQBG
 //dest = (src1 >= src2)
-int equalbigger(Tdata *src1, Tdata *src2, Tdata *dest);
+int equalbigger(tData *src1, tData *src2, tData *dest);
 
 //INOTEQ
 //dest = (src1 != src2)
-int notequal(Tdata *src1, Tdata *src2, Tdata *dest);
+int notequal(tData *src1, tData *src2, tData *dest);
 
 //INOT
 //dest = !(src1)
-int negation(Tdata *src1, Tdata *dest);	
+int negation(tData *src1, tData *dest);	
 
 //IGOTO
 //jdi na instrukci ilabel pro kterou platí:
 //igoto dest == ilabel src1
-int jump(Tdata *dest);			  
+int jump(tData *dest, TinstList *LOI);			  
 
 //IIFGOTO
 //kdyz plati src1
 //jdi na instrukci ilabel pro kterou plati
 //iifgoto dest == ilabel src1
-int jumpif(Tdata *src1, Tdata *dest);	  
+int jumpif(tData *src1, tData *dest, TinstList *LOI);	  
 
 //IREAD
 //ze stdin cte do dest
-int read(Tdata *dest);		
+int read(tData *dest);		
 
 //IREADI
 //ze stdin nacte int do dest
-int readint(Tdata *dest);		
+int readint(tData *dest);		
 
 
 //IREADD
 //ze stdin nacte double do dest
-int readdouble(Tdata *dest);		
+int readdouble(tData *dest);		
 
 //IREADS
 //ze stdin nacte string do dest
-int readstring(Tdata *dest);		
+int readstring(tData *dest);		
 
 //IWRITE
 //zapise src1 na stdout
-int write(Tdata *src1);			
+int write(tData *src1);			
 
 //ISORT
 //dest = sort(src1) funkce v ial.c
-int sortme(Tdata *src1, Tdata *dest);	
+int sortme(tData *src1, tData *dest);	
 
 //IFIND
 //dest = find(src1, src2)
 //funkce v ial.c
-int findme(Tdata *src1, Tdata *src2, Tdata *dest);  
+int findme(tData *src1, tData *src2, tData *dest);  
 
 //ILENGTH
 //dest = length(src1) 
 //funkce v inbuild.c
-int lengthstring(Tdata *src1, Tdata *dest);	
+int lengthstring(tData *src1, tData *dest);	
 
 //ICAT
 //dest=concat(src1,src2)
 //funkce v inbuild.c
-int concatenate(Tdata *src1, Tdata *src2, Tdata *dest);
+int concatenate(tData *src1, tData *src2, tData *dest);
+
+
+
+
+
