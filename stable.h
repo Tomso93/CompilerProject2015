@@ -30,3 +30,5 @@ tData* tableSearch(tSymbolTable *T, string *key);
 tData* tableRead ( tSymbolTable *T, string *key );
 void tableItemDelete ( tSymbolTable *T, string *key );
 void tableFree(tSymbolTable *T);
+
+int tableInsertValue (tSymbolTable *T, string *key, Tvalue v);
