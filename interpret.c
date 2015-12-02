@@ -143,7 +143,7 @@ int interpret (TinstList *LOI){
     }
 
     if (success){
-      ListDespose(LOI);
+      ListDispose(LOI);
       printerror(success);
       return success;
     }
@@ -154,7 +154,7 @@ int interpret (TinstList *LOI){
       return INTERN_ERROR;
     }
   }
-  ListDespose(LOI);
+  ListDispose(LOI);
   printerror(success);
   return success;
 }
