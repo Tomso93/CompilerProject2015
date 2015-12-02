@@ -15,7 +15,7 @@ typedef struct {
 
 typedef struct listItem{
 	Tinst inst;		   //aktualni instrukce
-	struct listItem *nextInst; //ukazatel na následujici instrukci
+	struct listItem *nextInst; //ukazatel na nasledujici instrukci
 }TlistItem;
 
 typedef struct {
@@ -25,7 +25,7 @@ typedef struct {
 }TinstList;
 
 int ListInit(TinstList *L);
-int ListDespose(TinstList *L);
+int ListDispose(TinstList *L);
 int ListInsert(TinstList *L, Tinst I);
 int ListSucc(TinstList *L);
 int ListGoto(TinstList *L, tData *dest);
