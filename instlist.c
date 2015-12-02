@@ -20,7 +20,7 @@ int ListInit (TinstList *L){
   return SUCCESS;
 }
 
-int ListDespose (TinstList *L) {
+int ListDispose (TinstList *L) {
   struct listItem *pom;
 
   L->act = NULL;
@@ -45,7 +45,7 @@ int ListInsert (TinstList *L, Tinst I) {
     new->nextInst = NULL;
     if (L->first == NULL){
       L->first = new;
-      L->act = L->first;
+      L->act = new;
       L->last = new;
     }else{
       L->last->nextInst = new;
