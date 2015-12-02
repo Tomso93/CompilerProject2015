@@ -7,6 +7,5 @@
 
 int find(string *s, string *str);
 void FailCreate(char *s, int delka, int fail[]);
-string *sort(string *str);
-void siftdown(char *str1, int left, int right);
-string concat(string s1, string s2);
+int sort(string *str0, string *str1);
+void siftdown(char *str1, int left, int right)
