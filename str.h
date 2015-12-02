@@ -19,3 +19,4 @@ int strCmpConstStr(string *s1, char *s2);
 
 char *strGetStr(string *s);
 int strGetLength(string *s);
+string concat(string *s1, string *s2);
