@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <malloc.h>
+#include "define.h"
 #include "str.h"
 #include "stable.h"
 
@@ -111,7 +112,9 @@ void tableItemDelete ( tSymbolTable *T, string *key) {
   if (found){
      preptr->nextItem = ptr->nextItem;
      free(&ptr->key);
-     strFree(&ptr->data.varValue.s);
+     if (ptr->data.varType == TOK_STRING){
+     	 strFree(&ptr->data.varValue.s);
+     }
   }
 }
 
@@ -124,9 +127,40 @@ void tableFree(tSymbolTable *T)
      ptr = T->first;
      T->first = T->first->nextItem;
      // uvolneni dat a klice
-     strFree(&ptr->data.varValue.s);
+     if (ptr->data.varType == TOK_STRING){
+       strFree(&ptr->data.varValue.s);
+     }
      strFree(&ptr->key);
      // nakonec uvolnime celou polozku
      free(ptr);
   }
+}
+
+
+int tableInsertValue (tSymbolTable *T, string *key, Tvalue v){
+//funkce pro vlozeni hodnoty "v" promenne s klicem "key" do tabulky symbolu "T"
+//vraci 0 pri uspechu a 1 pri neuspechu
+  tData *pom;
+  pom = tableSearch(T,key);
+
+  if (pom == NULL){
+    return 0;
+
+  }else if (pom->varType == TOK_INT){
+    pom->varValue.i = v.i;
+    return 1;
+
+  }else if (pom->varType == TOK_DOUBLE){
+    pom->varValue.d = v.d;
+    return 1;
+
+  }else if (pom->varType == TOK_STRING){
+    strInit(&(pom->varValue.s));
+    strCopyString(&(pom->varValue.s), &(v.s));
+    return 1;
+
+  }else{
+    return 0;
+  }
+  return 0;
 }
