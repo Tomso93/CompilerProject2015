@@ -60,7 +60,7 @@ int notequal(tData *src1, tData *src2, tData *dest);
 int negation(tData *src1, tData *dest);	
 
 //IGOTO
-//jdi na instrukci ilabel pro kterou platí:
+//jdi na instrukci ilabel pro kterou plati:
 //igoto dest == ilabel src1
 int jump(tData *dest, TinstList *LOI);			  
 
