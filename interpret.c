@@ -18,7 +18,8 @@
 
 int interpret (TinstList *LOI){
   int success = SUCCESS;
-  Tinst *instr;  
+  Tinst *instr;
+  LOI->act = LOI->first;  
 
   instr = ListGetInst(LOI);
   if (instr == NULL){
@@ -26,7 +27,7 @@ int interpret (TinstList *LOI){
     return INTERN_ERROR;
   }
 
-  while ( !(instr->itype == IEND) ){
+  while ( instr->itype != IEND ){
     switch (instr->itype){
 
       case IMOV:
@@ -141,7 +142,7 @@ int interpret (TinstList *LOI){
         break;
     }
 
-    if (!success){
+    if (success){
       ListDespose(LOI);
       printerror(success);
       return success;
@@ -686,19 +687,12 @@ int write(tData *src1){
 
 //-------------------ISORT-----------------------------------------------------
 int sortme(tData *src1, tData *dest){
-  string *sortedstr = NULL;
-  strInit(sortedstr);
 
   if ( (dest->varType == TOK_STRING) && (src1->varType == TOK_STRING) ){
-    sortedstr = sort(&(src1->varValue.s));
-    strCopyString(&(dest->varValue.s), sortedstr);
-    strFree(sortedstr);
-    return SUCCESS;
+    return sort(&(src1->varValue.s), &(dest->varValue.s));
   }else{
-    strFree(sortedstr);
     return TYPE_ERROR;
   }
-  strFree(sortedstr);
   return INTERN_ERROR;
 }
 
@@ -737,7 +731,7 @@ int lengthstring(tData *src1, tData *dest){
 //-------------------ICAT-----------------------------------------------------
 int concatenate(tData *src1, tData *src2, tData *dest){
   if ( (src1->varType == TOK_STRING) && (src2->varType == TOK_STRING) && (dest->varType == TOK_STRING) ){
-    dest->varValue.s = concat(src1->varValue.s, src2->varValue.s);
+    dest->varValue.s = concat(&(src1->varValue.s), &(src2->varValue.s));
     return SUCCESS;
   }else{
     return TYPE_ERROR;
