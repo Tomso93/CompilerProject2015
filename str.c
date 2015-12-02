@@ -89,3 +89,13 @@ int strGetLength(string *s)
 {
    return s->length;
 }
+
+string concat(string *s1, string *s2){
+  string newstring;
+  strInit(&newstring);
+  strCopyString(&newstring, s1);
+  for(int i=0; i < s2->length; i++){
+    strAddChar(&newstring, s2->str[i]);
+  }
+  return newstring;
+}
