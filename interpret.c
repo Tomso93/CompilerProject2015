@@ -628,16 +628,19 @@ int readstring(tData *dest){
     return TYPE_ERROR;
   }
 
-  c=getchar();
-  while ((c == '\n') && (c == '\t') && (c == '\\')){
-    c=getchar();
+  scanf("%c", &c);
+//  c = getchar();
+  while ((c == '\n') || (c == '\t') || (c == ' ')){
+    scanf("%c", &c);
+//    c = getchar();
   }
 
-  while((c != '\n') && (c != '\t') && (c != '\\') && (c != EOF) && (c != ';')){
+  while((c != '\n') && (c != '\t') && (c != ' ') && (c != EOF) && (c != ';')){
     if ( strAddChar(&(dest->varValue.s), c) == 1 ){
       return INTERN_ERROR;
     }
-    c=getchar();
+    scanf("%c", &c);
+//    c = getchar();
   }
   return SUCCESS;
 }
@@ -646,7 +649,7 @@ int readstring(tData *dest){
 int read(tData *dest){ 
   if (dest->varType == TOK_INT){
     return readint(dest);
-  }else if (dest->varType == TOK_INT){
+  }else if (dest->varType == TOK_DOUBLE){
     return readdouble(dest);
   }else if (dest->varType == TOK_STRING){
     return readstring(dest);
@@ -656,23 +659,23 @@ int read(tData *dest){
 }
 
 //-------------------IWRITE----------------------------------------------------
-int write(tData *dest){ 
-  if (dest->varType == TOK_DOUBLE){
-     if (printf("%lg", dest->varValue.d) < 0){
+int write(tData *src1){ 
+  if (src1->varType == TOK_DOUBLE){
+     if (printf("%g", src1->varValue.d) < 0){
        return RUNTIME_ERROR;
      }else{
        return SUCCESS;
      }
 
-  }else if (dest->varType == TOK_INT){
-    if (printf("%d", dest->varValue.i) < 0){
+  }else if (src1->varType == TOK_INT){
+    if (printf("%d", src1->varValue.i) < 0){
        return RUNTIME_ERROR;
      }else{
        return SUCCESS;
      }
 
-  }else if (dest->varType == TOK_STRING){
-    if (printf("%s", dest->varValue.s.str) < 0){
+  }else if (src1->varType == TOK_STRING){
+    if (printf("%s", src1->varValue.s.str) < 0){
        return RUNTIME_ERROR;
      }else{
        return SUCCESS;
