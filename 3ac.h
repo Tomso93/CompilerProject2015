@@ -1,3 +1,3 @@
 
-void genInstr(int InstType, void *src1, void *src2, void *dest, TinstList *list);
+void genInstr(int InstType, tData *src1, tData *src2, tData *dest, TinstList *list);
 void GenNewVariable(string *item);
