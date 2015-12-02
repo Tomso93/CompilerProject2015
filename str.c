@@ -1,6 +1,7 @@
 //jednoducha knihovna pro praci s nekonecne dlouhymi retezci
 #include <string.h>
 #include <malloc.h>
+#include "define.h"
 #include "str.h"
 
 #define STR_LEN_INC 8
@@ -8,8 +9,6 @@
 // pokud nacitame retezec znak po znaku, pamet se postupne bude alkokovat na
 // nasobky tohoto cisla
 
-#define STR_ERROR   1
-#define STR_SUCCESS 0
 
 int strInit(string *s)
 // funkce vytvori novy retezec
@@ -89,4 +88,14 @@ int strGetLength(string *s)
 // vrati delku daneho retezce
 {
    return s->length;
+}
+
+string concat(string *s1, string *s2){
+  string newstring;
+  strInit(&newstring);
+  strCopyString(&newstring, s1);
+  for(int i=0; i < s2->length; i++){
+    strAddChar(&newstring, s2->str[i]);
+  }
+  return newstring;
 }
