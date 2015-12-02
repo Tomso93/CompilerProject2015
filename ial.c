@@ -60,9 +60,8 @@ void FailCreate(char *s, int delka, int fail[]){
 
 //------------------rezeni-----------------------------------------------------
 
-string *sort(string *str0){
-  string *str1 = NULL;
-  strInit(str1);
+int sort(string *str0, string *str1){
+
   strCopyString(str1, str0);
 
   char pom; 
@@ -77,7 +76,7 @@ string *sort(string *str0){
     str1->str[right] = pom;
     siftdown(str1->str, 0, right-1);
   }
-  return str1;
+  return 0;
 }
 
 void siftdown(char *str1, int left, int right){
@@ -106,7 +105,3 @@ void siftdown(char *str1, int left, int right){
   str1[i] = temp;
 }
 
-
-string concat(string s1, string s2){
-  return s1;
-}
