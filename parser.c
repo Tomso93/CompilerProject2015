@@ -754,7 +754,7 @@ int _for(){
     strInit(&Label_2); //inicializace
     GenNewVariable(&Label_2);  // vygenerovani promenne
     tableInsert(local_table, &Label_2, TOK_INT);
-    genInstr(IGOTO, LastVar, NULL, Label_2)
+    genInstr(IIFGOTO, LastVar, NULL, Label_2)
      
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_SEMICOLON) return SYNTAX_ERROR;
@@ -778,7 +778,7 @@ int _for(){
 	result= body();
 
     // instrukce skoku
-    genInstr(IGOTO, Label_1, NULL, NULL);
+    genInstr(IGOTO, NULL, NULL, Label_1);
     //instrukce label pro skonceni cyklu
     genInstr(ILABEL, Label_1, NULL, NULL);
 	if(result !=SYNTAX_OK) return result;
@@ -894,7 +894,7 @@ int _if(){
     tableInsert(local_table, &Label_1, TOK_INT);    // vlozeni do lokalni tabulky symbolu
     
     //generovani skoku na ELSE vetev
-    genInstr(IFGOTO, LastVar, NULL, Label_1);
+    genInstr(IIFGOTO, LastVar, NULL, Label_1);
     
 	//telo pokud je v if pravda
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
