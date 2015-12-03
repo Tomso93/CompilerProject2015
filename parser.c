@@ -861,11 +861,32 @@ int _if(){
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_RIGHT_BRACKET) return SYNTAX_ERROR;
 
+    //generovani pomocne promenne
+    string LastVar = ReadNameVar(); // funkce na cteni nazvu posledni instrukce 
+    genInstr(INOT, LastVar, NULL, LastVar, list); // negace podminky
+    
+    string Label_1; //novy label, skok na vetev else
+    strInit(&Label_1); //inicializace
+    GenNewVariable(&Label_1);  // vygenerovani promenne
+    tableInsert(local_table, &Label_1, TOK_INT);    // vlozeni do lokalni tabulky symbolu
+    
+    //generovani skoku na ELSE vetev
+    genInstr(IFGOTO, LastVar, NULL, Label_1, list);
+    
 	//telo pokud je v if pravda
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_LEFT_BRACE) return SYNTAX_ERROR;
 	result= body();
 
+    string Label_2;  // label dva, skok az za else, podminka v IF byla pravda
+    strInit(&Label_2);
+    GenNewVariable(&Label_2);
+    tableInsert(local_table, &Label_1, TOK_INT);
+    
+    // skok za ELSE
+    genInstr(IGOTO, NULL, NULL, Label_2, list);
+    genInstr(ILABEL, Label_1, NULL, NULL, list); // musime vlozit label za telo IFu
+    
 	if(result !=SYNTAX_OK) return result;
 	//vse ok, nasleduje else a za ni else
 
@@ -876,6 +897,9 @@ int _if(){
 	if (token !=TOK_LEFT_BRACE) return SYNTAX_ERROR;
 	result= body();
 
+    // instrukce pro label_2, sem se skoci jestlize podminka IF byla pravda
+    genInst(ILABEL, Label_2, NULL, NULL, list);
+    
 	if(result !=SYNTAX_OK) return result;
 	// konstrukce if je v poradku muze opustit s pozitvni odpovedi
 	return SYNTAX_OK;
