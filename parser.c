@@ -839,6 +839,9 @@ int _id_n(){
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			if (token !=TOK_ID) return SYNTAX_ERROR;
 			
+			// vygeneruju instrukci
+			genInstr(IREAD, NULL, NULL, token);
+			
 			//a zavolam si ji znova
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			return _id_n();
@@ -856,7 +859,10 @@ int _cin(){
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_ID) return SYNTAX_ERROR;
-
+	
+	// generuji prvni instrukci, ostatni se generujou v _id_n()
+	genInstr(IREAD, NULL, NULL, token);
+	
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	
 	//podivu se, jestli tam neni vic identifikatoru
