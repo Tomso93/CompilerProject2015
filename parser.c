@@ -797,7 +797,7 @@ int term_n(){
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_DOUBLE_ARROW_LEFT) return SYNTAX_ERROR;
 	
-	
+	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	result= term();
 	if (result !=SYNTAX_OK) return result;
 
