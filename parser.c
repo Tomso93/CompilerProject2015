@@ -745,10 +745,16 @@ int _for(){
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	result= comp_expr();
 	if (result !=SYNTAX_OK) return SYNTAX_ERROR;
-
+    
     // najde promennou ve ktere je vyhodnocena podminka
     string LastVar = ReadNameVar();
+    genInstr(INOT, LastVar, NULL, LastVar, list);
     
+    string Label_2; //label, pro navrat
+    strInit(&Label_2); //inicializace
+    GenNewVariable(&Label_2);  // vygenerovani promenne
+    tableInsert(local_table, &Label_2, TOK_INT);
+    genInstr(IGOTO, LastVar, NULL, Label_2)
      
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_SEMICOLON) return SYNTAX_ERROR;
@@ -761,6 +767,7 @@ int _for(){
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	result= comp_expr();
+
 	if (result !=SYNTAX_OK) return SYNTAX_ERROR;
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -770,7 +777,12 @@ int _for(){
 	if (token !=TOK_LEFT_BRACE) return SYNTAX_ERROR;
 	result= body();
 
+    // instrukce skoku
+    genInstr(IGOTO, Label_1, NULL, NULL, list);
+    //instrukce label pro skonceni cyklu
+    genInstr(ILABEL, Label_1, NULL, NULL, list);
 	if(result !=SYNTAX_OK) return result;
+
 
 	//cely for je v tom, ze je to opravdu for a dokonce spravne zapsany >:D
 	return SYNTAX_OK;
