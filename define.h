@@ -18,6 +18,7 @@
 #define STATE_ESCAPE_SEQUENCE 17
 #define STATE_HEXA_CHAR 18
 #define STATE_HEXA_CHAR_SECOND 19
+#define STATE_INEQUALITY 20
 
 
 /** tokeny - cisla od 101 do n */
@@ -44,6 +45,7 @@
 #define TOK_LESS_THAN 128 // <
 #define TOK_COMPARISON 111  // ==
 #define TOK_EQUALS 112      // =
+#define TOK_INEQUALITY 135 // !=
 
 //identifikátor
 #define TOK_ID 109          // ID
@@ -52,7 +54,7 @@
 #define TOK_STR 134
 
 //reálná konstanta
-#define TOK_REAL_NUMBER 133 // realnumber
+//#define TOK_REAL_NUMBER 133 // realnumber
 
 //celoèíselná konstanta
 #define TOK_DECIMAL_NUMBER 113 // cele cislo (rozsah C-int)

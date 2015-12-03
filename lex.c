@@ -60,6 +60,9 @@ int get_next_token(string *attr){
                         case '=':
                             stav = STATE_EQUALS;
                             break;
+                        case '!':
+                            stav = STATE_INEQUALITY;
+                            break;
                         case ';':
                             return TOK_SEMICOLON;
                             break;
@@ -88,6 +91,14 @@ int get_next_token(string *attr){
                             printf("defualt %c", c);
                             break;
                     }
+                }
+                break;
+            case STATE_INEQUALITY:
+                if(c == '='){
+                    return TOK_INEQUALITY;
+                } else {
+                    ungetc (c,sourceFile);
+                    return LEX_ERROR;
                 }
                 break;
             case STATE_STRING:
@@ -197,7 +208,7 @@ int get_next_token(string *attr){
                 }
                 else if(c == ' ' || c == ';' || c == ')' || c == '+' || c == '-' || c == '/' || c == '*'){
                     ungetc(c, sourceFile);
-                    return TOK_REAL_NUMBER;
+                    return TOK_FLOATING_POINT_NUMBER;
                 }
                 else{
                     ungetc(c, sourceFile);
