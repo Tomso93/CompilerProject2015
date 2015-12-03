@@ -1,6 +1,6 @@
 /*
 *	Projekt: Kompilator pro jazyk IFJ15=>podmnozina C++11
-*	Autor: Tomas STRNKA
+*	Autor: Tomas STRNKA & Martin Wojaczek 
 *	Login: xstrnk01
 *	Cast: Parser .c +.h
 *	Verze: 1.4 
