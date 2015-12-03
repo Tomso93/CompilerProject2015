@@ -30,3 +30,4 @@ int ListInsert(TinstList *L, Tinst I);
 int ListSucc(TinstList *L);
 int ListGoto(TinstList *L, tData *dest);
 Tinst *ListGetInst(TinstList *L);
+Tinst *ListGetLastInst(TinstList *L);
