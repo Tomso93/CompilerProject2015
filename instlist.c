@@ -86,3 +86,10 @@ Tinst *ListGetInst(TinstList *L){
   }
   return &(L->act->inst);  
 }
+
+Tinst *ListGetLastInst(TinstList *L){
+  if ( (L == NULL) || (L->act == NULL) ){
+    return NULL;
+  }
+  return &(L->last->inst);  
+}
