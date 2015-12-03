@@ -794,7 +794,6 @@ int term_n(){
 
 	if(token == TOK_SEMICOLON) return SYNTAX_OK;
 
-	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_DOUBLE_ARROW_LEFT) return SYNTAX_ERROR;
 	
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
