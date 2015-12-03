@@ -41,3 +41,10 @@ void GenNewVariable(string *item)
     }
     cnt++;                             
 }
+
+string ReadNameVar(TinstList *list)
+{
+    I = ListGetLastInst(list);
+    
+    return I->dest;
+}
