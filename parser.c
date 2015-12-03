@@ -802,7 +802,10 @@ int term_n(){
 			
 			result = term();
 			if (result != SYNTAX_OK) return result;
-
+			
+			//generovani instukce
+			genInstr(IWRITE, NULL, NULL, token);
+			
 			//mozna jich je jeste vic, radeji si ho zavolam znovu
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			return term_n();
