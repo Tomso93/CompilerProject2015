@@ -792,18 +792,23 @@ int _for(){
 int term_n(){
 	int result;
 
-	if(token == TOK_SEMICOLON) return SYNTAX_OK;
+	switch (token) {
+		case TOK_SEMICOLON:
+			return SYNTAX_OK;
+			break;
+		
+		case TOK_DOUBLE_ARROW_LEFT:
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+			
+			result = term();
+			if (result != SYNTAX_OK) return result;
 
-	if (token !=TOK_DOUBLE_ARROW_LEFT) return SYNTAX_ERROR;
-	
-	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-	result= term();
-	if (result !=SYNTAX_OK) return result;
-
-	//mozna jich je jeste vic, radeji si ho zavolam znovu
-	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-	return term_n();
-
+			//mozna jich je jeste vic, radeji si ho zavolam znovu
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+			return term_n();
+			break;
+	}
+	return SYNTAX_ERROR;
 }
 
 //-----------COUT->--cout--<<--TERM--TERM_N--;--------------------------------
