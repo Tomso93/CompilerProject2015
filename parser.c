@@ -740,7 +740,7 @@ int _for(){
     GenNewVariable(&Label_1);  // vygenerovani promenne
     tableInsert(local_table, &Label_1, TOK_INT);
     // instrukce pro label
-    genInstr(ILABEL, Label_1, NULL, NULL, list);
+    genInstr(ILABEL, Label_1, NULL, NULL);
     
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	result= comp_expr();
@@ -748,7 +748,7 @@ int _for(){
     
     // najde promennou ve ktere je vyhodnocena podminka
     string LastVar = ReadNameVar();
-    genInstr(INOT, LastVar, NULL, LastVar, list);
+    genInstr(INOT, LastVar, NULL, LastVar);
     
     string Label_2; //label, pro navrat
     strInit(&Label_2); //inicializace
@@ -778,9 +778,9 @@ int _for(){
 	result= body();
 
     // instrukce skoku
-    genInstr(IGOTO, Label_1, NULL, NULL, list);
+    genInstr(IGOTO, Label_1, NULL, NULL);
     //instrukce label pro skonceni cyklu
-    genInstr(ILABEL, Label_1, NULL, NULL, list);
+    genInstr(ILABEL, Label_1, NULL, NULL);
 	if(result !=SYNTAX_OK) return result;
 
 
@@ -886,7 +886,7 @@ int _if(){
 
     //generovani pomocne promenne
     string LastVar = ReadNameVar(); // funkce na cteni nazvu posledni instrukce 
-    genInstr(INOT, LastVar, NULL, LastVar, list); // negace podminky
+    genInstr(INOT, LastVar, NULL, LastVar); // negace podminky
     
     string Label_1; //novy label, skok na vetev else
     strInit(&Label_1); //inicializace
@@ -894,7 +894,7 @@ int _if(){
     tableInsert(local_table, &Label_1, TOK_INT);    // vlozeni do lokalni tabulky symbolu
     
     //generovani skoku na ELSE vetev
-    genInstr(IFGOTO, LastVar, NULL, Label_1, list);
+    genInstr(IFGOTO, LastVar, NULL, Label_1);
     
 	//telo pokud je v if pravda
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -907,8 +907,8 @@ int _if(){
     tableInsert(local_table, &Label_1, TOK_INT);
     
     // skok za ELSE
-    genInstr(IGOTO, NULL, NULL, Label_2, list);
-    genInstr(ILABEL, Label_1, NULL, NULL, list); // musime vlozit label za telo IFu
+    genInstr(IGOTO, NULL, NULL, Label_2);
+    genInstr(ILABEL, Label_1, NULL, NULL); // musime vlozit label za telo IFu
     
 	if(result !=SYNTAX_OK) return result;
 	//vse ok, nasleduje else a za ni else
@@ -921,7 +921,7 @@ int _if(){
 	result= body();
 
     // instrukce pro label_2, sem se skoci jestlize podminka IF byla pravda
-    genInst(ILABEL, Label_2, NULL, NULL, list);
+    genInst(ILABEL, Label_2, NULL, NULL);
     
 	if(result !=SYNTAX_OK) return result;
 	// konstrukce if je v poradku muze opustit s pozitvni odpovedi
