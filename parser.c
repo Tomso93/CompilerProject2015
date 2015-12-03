@@ -797,6 +797,7 @@ int term_n(){
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_DOUBLE_ARROW_LEFT) return SYNTAX_ERROR;
 	
+	
 	result= term();
 	if (result !=SYNTAX_OK) return result;
 
@@ -817,7 +818,10 @@ int _cout(){
 	result = term();
 
 	if(token !=SYNTAX_OK) return result;
-
+	
+	// instrukce pro zapis, pokud jich je vice generuji se v term_n()
+    	genInstr(IWRITE, NULL, NULL, token);
+	
 	//zavolam scanner a jdu zjistit, jestli termu neni vic a jestli jsou ok
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	result = term_n();
