@@ -93,3 +93,13 @@ Tinst *ListGetLastInst(TinstList *L){
   }
   return &(L->last->inst);  
 }
+
+int ListActLast(TinstList *L){
+  L->act = L->last;
+  return SUCCESS;
+}
+
+int ListActFirst(TinstList *L){
+  L->act = L->first;
+  return SUCCESS;
+}
