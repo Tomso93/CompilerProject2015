@@ -735,10 +735,21 @@ int _for(){
 	result= _i_prom();
 	if (result !=SYNTAX_OK) return SYNTAX_ERROR;
 
+    string Label_1; //label, pro navrat
+    strInit(&Label_1); //inicializace
+    GenNewVariable(&Label_1);  // vygenerovani promenne
+    tableInsert(local_table, &Label_1, TOK_INT);
+    // instrukce pro label
+    genInstr(ILABEL, Label_1, NULL, NULL, list);
+    
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	result= comp_expr();
 	if (result !=SYNTAX_OK) return SYNTAX_ERROR;
 
+    // najde promennou ve ktere je vyhodnocena podminka
+    string LastVar = ReadNameVar();
+    
+     
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_SEMICOLON) return SYNTAX_ERROR;
 
