@@ -31,3 +31,5 @@ int ListSucc(TinstList *L);
 int ListGoto(TinstList *L, tData *dest);
 Tinst *ListGetInst(TinstList *L);
 Tinst *ListGetLastInst(TinstList *L);
+int ListActLast(TinstList *L);
+int ListActFirst(TinstList *L);
