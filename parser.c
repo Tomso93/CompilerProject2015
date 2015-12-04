@@ -157,6 +157,7 @@ void StackInit(tStackTN * S){
 void SPushTerm (tStackTN *S){
 //dam terminal na zasobnik
   if (S->top==25) 
+	  fprintf(stderr, "pretekl zasobnik\n");
 	  //vnitrni chyba interperetu
   else {  
 		string a;
@@ -174,7 +175,7 @@ void SPushTerm (tStackTN *S){
 void SPushNeterm(tStackTN *S, char Type, void * data){
 //dam pravidlo na zasobnik
   if (S->top==25) 
-  
+	  fprintf(stderr, "pretekl zasobnik\n");
   else {  
 		string a;
 		strInit(&a);
@@ -518,37 +519,40 @@ int comp_expr(){
 
 		result = select_ruler(&a,token);
 
-		switch (result){
-			case "=":
-				SPushTerm(&stack);
-				if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;	
-			break;
+		if (result == '='){
+			SPushTerm(&stack);
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			
-			case "<":
-				SAddTerm(&stack, '<');
+		} 
+		
+			else if ( result == '<') {
+				// pushuj
+				SAddTerm(&stack, '<');		
 				SPushTerm(&stack);
 				if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-			break;
+		
+			} 
 			
-			case ">":
-				if ((index=SSearchBracket(&stack))!= -1){
-				strDelLastChar(&(stack.a[index]));
-				
-					// chyba v redukovat
-					if (SReduction_expr(&stack, index + 1) == SYNTAX_ERROR){
-						SDipose(&stack);
-						error=2;
-						return SYNTAX_ERROR;			
-					}
+			else if (result == '>') {
+				// redukuj
+				if ((index = SSearchBracket(&stack)) != -1) {
+					strDelLastChar(&(stack.a[index]));
+					if (SReduction_expr(&stack, index + 1) == FALSE) {
 
-					// neni co redukovat
-					else{
+						SDipose(&stack);
+						error = 2;
+						return SYNTAX_ERROR;
+					}
+				}
+			
+			
+			else{
 				
-							SDipose(&stack);
-							error=2;
-							return FALSE;
+				SDipose(&stack);
+				error=2;
+				return FALSE;
 			}
-				} 
+		}
 			
 			//prazdne misto v tabulce
 			else{
@@ -556,15 +560,13 @@ int comp_expr(){
 				SDipose(&stack);
 				error=2;
 				return SYNTAX_ERROR;
-			}
 
-			break;
 		}
 
 		a = STopTerm (&stack);
 	}
 
-	*value = stack.value[1]; 	
+		
 	strFree(&a);
 	SDipose(&stack);
 	return SYNTAX_OK;
@@ -953,7 +955,7 @@ int _if(){
 	result= body();
 
     // instrukce pro label_2, sem se skoci jestlize podminka IF byla pravda
-    genInst(ILABEL, Label_2, NULL, NULL);
+    genInstr(ILABEL, Label_2, NULL, NULL);
     
 	if(result !=SYNTAX_OK) return result;
 	// konstrukce if je v poradku muze opustit s pozitvni odpovedi
@@ -1110,17 +1112,17 @@ int param(){
 //-----------FUNC_DCLR->TYPE--id--(--PARAM--)--SELECT---FUNC_DCLR------------
 int func_dclr(){
 	int result;
-	int type_token;
+	
 	
 	result= type();
 	if (result != SYNTAX_OK) return SYNTAX_ERROR;
 ///
-	type_token= token;
+	
 	// dalsi token ID
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token != TOK_ID) return SYNTAX_ERROR;
 ///
-	if (tableInsert(global_table, &attr, type_token) == 1) return SEM_ERROR;
+	
 	// po ID nasleduje (
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token != TOK_LEFT_BRACKET) return SYNTAX_ERROR;
@@ -1146,7 +1148,7 @@ int program(){
 	result= func_dclr();
 	if(result != SYNTAX_OK) return result;
 	//prosel jsem cely program a scanner uz nema co davat
-	if (token != END_OF_FILE) return SYNTAX_ERROR;
+	if (token != TOK_END_OF_FILE) return SYNTAX_ERROR;
 	//generuji konec programu
 	genInstr(IEND,NULL,NULL,NULL);
 	return SYNTAX_OK;
