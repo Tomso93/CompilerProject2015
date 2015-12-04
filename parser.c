@@ -734,7 +734,7 @@ int _return(){
 }
 
 //-----------FOR->for--(--TYPE--id--I_PROM--;--EXPR--;--id--=--EXPR)--BODY------
-int _for(){
+int _for(TinstList *instrList){
 	int result; 
 	
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -795,7 +795,7 @@ int _for(){
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_LEFT_BRACE) return SYNTAX_ERROR;
-	result= body();
+	result= body(instrList);
 
     // instrukce skoku
     genInstr(IGOTO, NULL, NULL,(void *) &Label_1);
@@ -905,7 +905,7 @@ int _cin(){
 }
 
 //-----------IF->if--(--EXPR--)--BODY--else--BODY----------------------------
-int _if(){
+int _if(TinstList *instrList){
 	int result;
 	
 	//nasleduje leva zavorka a v ni vyraz
@@ -936,7 +936,7 @@ int _if(){
 	//telo pokud je v if pravda
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_LEFT_BRACE) return SYNTAX_ERROR;
-	result= body();
+	result= body(instrList);
 
     string Label_2;  // label dva, skok az za else, podminka v IF byla pravda
     strInit(&Label_2);
@@ -955,7 +955,7 @@ int _if(){
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_LEFT_BRACE) return SYNTAX_ERROR;
-	result= body();
+	result= body(instrList);
 
     // instrukce pro label_2, sem se skoci jestlize podminka IF byla pravda
     genInstr(ILABEL,(void *) &Label_2, NULL, NULL);
@@ -966,22 +966,22 @@ int _if(){
 
 }
 //-----------STMNT->IF||BODY||FOR||CIN||COUT||RETURN||PROM-------------------
-int stmnt(){
+int stmnt(TinstList *instrList){
 	int result;
 
 	switch (token){
 		case TOK_LEFT_BRACE:
-			return body();
+			return body(instrList);
 			break;
 		
 		case TOK_IF:
-			result= _if();
+			result= _if(instrList);
 			if (result != SYNTAX_OK) return result;
 			return stmnt();
 			break;
 		
 		case TOK_FOR:
-			result= _for();
+			result= _for(instrList);
 			if (result != SYNTAX_OK) return result;
 			return stmnt();
 			break;
@@ -1024,25 +1024,25 @@ int stmnt(){
 	return SYNTAX_ERROR;
 }
 //-----------BODY->{STMNT}----------prazdny-statement-nebo-zaplneny----------
-int body(){
+int body(TinstList *instrList){
 	int result;
 	// jsme v body a melo bz nasledovat prud } nebo eps
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 
-	result = stmnt();
+	result = stmnt(instrList);
 	if (result !=SYNTAX_OK) return result;
 
 	return SYNTAX_OK;
 
 }
 //-----------SELECT->BODY--||--;----bud-je-to-funkce-nebo-deklarace----------
-int select(){
+int select(TinstList *instrList){
 	int result;
 	//ocekavam v token { nebo ;, podle toho poznam, zda se jedna o fce nebo dek.
 
 	switch (token){
 		case TOK_LEFT_BRACE:
-			result=body();
+			result=body(instrList);
 			if (result !=SYNTAX_OK) return result;
 			
 			return SYNTAX_OK;
@@ -1113,7 +1113,7 @@ int param(){
 	return SYNTAX_ERROR;
 }
 //-----------FUNC_DCLR->TYPE--id--(--PARAM--)--SELECT---FUNC_DCLR------------
-int func_dclr(){
+int func_dclr(TinstList *instrList){
 	int result;
 	
 	
@@ -1134,7 +1134,7 @@ int func_dclr(){
 	if (result !=SYNTAX_OK) return result;
 	// uvnitr zavorky je vse ok, frcim dal
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-	result=select();
+	result=select(instrList);
 
 	if (result !=SYNTAX_OK) return result;
 	//!!!!!!! nevim, jestli muzu ukoncit uspesne, protoze pokud prijde pouze dekalarace
@@ -1146,9 +1146,9 @@ int func_dclr(){
 }
 
 //------------PROGRAM->FUNC_DCLR---------------------------------------------
-int program(){
+int program(TinstList *instrList){
 	int result;
-	result= func_dclr();
+	result= func_dclr(instrList);
 	if(result != SYNTAX_OK) return result;
 	//prosel jsem cely program a scanner uz nema co davat
 	if (token != TOK_END_OF_FILE) return SYNTAX_ERROR;
@@ -1169,7 +1169,7 @@ int parse(tSymbolTable *ST, TinstList *instrList){
 	if((token = getNextToken(&atrr))== LEX_ERROR)
 		result=LEX_ERROR;
 	else
-		result=program();	// volam prvni neterminal 
+		result=program(list);	// volam prvni neterminal 
 	
 	
 	return result;
