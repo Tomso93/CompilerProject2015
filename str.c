@@ -65,7 +65,7 @@ int strDelLastChar(string *s1){
 	s1->length --;
 	s1->str[s1->length] = '\0';
 	
-   return TRUE;
+   return STR_SUCCESS;
 }
 
 int strCopyString(string *s1, string *s2)
