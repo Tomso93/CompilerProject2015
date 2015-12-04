@@ -7,12 +7,12 @@
 */
 
 #include <stdio.h>
-#include "lex.h"		// getNextToken()
 #include "define.h"		// instrukce, tokeny, err
-#include "3ac.h"		// genInstr, GenNewVariable  
 #include "str.h"		// retezce
+#include "lex.h"		// getNextToken()
 #include "stable.h"		// tabulka symbolu
 #include "instlist.h"	// seznam instukci
+#include "3ac.h"		// genInstr, GenNewVariable
 
 
 int token; //Globalni promennna pro pradavani tokenu 
