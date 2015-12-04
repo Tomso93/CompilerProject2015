@@ -7,7 +7,7 @@
 */
 
 #include <stdio.h>
-#include <stdbool>
+#include <stdbool.h>
 #include <malloc.h>
 #include "define.h"		// instrukce, tokeny, err
 #include "str.h"		// retezce
