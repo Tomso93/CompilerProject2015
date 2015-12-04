@@ -133,3 +133,5 @@
 
 #define STR_ERROR   1
 #define STR_SUCCESS 0
+
+#define SYNTAX_OK 0
