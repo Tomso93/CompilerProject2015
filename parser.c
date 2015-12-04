@@ -783,7 +783,6 @@ int _for(TinstList *instrList){
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_ID) return SYNTAX_ERROR;
-	if(!(tableSearch(local_table, token))) return SEMANTIC_ERROR;
 	
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_EQUALS) return SYNTAX_ERROR;
