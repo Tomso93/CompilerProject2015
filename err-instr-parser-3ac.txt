@@ -1,16 +1,20 @@
-
+xstrnk01@merlin: ~/CompilerProject2015$ make
+gcc -Wall -std=c99 -pedantic -g -c parser.c
+parser.c: In function ‘comp_expr’:
+parser.c:524:4: warning: implicit declaration of function ‘getNextToken’ [-Wimplicit-function-declaration]
+    if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+    ^
+parser.c:539:6: warning: implicit declaration of function ‘strDelLastChar’ [-Wimplicit-function-declaration]
+      strDelLastChar(&(stack.a[index]));
+      ^
 parser.c:540:48: error: ‘FALSE’ undeclared (first use in this function)
       if (SReduction_expr(&stack, index + 1) == FALSE) {
                                                 ^
 parser.c:540:48: note: each undeclared identifier is reported only once for each function it appears in
 parser.c: In function ‘_for’:
-parser.c:760:5: error: incompatible type for argument 2 of ‘genInstr’
-     genInstr(ILABEL, Label_1, NULL, NULL);
+parser.c:760:5: error: cannot convert to a pointer type
+     genInstr(ILABEL,(void *) Label_1, NULL, NULL);
      ^
-In file included from parser.c:17:0:
-3ac.h:2:6: note: expected ‘struct tData *’ but argument is of type ‘string’
- void genInstr(int InstType, tData *src1, tData *src2, tData *dest);
-      ^
 parser.c:767:22: error: too few arguments to function ‘ReadNameVar’
      string LastVar = ReadNameVar();
                       ^
@@ -18,80 +22,36 @@ In file included from parser.c:17:0:
 3ac.h:4:8: note: declared here
  string ReadNameVar(TinstList *list);
         ^
-parser.c:768:5: error: incompatible type for argument 2 of ‘genInstr’
-     genInstr(INOT, LastVar, NULL, LastVar);
+parser.c:768:5: error: cannot convert to a pointer type
+     genInstr(INOT,(void *) LastVar, NULL,(void *) LastVar);
      ^
-In file included from parser.c:17:0:
-3ac.h:2:6: note: expected ‘struct tData *’ but argument is of type ‘string’
- void genInstr(int InstType, tData *src1, tData *src2, tData *dest);
-      ^
-parser.c:768:5: error: incompatible type for argument 4 of ‘genInstr’
-     genInstr(INOT, LastVar, NULL, LastVar);
+parser.c:768:5: error: cannot convert to a pointer type
+parser.c:774:5: error: cannot convert to a pointer type
+     genInstr(IIFGOTO,(void *) LastVar, NULL,(void *) Label_2);
      ^
-In file included from parser.c:17:0:
-3ac.h:2:6: note: expected ‘struct tData *’ but argument is of type ‘string’
- void genInstr(int InstType, tData *src1, tData *src2, tData *dest);
-      ^
-parser.c:774:5: error: incompatible type for argument 2 of ‘genInstr’
-     genInstr(IIFGOTO, LastVar, NULL, Label_2);
+parser.c:774:5: error: cannot convert to a pointer type
+parser.c:798:5: error: cannot convert to a pointer type
+     genInstr(IGOTO, NULL, NULL,(void *) Label_1);
      ^
-In file included from parser.c:17:0:
-3ac.h:2:6: note: expected ‘struct tData *’ but argument is of type ‘string’
- void genInstr(int InstType, tData *src1, tData *src2, tData *dest);
-      ^
-parser.c:774:5: error: incompatible type for argument 4 of ‘genInstr’
-     genInstr(IIFGOTO, LastVar, NULL, Label_2);
+parser.c:800:5: error: cannot convert to a pointer type
+     genInstr(ILABEL,(void *) Label_1, NULL, NULL);
      ^
-In file included from parser.c:17:0:
-3ac.h:2:6: note: expected ‘struct tData *’ but argument is of type ‘string’
- void genInstr(int InstType, tData *src1, tData *src2, tData *dest);
-      ^
-parser.c:798:5: error: incompatible type for argument 4 of ‘genInstr’
-     genInstr(IGOTO, NULL, NULL, Label_1);
-     ^
-In file included from parser.c:17:0:
-3ac.h:2:6: note: expected ‘struct tData *’ but argument is of type ‘string’
- void genInstr(int InstType, tData *src1, tData *src2, tData *dest);
-      ^
-parser.c:800:5: error: incompatible type for argument 2 of ‘genInstr’
-     genInstr(ILABEL, Label_1, NULL, NULL);
-     ^
-In file included from parser.c:17:0:
-3ac.h:2:6: note: expected ‘struct tData *’ but argument is of type ‘string’
- void genInstr(int InstType, tData *src1, tData *src2, tData *dest);
-      ^
 parser.c: In function ‘term_n’:
-parser.c:824:33: warning: passing argument 4 of ‘genInstr’ makes pointer from integer without a cast
-    genInstr(IWRITE, NULL, NULL, token);
-                                 ^
-In file included from parser.c:17:0:
-3ac.h:2:6: note: expected ‘struct tData *’ but argument is of type ‘int’
- void genInstr(int InstType, tData *src1, tData *src2, tData *dest);
-      ^
-parser.c: In function ‘_cout’:
-parser.c:847:35: warning: passing argument 4 of ‘genInstr’ makes pointer from integer without a cast
-      genInstr(IWRITE, NULL, NULL, token);
-                                   ^
-In file included from parser.c:17:0:
-3ac.h:2:6: note: expected ‘struct tData *’ but argument is of type ‘int’
- void genInstr(int InstType, tData *src1, tData *src2, tData *dest);
-      ^
-parser.c: In function ‘_id_n’:
-parser.c:871:32: warning: passing argument 4 of ‘genInstr’ makes pointer from integer without a cast
-    genInstr(IREAD, NULL, NULL, token);
+parser.c:824:32: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    genInstr(IWRITE, NULL, NULL,(void *) token);
                                 ^
-In file included from parser.c:17:0:
-3ac.h:2:6: note: expected ‘struct tData *’ but argument is of type ‘int’
- void genInstr(int InstType, tData *src1, tData *src2, tData *dest);
-      ^
+parser.c: In function ‘_cout’:
+parser.c:847:34: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+      genInstr(IWRITE, NULL, NULL,(void *) token);
+                                  ^
+parser.c: In function ‘_id_n’:
+parser.c:871:31: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+    genInstr(IREAD, NULL, NULL,(void *) token);
+                               ^
 parser.c: In function ‘_cin’:
-parser.c:892:30: warning: passing argument 4 of ‘genInstr’ makes pointer from integer without a cast
-  genInstr(IREAD, NULL, NULL, token);
-                              ^
-In file included from parser.c:17:0:
-3ac.h:2:6: note: expected ‘struct tData *’ but argument is of type ‘int’
- void genInstr(int InstType, tData *src1, tData *src2, tData *dest);
-      ^
+parser.c:892:29: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
+  genInstr(IREAD, NULL, NULL,(void *) token);
+                             ^
 parser.c: In function ‘_if’:
 parser.c:922:22: error: too few arguments to function ‘ReadNameVar’
      string LastVar = ReadNameVar(); // funkce na cteni nazvu posledni instrukce
@@ -100,55 +60,25 @@ In file included from parser.c:17:0:
 3ac.h:4:8: note: declared here
  string ReadNameVar(TinstList *list);
         ^
-parser.c:923:5: error: incompatible type for argument 2 of ‘genInstr’
-     genInstr(INOT, LastVar, NULL, LastVar); // negace podminky
+parser.c:923:5: error: cannot convert to a pointer type
+     genInstr(INOT,(void *) LastVar, NULL,(void *) LastVar); // negace podminky
      ^
-In file included from parser.c:17:0:
-3ac.h:2:6: note: expected ‘struct tData *’ but argument is of type ‘string’
- void genInstr(int InstType, tData *src1, tData *src2, tData *dest);
-      ^
-parser.c:923:5: error: incompatible type for argument 4 of ‘genInstr’
-     genInstr(INOT, LastVar, NULL, LastVar); // negace podminky
+parser.c:923:5: error: cannot convert to a pointer type
+parser.c:931:5: error: cannot convert to a pointer type
+     genInstr(IIFGOTO,(void *) LastVar, NULL,(void *) Label_1);
      ^
-In file included from parser.c:17:0:
-3ac.h:2:6: note: expected ‘struct tData *’ but argument is of type ‘string’
- void genInstr(int InstType, tData *src1, tData *src2, tData *dest);
-      ^
-parser.c:931:5: error: incompatible type for argument 2 of ‘genInstr’
-     genInstr(IIFGOTO, LastVar, NULL, Label_1);
+parser.c:931:5: error: cannot convert to a pointer type
+parser.c:944:5: error: cannot convert to a pointer type
+     genInstr(IGOTO, NULL, NULL,(void *) Label_2);
      ^
-In file included from parser.c:17:0:
-3ac.h:2:6: note: expected ‘struct tData *’ but argument is of type ‘string’
- void genInstr(int InstType, tData *src1, tData *src2, tData *dest);
-      ^
-parser.c:931:5: error: incompatible type for argument 4 of ‘genInstr’
-     genInstr(IIFGOTO, LastVar, NULL, Label_1);
+parser.c:945:5: error: cannot convert to a pointer type
+     genInstr(ILABEL,(void *) Label_1, NULL, NULL); // musime vlozit label za telo IFu
      ^
-In file included from parser.c:17:0:
-3ac.h:2:6: note: expected ‘struct tData *’ but argument is of type ‘string’
- void genInstr(int InstType, tData *src1, tData *src2, tData *dest);
-      ^
-parser.c:944:5: error: incompatible type for argument 4 of ‘genInstr’
-     genInstr(IGOTO, NULL, NULL, Label_2);
+parser.c:958:5: error: cannot convert to a pointer type
+     genInstr(ILABEL,(void *) Label_2, NULL, NULL);
      ^
-In file included from parser.c:17:0:
-3ac.h:2:6: note: expected ‘struct tData *’ but argument is of type ‘string’
- void genInstr(int InstType, tData *src1, tData *src2, tData *dest);
-      ^
-parser.c:945:5: error: incompatible type for argument 2 of ‘genInstr’
-     genInstr(ILABEL, Label_1, NULL, NULL); // musime vlozit label za telo IFu
-     ^
-In file included from parser.c:17:0:
-3ac.h:2:6: note: expected ‘struct tData *’ but argument is of type ‘string’
- void genInstr(int InstType, tData *src1, tData *src2, tData *dest);
-      ^
-parser.c:958:5: error: incompatible type for argument 2 of ‘genInstr’
-     genInstr(ILABEL, Label_2, NULL, NULL);
-     ^
-In file included from parser.c:17:0:
-3ac.h:2:6: note: expected ‘struct tData *’ but argument is of type ‘string’
- void genInstr(int InstType, tData *src1, tData *src2, tData *dest);
-      ^
 parser.c: At top level:
 parser.c:1158:29: error: unknown type name ‘tListOfInstr’
  int parse(tSymbolTable *ST, tListOfInstr *instrList){
+                             ^
+
