@@ -756,8 +756,11 @@ int _for(){
     strInit(&Label_1); //inicializace
     GenNewVariable(&Label_1);  // vygenerovani promenne
     tableInsert(local_table, &Label_1, TOK_INT);
+    tData *newVariableInfo;
+    newVariableInfo = tableSearch(local_table, &Label_1);
+    strFree(&Label_1);
     // instrukce pro label
-    genInstr(ILABEL,(void *) Label_1, NULL, NULL);
+    genInstr(ILABEL,(void *) newVariableInfo, NULL, NULL);
     
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	result= comp_expr();
@@ -765,7 +768,7 @@ int _for(){
     
     // najde promennou ve ktere je vyhodnocena podminka
     string LastVar = ReadNameVar(instrList);
-    genInstr(INOT,(void *) LastVar, NULL,(void *) LastVar);
+    genInstr(INOT,(void *) &LastVar, NULL,(void *) &LastVar);
     
     string Label_2; //label, pro navrat
     strInit(&Label_2); //inicializace
