@@ -50,6 +50,24 @@ int strAddChar(string *s1, char c)
    return STR_SUCCESS;
 }
 
+int strDelLastChar(string *s1){
+ // smaze posledni znak z retezce
+		
+	int newLength=((s1->length-1)/4 + 1)*4;
+	if (newLength != s1->allocSize)
+	{
+      // pamet nestaci nebo ji je zbytecne hodne, je potreba provest realokaci
+		if ((s1->str = (char*) realloc(s1->str, newLength)) == NULL)
+			return INTERNAL_ERROR;
+		s1->allocSize = newLength;
+	}
+   
+	s1->length --;
+	s1->str[s1->length] = '\0';
+	
+   return TRUE;
+}
+
 int strCopyString(string *s1, string *s2)
 // prekopiruje retezec s2 do s1
 {
