@@ -521,6 +521,7 @@ int comp_expr(){
 
 		if (result == '='){
 			SPushTerm(&stack);
+			
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			
 		} 
@@ -529,6 +530,7 @@ int comp_expr(){
 				// pushuj
 				SAddTerm(&stack, '<');		
 				SPushTerm(&stack);
+				
 				if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 		
 			} 
@@ -537,7 +539,7 @@ int comp_expr(){
 				// redukuj
 				if ((index = SSearchBracket(&stack)) != -1) {
 					strDelLastChar(&(stack.a[index]));
-					if (SReduction_expr(&stack, index + 1) == FALSE) {
+					if (SReduction_expr(&stack, index + 1) == SYNTAX_ERROR) {
 
 						SDipose(&stack);
 						error = 2;
@@ -550,7 +552,7 @@ int comp_expr(){
 				
 				SDipose(&stack);
 				error=2;
-				return FALSE;
+				return SYNTAX_ERROR;
 			}
 		}
 			
@@ -767,7 +769,7 @@ int _for(TinstList *instrList){
 	if (result !=SYNTAX_OK) return SYNTAX_ERROR;
     
     // najde promennou ve ktere je vyhodnocena podminka
-    string LastVar = ReadNameVar(list);
+    string LastVar = ReadNameVar(instrList);
     genInstr(INOT,(void *) &LastVar, NULL,(void *) &LastVar);
     
     string Label_2; //label, pro navrat
@@ -922,7 +924,7 @@ int _if(TinstList *instrList){
 	if (token !=TOK_RIGHT_BRACKET) return SYNTAX_ERROR;
 
     //generovani pomocne promenne
-    string LastVar = ReadNameVar(list); // funkce na cteni nazvu posledni instrukce 
+    string LastVar = ReadNameVar(instrList); // funkce na cteni nazvu posledni instrukce 
     genInstr(INOT,(void *) &LastVar, NULL,(void *) &LastVar); // negace podminky
     
     string Label_1; //novy label, skok na vetev else
@@ -1161,12 +1163,12 @@ int program(TinstList *instrList){
 int parse(tSymbolTable *ST, TinstList *instrList){
 
   int result;
-  table = ST;
+  
   list = instrList;
   strInit(&attr);
 	
 
-	if((token = getNextToken(&atrr))== LEX_ERROR)
+	if((token = getNextToken(&attr))== LEX_ERROR)
 		result=LEX_ERROR;
 	else
 		result=program(list);	// volam prvni neterminal 
