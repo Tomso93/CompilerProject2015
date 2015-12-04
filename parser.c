@@ -756,11 +756,11 @@ int _for(){
     strInit(&Label_1); //inicializace
     GenNewVariable(&Label_1);  // vygenerovani promenne
     tableInsert(local_table, &Label_1, TOK_INT);
-    tData *newVariableInfo;
-    newVariableInfo = tableSearch(local_table, &Label_1);
-    strFree(&Label_1);
+   // tData *newVariableInfo;
+   // newVariableInfo = tableSearch(local_table, &Label_1);
+   // strFree(&Label_1);
     // instrukce pro label
-    genInstr(ILABEL,(void *) newVariableInfo, NULL, NULL);
+    genInstr(ILABEL,(void *) &Lable_1, NULL, NULL);
     
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	result= comp_expr();
@@ -774,7 +774,7 @@ int _for(){
     strInit(&Label_2); //inicializace
     GenNewVariable(&Label_2);  // vygenerovani promenne
     tableInsert(local_table, &Label_2, TOK_INT);
-    genInstr(IIFGOTO,(void *) LastVar, NULL,(void *) Label_2);
+    genInstr(IIFGOTO,(void *) &LastVar, NULL,(void *) &Label_2);
      
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_SEMICOLON) return SYNTAX_ERROR;
@@ -798,9 +798,9 @@ int _for(){
 	result= body();
 
     // instrukce skoku
-    genInstr(IGOTO, NULL, NULL,(void *) Label_1);
+    genInstr(IGOTO, NULL, NULL,(void *) &Label_1);
     //instrukce label pro skonceni cyklu
-    genInstr(ILABEL,(void *) Label_1, NULL, NULL);
+    genInstr(ILABEL,(void *) &Label_1, NULL, NULL);
 	if(result !=SYNTAX_OK) return result;
 
 
@@ -824,7 +824,7 @@ int term_n(){
 			if (result != SYNTAX_OK) return result;
 			
 			//generovani instukce
-			genInstr(IWRITE, NULL, NULL,(void *) token);
+			genInstr(IWRITE, NULL, NULL,(void *) &token);
 			
 			//mozna jich je jeste vic, radeji si ho zavolam znovu
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -847,7 +847,7 @@ int _cout(){
 	if(token !=SYNTAX_OK) return result;
 	
 	// instrukce pro zapis, pokud jich je vice generuji se v term_n()
-    	genInstr(IWRITE, NULL, NULL,(void *) token);
+    	genInstr(IWRITE, NULL, NULL,(void *) &token);
 	
 	//zavolam scanner a jdu zjistit, jestli termu neni vic a jestli jsou ok
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -871,7 +871,7 @@ int _id_n(){
 			if (token !=TOK_ID) return SYNTAX_ERROR;
 			
 			// vygeneruju instrukci
-			genInstr(IREAD, NULL, NULL,(void *) token);
+			genInstr(IREAD, NULL, NULL,(void *) &token);
 			
 			//a zavolam si ji znova
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -892,7 +892,7 @@ int _cin(){
 	if (token !=TOK_ID) return SYNTAX_ERROR;
 	
 	// generuji prvni instrukci, ostatni se generujou v _id_n()
-	genInstr(IREAD, NULL, NULL,(void *) token);
+	genInstr(IREAD, NULL, NULL,(void *) &token);
 	
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	
@@ -923,7 +923,7 @@ int _if(){
 
     //generovani pomocne promenne
     string LastVar = ReadNameVar(instrList); // funkce na cteni nazvu posledni instrukce 
-    genInstr(INOT,(void *) LastVar, NULL,(void *) LastVar); // negace podminky
+    genInstr(INOT,(void *) &LastVar, NULL,(void *) &LastVar); // negace podminky
     
     string Label_1; //novy label, skok na vetev else
     strInit(&Label_1); //inicializace
@@ -931,7 +931,7 @@ int _if(){
     tableInsert(local_table, &Label_1, TOK_INT);    // vlozeni do lokalni tabulky symbolu
     
     //generovani skoku na ELSE vetev
-    genInstr(IIFGOTO,(void *) LastVar, NULL,(void *) Label_1);
+    genInstr(IIFGOTO,(void *) &LastVar, NULL,(void *) &Label_1);
     
 	//telo pokud je v if pravda
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -944,8 +944,8 @@ int _if(){
     tableInsert(local_table, &Label_1, TOK_INT);
     
     // skok za ELSE
-    genInstr(IGOTO, NULL, NULL,(void *) Label_2);
-    genInstr(ILABEL,(void *) Label_1, NULL, NULL); // musime vlozit label za telo IFu
+    genInstr(IGOTO, NULL, NULL,(void *) &Label_2);
+    genInstr(ILABEL,(void *) &Label_1, NULL, NULL); // musime vlozit label za telo IFu
     
 	if(result !=SYNTAX_OK) return result;
 	//vse ok, nasleduje else a za ni else
@@ -958,7 +958,7 @@ int _if(){
 	result= body();
 
     // instrukce pro label_2, sem se skoci jestlize podminka IF byla pravda
-    genInstr(ILABEL,(void *) Label_2, NULL, NULL);
+    genInstr(ILABEL,(void *) &Label_2, NULL, NULL);
     
 	if(result !=SYNTAX_OK) return result;
 	// konstrukce if je v poradku muze opustit s pozitvni odpovedi
