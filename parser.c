@@ -8,6 +8,7 @@
 
 #include <stdio.h>
 #include <stdbool>
+#include <malloc.h>
 #include "define.h"		// instrukce, tokeny, err
 #include "str.h"		// retezce
 #include "lex.h"		// getNextToken()
