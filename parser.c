@@ -279,8 +279,7 @@ int SReduction_expr (tStackTN * S, int index){
 	// E-> id
 		// generuje instrukci ve ktere priradi hodnotu z adresy 1 do adresy 3
 		if (error != 2)
-			//tady asi instrukce
-			//!!Co mam tady generovat?
+			genInstr(IEQUAL, (void *)value3, (void *)value1, NULL);
 		SDeleteItem(S, 1);
 		// adresa 3 je pote ulozena do zasobniku a pouzita pro dalsi vypocty
 		SPushNeterm(S, E1, value3);
@@ -295,6 +294,7 @@ int SReduction_expr (tStackTN * S, int index){
 				if (error != 2){
 					E1 = S-> valueType[index+1];
 					value1 = S-> value[index+1];
+					genInstr(IEQUAL, (void *)value3, (void *)value1, NULL);
 					//tady instrukce
 				}
 				SDeleteItem(S, 3);
@@ -314,11 +314,13 @@ int SReduction_expr (tStackTN * S, int index){
 				if (error != 2){
 					char E2 = S->valueType[index+2];
 					double *value2  = S->value[index+2];
-				// nezapomen na kontrolu semantiky
 
+					if (E1 != E2) return SEMANTIC_ERROR;
+				// nezapomen na kontrolu semantiky
+					genInstr(IMUL, (void *)value3, (void *)value1, (void *)value2);
 					// generuje istrulci ve ktere se vynasoby hodnoty na adresach 1 a 2
 					// a vysledek se ulozi na adresu 3 se kterou dale pracujeme
-					genInstr(IMUL,)
+					
 				}
 				SDeleteItem(S, 3);
 				// adresa 3 se ulozi do zasobniku a ceka na dalsi zpracovani
@@ -336,7 +338,9 @@ int SReduction_expr (tStackTN * S, int index){
 					char E2 = S->valueType[index+2];
 					double *value2 = S->value[index+2];
 					//seman
-					
+					if (E1 != E2) return SEMANTIC_ERROR;
+
+					genInstr(IDIV, (void *)value3, (void *)value1, (void *)value2);
 					
 				}	
 				SDeleteItem(S, 3);
@@ -353,8 +357,8 @@ int SReduction_expr (tStackTN * S, int index){
 					char E2 = S->valueType[index+2];
 					double *value2  = S->value[index+2];
 					//seman
-					
-					
+					if (E1 != E2) return SEMANTIC_ERROR;
+					genInstr(IADD, (void *)value3, (void *)value1, (void *)value2);
 				}
 				SDeleteItem(S, 3);
 				SPushNeterm(S, E1, value3);
@@ -371,7 +375,8 @@ int SReduction_expr (tStackTN * S, int index){
 					double *value2  = S->value[index+2];
 					
 					//seman
-					
+					if (E1 != E2) return SEMANTIC_ERROR;
+					genInstr(ISUB, (void *)value3, (void *)value1, (void *)value2);
 				}
 				SDeleteItem(S, 3);
 				SPushNeterm(S, E1, value3);
@@ -389,7 +394,9 @@ int SReduction_expr (tStackTN * S, int index){
 					double *value2  = S->value[index+2];
 					
 					//seman
-					
+					if (E1 != E2) return SEMANTIC_ERROR;
+					genInstr(IBIG, (void *)value3, (void *)value1, (void *)value2);
+
 				}
 				SDeleteItem(S, 3);
 				SPushNeterm(S, E1, value3);
@@ -406,6 +413,8 @@ int SReduction_expr (tStackTN * S, int index){
 					double *value2  = S->value[index+2];
 					
 					//seman
+					if (E1 != E2) return SEMANTIC_ERROR;
+					genInstr(IEQBG, (void *)value3, (void *)value1, (void *)value2);
 					// viz komentar k nasobeni
 					
 				}
