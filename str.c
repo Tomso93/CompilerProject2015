@@ -58,14 +58,14 @@ int strDelLastChar(string *s1){
 	{
       // pamet nestaci nebo ji je zbytecne hodne, je potreba provest realokaci
 		if ((s1->str = (char*) realloc(s1->str, newLength)) == NULL)
-			return INTERNAL_ERROR;
+			return I_E;
 		s1->allocSize = newLength;
 	}
    
 	s1->length --;
 	s1->str[s1->length] = '\0';
 	
-   return STR_SUCCESS;
+   return TRUE;
 }
 
 int strCopyString(string *s1, string *s2)
