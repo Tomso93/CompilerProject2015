@@ -48,9 +48,9 @@ string substr(string s, int pos, int n)
 	return sStr;
 }
 
-int find(string *s, string *str1){
+int find(string *s, string *str1)
 //funkce vyhleda podretezec v retezci, uziti KMP algoritmu
-
+{
   int delkas = strGetLength(s);
   int delkastr1 = strGetLength(str1);
   int fail[delkas];
@@ -79,10 +79,10 @@ int find(string *s, string *str1){
 return 0;
 }
 
-void FailCreate(char *s, int delka, int fail[]){
+void FailCreate(char *s, int delka, int fail[])
 //funkce vektoru FAIL
 //urcuje pozici kam se algoritmus musi vratit v porovnavani retezcu
-
+{
   int k,r = 0;
   fail[0] = 0;
 
@@ -98,6 +98,7 @@ void FailCreate(char *s, int delka, int fail[]){
 }
 
 string sort(string s)
+//funkce vyhledavani - heap sort
 {
   string* str1 = &s;
 
@@ -116,7 +117,11 @@ string sort(string s)
   return *str1;
 }
 
-void siftdown(char *str1, int left, int right){
+void siftdown(char *str1, int left, int right)
+//funkce tkz "sesypani dolu"
+//prvek v koreni je prohozen s prvkem odpovidajici koreni hromady
+{
+
   int i = left;
   int j = (2*i);
   char temp = str1[i];
