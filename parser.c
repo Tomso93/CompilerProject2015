@@ -265,7 +265,7 @@ void SDipose(tStackTN *S){
 	}
 }
 
-nt SReduction_expr (tStackTN * S, int index){
+int SReduction_expr (tStackTN * S, int index){
 // pokusi se aplikovat pravidlo a zredukovat vyraz
 	char E1;
 	double * value1 ;
