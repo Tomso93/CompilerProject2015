@@ -133,6 +133,7 @@
 
 #define STR_ERROR   1
 #define STR_SUCCESS 0
+#define TRUE -1
 
 #define SYNTAX_OK 0
 #define SEM_ERROR SEMANTIC_ERROR
