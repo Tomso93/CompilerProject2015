@@ -19,10 +19,11 @@
 int interpret (TinstList *LOI){
   int success = SUCCESS;
   Tinst *instr;
-  LOI->act = LOI->first;  
+  ListActFirst(LOI);  
 
   instr = ListGetInst(LOI);
   if (instr == NULL){
+    ListDispose(LOI);
     printerror(INTERN_ERROR);
     return INTERN_ERROR;
   }
@@ -142,7 +143,7 @@ int interpret (TinstList *LOI){
         break;
     }
 
-    if (success){
+    if (success != SUCCESS){
       ListDispose(LOI);
       printerror(success);
       return success;
@@ -151,6 +152,7 @@ int interpret (TinstList *LOI){
     instr = ListGetInst(LOI);
     if (instr == NULL){
       printerror(INTERN_ERROR);
+      ListDispose(LOI);
       return INTERN_ERROR;
     }
   }
