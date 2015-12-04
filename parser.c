@@ -844,7 +844,7 @@ int _cout(){
 int _id_n(){
 
 	switch (token){
-		case TOK_SEMICOLON;
+		case TOK_SEMICOLON:
 			return SYNTAX_OK;
 			break;
 		
