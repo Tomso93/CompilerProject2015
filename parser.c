@@ -756,7 +756,7 @@ int _for(){
     strInit(&Label_2); //inicializace
     GenNewVariable(&Label_2);  // vygenerovani promenne
     tableInsert(local_table, &Label_2, TOK_INT);
-    genInstr(IIFGOTO, LastVar, NULL, Label_2)
+    genInstr(IIFGOTO, LastVar, NULL, Label_2);
      
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_SEMICOLON) return SYNTAX_ERROR;
