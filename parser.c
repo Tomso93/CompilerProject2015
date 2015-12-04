@@ -760,14 +760,14 @@ int _for(){
    // newVariableInfo = tableSearch(local_table, &Label_1);
    // strFree(&Label_1);
     // instrukce pro label
-    genInstr(ILABEL,(void *) &Lable_1, NULL, NULL);
+    genInstr(ILABEL,(void *) &Label_1, NULL, NULL);
     
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	result= comp_expr();
 	if (result !=SYNTAX_OK) return SYNTAX_ERROR;
     
     // najde promennou ve ktere je vyhodnocena podminka
-    string LastVar = ReadNameVar(instrList);
+    string LastVar = ReadNameVar(list);
     genInstr(INOT,(void *) &LastVar, NULL,(void *) &LastVar);
     
     string Label_2; //label, pro navrat
@@ -922,7 +922,7 @@ int _if(){
 	if (token !=TOK_RIGHT_BRACKET) return SYNTAX_ERROR;
 
     //generovani pomocne promenne
-    string LastVar = ReadNameVar(instrList); // funkce na cteni nazvu posledni instrukce 
+    string LastVar = ReadNameVar(list); // funkce na cteni nazvu posledni instrukce 
     genInstr(INOT,(void *) &LastVar, NULL,(void *) &LastVar); // negace podminky
     
     string Label_1; //novy label, skok na vetev else
