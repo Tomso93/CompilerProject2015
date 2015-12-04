@@ -7,6 +7,7 @@
 */
 
 #include <stdio.h>
+#include <stdbool>
 #include "define.h"		// instrukce, tokeny, err
 #include "str.h"		// retezce
 #include "lex.h"		// getNextToken()
