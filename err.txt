@@ -1,0 +1,451 @@
+In file included from interpret.c:13:0:
+stable.h: In function ‘siftdown’:
+stable.h:7:2: error: storage class specified for parameter ‘Tvalue’
+ }Tvalue;
+  ^
+stable.h:12:3: error: expected specifier-qualifier-list before ‘Tvalue’
+   Tvalue varValue;
+   ^
+stable.h:13:3: error: storage class specified for parameter ‘tData’
+ } tData;
+   ^
+stable.h:18:3: error: expected specifier-qualifier-list before ‘tData’
+   tData data;                  // data, ktera jsou ke klici pridruzena
+   ^
+stable.h:20:3: error: storage class specified for parameter ‘tTableItem’
+ } tTableItem;
+   ^
+stable.h:25:3: error: storage class specified for parameter ‘tSymbolTable’
+ } tSymbolTable;
+   ^
+stable.h:27:16: error: expected declaration specifiers or ‘...’ before ‘tSymbolT                                      able’
+ void tableInit(tSymbolTable *T);
+                ^
+stable.h:28:1: error: expected declaration specifiers before ‘tTableItem’
+ tTableItem* tableInsert(tSymbolTable *T, string *key, int varType);
+ ^
+stable.h:29:1: error: expected declaration specifiers before ‘tData’
+ tData* tableSearch(tSymbolTable *T, string *key);
+ ^
+stable.h:30:1: error: expected declaration specifiers before ‘tData’
+ tData* tableRead ( tSymbolTable *T, string *key );
+ ^
+stable.h:31:24: error: expected declaration specifiers or ‘...’ before ‘tSymbolT                                      able’
+ void tableItemDelete ( tSymbolTable *T, string *key );
+                        ^
+stable.h:32:16: error: expected declaration specifiers or ‘...’ before ‘tSymbolT                                      able’
+ void tableFree(tSymbolTable *T);
+                ^
+stable.h:34:23: error: expected declaration specifiers or ‘...’ before ‘tSymbolT                                      able’
+ int tableInsertValue (tSymbolTable *T, string *key, Tvalue v);
+                       ^
+stable.h:34:53: error: expected declaration specifiers or ‘...’ before ‘Tvalue’
+ int tableInsertValue (tSymbolTable *T, string *key, Tvalue v);
+                                                     ^
+In file included from interpret.c:14:0:
+instlist.h:11:2: error: expected specifier-qualifier-list before ‘tData’
+  tData *src1; //zdroj1
+  ^
+instlist.h:14:2: error: storage class specified for parameter ‘Tinst’
+ }Tinst;
+  ^
+instlist.h:17:2: error: expected specifier-qualifier-list before ‘Tinst’
+  Tinst inst;     //aktualni instrukce
+  ^
+instlist.h:16:16: warning: struct has no members [-Wpedantic]
+ typedef struct listItem{
+                ^
+instlist.h:19:2: error: storage class specified for parameter ‘TlistItem’
+ }TlistItem;
+  ^
+instlist.h:25:2: error: storage class specified for parameter ‘TinstList’
+ }TinstList;
+  ^
+instlist.h:27:14: error: expected declaration specifiers or ‘...’ before ‘TinstL                                      ist’
+ int ListInit(TinstList *L);
+              ^
+instlist.h:28:17: error: expected declaration specifiers or ‘...’ before ‘TinstL                                      ist’
+ int ListDispose(TinstList *L);
+                 ^
+instlist.h:29:16: error: expected declaration specifiers or ‘...’ before ‘TinstL                                      ist’
+ int ListInsert(TinstList *L, Tinst I);
+                ^
+instlist.h:29:30: error: expected declaration specifiers or ‘...’ before ‘Tinst’
+ int ListInsert(TinstList *L, Tinst I);
+                              ^
+instlist.h:30:14: error: expected declaration specifiers or ‘...’ before ‘TinstL                                      ist’
+ int ListSucc(TinstList *L);
+              ^
+instlist.h:31:14: error: expected declaration specifiers or ‘...’ before ‘TinstL                                      ist’
+ int ListGoto(TinstList *L, tData *dest);
+              ^
+instlist.h:31:28: error: expected declaration specifiers or ‘...’ before ‘tData’
+ int ListGoto(TinstList *L, tData *dest);
+                            ^
+instlist.h:32:1: error: expected declaration specifiers before ‘Tinst’
+ Tinst *ListGetInst(TinstList *L);
+ ^
+instlist.h:33:1: error: expected declaration specifiers before ‘Tinst’
+ Tinst *ListGetLastInst(TinstList *L);
+ ^
+instlist.h:34:17: error: expected declaration specifiers or ‘...’ before ‘TinstL                                      ist’
+ int ListActLast(TinstList *L);
+                 ^
+instlist.h:35:18: error: expected declaration specifiers or ‘...’ before ‘TinstL                                      ist’
+ int ListActFirst(TinstList *L);
+                  ^
+In file included from interpret.c:16:0:
+interpret.h:11:15: error: expected declaration specifiers or ‘...’ before ‘Tinst                                      List’
+ int interpret(TinstList *LOI);  //hlavni funkce. prochazi seznam instrukci
+               ^
+interpret.h:16:10: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int move(tData *src1, tData *dest);
+          ^
+interpret.h:16:23: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int move(tData *src1, tData *dest);
+                       ^
+interpret.h:20:14: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int addition(tData *src1, tData *src2, tData *dest);
+              ^
+interpret.h:20:27: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int addition(tData *src1, tData *src2, tData *dest);
+                           ^
+interpret.h:20:40: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int addition(tData *src1, tData *src2, tData *dest);
+                                        ^
+interpret.h:24:18: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int substraction(tData *src1, tData *src2, tData *dest);
+                  ^
+interpret.h:24:31: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int substraction(tData *src1, tData *src2, tData *dest);
+                               ^
+interpret.h:24:44: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int substraction(tData *src1, tData *src2, tData *dest);
+                                            ^
+interpret.h:28:20: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int multiplication(tData *src1, tData *src2, tData *dest);
+                    ^
+interpret.h:28:33: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int multiplication(tData *src1, tData *src2, tData *dest);
+                                 ^
+interpret.h:28:46: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int multiplication(tData *src1, tData *src2, tData *dest);
+                                              ^
+interpret.h:32:14: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int division(tData *src1, tData *src2, tData *dest);
+              ^
+interpret.h:32:27: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int division(tData *src1, tData *src2, tData *dest);
+                           ^
+interpret.h:32:40: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int division(tData *src1, tData *src2, tData *dest);
+                                        ^
+interpret.h:36:11: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int equal(tData *src1, tData *src2, tData *dest);
+           ^
+interpret.h:36:24: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int equal(tData *src1, tData *src2, tData *dest);
+                        ^
+interpret.h:36:37: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int equal(tData *src1, tData *src2, tData *dest);
+                                     ^
+interpret.h:40:13: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int smaller(tData *src1, tData *src2, tData *dest);
+             ^
+interpret.h:40:26: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int smaller(tData *src1, tData *src2, tData *dest);
+                          ^
+interpret.h:40:39: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int smaller(tData *src1, tData *src2, tData *dest);
+                                       ^
+interpret.h:44:12: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int bigger(tData *src1, tData *src2, tData *dest);
+            ^
+interpret.h:44:25: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int bigger(tData *src1, tData *src2, tData *dest);
+                         ^
+interpret.h:44:38: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int bigger(tData *src1, tData *src2, tData *dest);
+                                      ^
+interpret.h:48:18: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int equalsmaller(tData *src1, tData *src2, tData *dest);
+                  ^
+interpret.h:48:31: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int equalsmaller(tData *src1, tData *src2, tData *dest);
+                               ^
+interpret.h:48:44: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int equalsmaller(tData *src1, tData *src2, tData *dest);
+                                            ^
+interpret.h:52:17: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int equalbigger(tData *src1, tData *src2, tData *dest);
+                 ^
+interpret.h:52:30: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int equalbigger(tData *src1, tData *src2, tData *dest);
+                              ^
+interpret.h:52:43: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int equalbigger(tData *src1, tData *src2, tData *dest);
+                                           ^
+interpret.h:56:14: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int notequal(tData *src1, tData *src2, tData *dest);
+              ^
+interpret.h:56:27: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int notequal(tData *src1, tData *src2, tData *dest);
+                           ^
+interpret.h:56:40: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int notequal(tData *src1, tData *src2, tData *dest);
+                                        ^
+interpret.h:60:14: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int negation(tData *src1, tData *dest);
+              ^
+interpret.h:60:27: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int negation(tData *src1, tData *dest);
+                           ^
+interpret.h:65:10: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int jump(tData *dest, TinstList *LOI);
+          ^
+interpret.h:65:23: error: expected declaration specifiers or ‘...’ before ‘Tinst                                      List’
+ int jump(tData *dest, TinstList *LOI);
+                       ^
+interpret.h:71:12: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int jumpif(tData *src1, tData *dest, TinstList *LOI);
+            ^
+interpret.h:71:25: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int jumpif(tData *src1, tData *dest, TinstList *LOI);
+                         ^
+interpret.h:71:38: error: expected declaration specifiers or ‘...’ before ‘Tinst                                      List’
+ int jumpif(tData *src1, tData *dest, TinstList *LOI);
+                                      ^
+interpret.h:75:10: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int read(tData *dest);
+          ^
+interpret.h:79:13: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int readint(tData *dest);
+             ^
+interpret.h:84:16: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int readdouble(tData *dest);
+                ^
+interpret.h:88:16: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int readstring(tData *dest);
+                ^
+interpret.h:92:11: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int write(tData *src1);
+           ^
+interpret.h:96:12: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int sortme(tData *src1, tData *dest);
+            ^
+interpret.h:96:25: error: expected declaration specifiers or ‘...’ before ‘tData                                      ’
+ int sortme(tData *src1, tData *dest);
+                         ^
+interpret.h:101:12: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int findme(tData *src1, tData *src2, tData *dest);
+            ^
+interpret.h:101:25: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int findme(tData *src1, tData *src2, tData *dest);
+                         ^
+interpret.h:101:38: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int findme(tData *src1, tData *src2, tData *dest);
+                                      ^
+interpret.h:106:18: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int lengthstring(tData *src1, tData *dest);
+                  ^
+interpret.h:106:31: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int lengthstring(tData *src1, tData *dest);
+                               ^
+interpret.h:111:17: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int concatenate(tData *src1, tData *src2, tData *dest);
+                 ^
+interpret.h:111:30: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int concatenate(tData *src1, tData *src2, tData *dest);
+                              ^
+interpret.h:111:43: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int concatenate(tData *src1, tData *src2, tData *dest);
+                                           ^
+interpret.h:115:15: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int substring(tData *src1, tData *src2, tData *dest);
+               ^
+interpret.h:115:28: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int substring(tData *src1, tData *src2, tData *dest);
+                            ^
+interpret.h:115:41: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int substring(tData *src1, tData *src2, tData *dest);
+                                         ^
+interpret.c:19:16: error: expected declaration specifiers or ‘...’ before ‘Tinst                                      List’
+ int interpret (TinstList *LOI){
+                ^
+interpret.c:166:10: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int move(tData *src1, tData *dest){
+          ^
+interpret.c:166:23: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int move(tData *src1, tData *dest){
+                       ^
+interpret.c:228:14: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int addition(tData *src1, tData *src2, tData *dest){
+              ^
+interpret.c:228:27: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int addition(tData *src1, tData *src2, tData *dest){
+                           ^
+interpret.c:228:40: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int addition(tData *src1, tData *src2, tData *dest){
+                                        ^
+interpret.c:302:18: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int substraction(tData *src1, tData *src2, tData *dest){
+                  ^
+interpret.c:302:31: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int substraction(tData *src1, tData *src2, tData *dest){
+                               ^
+interpret.c:302:44: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int substraction(tData *src1, tData *src2, tData *dest){
+                                            ^
+interpret.c:375:20: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int multiplication(tData *src1, tData *src2, tData *dest){
+                    ^
+interpret.c:375:33: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int multiplication(tData *src1, tData *src2, tData *dest){
+                                 ^
+interpret.c:375:46: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int multiplication(tData *src1, tData *src2, tData *dest){
+                                              ^
+interpret.c:448:14: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int division(tData *src1, tData *src2, tData *dest){
+              ^
+interpret.c:448:27: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int division(tData *src1, tData *src2, tData *dest){
+                           ^
+interpret.c:448:40: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int division(tData *src1, tData *src2, tData *dest){
+                                        ^
+interpret.c:527:11: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int equal(tData *src1, tData *src2, tData *dest){
+           ^
+interpret.c:527:24: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int equal(tData *src1, tData *src2, tData *dest){
+                        ^
+interpret.c:527:37: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int equal(tData *src1, tData *src2, tData *dest){
+                                     ^
+interpret.c:618:13: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int smaller(tData *src1, tData *src2, tData *dest){
+             ^
+interpret.c:618:26: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int smaller(tData *src1, tData *src2, tData *dest){
+                          ^
+interpret.c:618:39: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int smaller(tData *src1, tData *src2, tData *dest){
+                                       ^
+interpret.c:709:12: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int bigger(tData *src1, tData *src2, tData *dest){
+            ^
+interpret.c:709:25: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int bigger(tData *src1, tData *src2, tData *dest){
+                         ^
+interpret.c:709:38: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int bigger(tData *src1, tData *src2, tData *dest){
+                                      ^
+interpret.c:800:18: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int equalsmaller(tData *src1, tData *src2, tData *dest){
+                  ^
+interpret.c:800:31: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int equalsmaller(tData *src1, tData *src2, tData *dest){
+                               ^
+interpret.c:800:44: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int equalsmaller(tData *src1, tData *src2, tData *dest){
+                                            ^
+interpret.c:891:17: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int equalbigger(tData *src1, tData *src2, tData *dest){
+                 ^
+interpret.c:891:30: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int equalbigger(tData *src1, tData *src2, tData *dest){
+                              ^
+interpret.c:891:43: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int equalbigger(tData *src1, tData *src2, tData *dest){
+                                           ^
+interpret.c:982:14: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int notequal(tData *src1, tData *src2, tData *dest){
+              ^
+interpret.c:982:27: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int notequal(tData *src1, tData *src2, tData *dest){
+                           ^
+interpret.c:982:40: error: expected declaration specifiers or ‘...’ before ‘tDat                                      a’
+ int notequal(tData *src1, tData *src2, tData *dest){
+                                        ^
+interpret.c:1073:14: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int negation(tData *src1, tData *dest){
+              ^
+interpret.c:1073:27: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int negation(tData *src1, tData *dest){
+                           ^
+interpret.c:1114:10: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int jump(tData *dest, TinstList *LOI){
+          ^
+interpret.c:1114:23: error: expected declaration specifiers or ‘...’ before ‘Tin                                      stList’
+ int jump(tData *dest, TinstList *LOI){
+                       ^
+interpret.c:1119:12: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int jumpif(tData *src1, tData *dest, TinstList *LOI){
+            ^
+interpret.c:1119:25: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int jumpif(tData *src1, tData *dest, TinstList *LOI){
+                         ^
+interpret.c:1119:38: error: expected declaration specifiers or ‘...’ before ‘Tin                                      stList’
+ int jumpif(tData *src1, tData *dest, TinstList *LOI){
+                                      ^
+interpret.c:1129:13: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int readint(tData *dest){
+             ^
+interpret.c:1139:16: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int readdouble(tData *dest){
+                ^
+interpret.c:1149:16: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int readstring(tData *dest){
+                ^
+interpret.c:1180:10: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int read(tData *dest){
+          ^
+interpret.c:1199:11: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int write(tData *src1){
+           ^
+interpret.c:1229:12: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int sortme(tData *src1, tData *dest){
+            ^
+interpret.c:1229:25: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int sortme(tData *src1, tData *dest){
+                         ^
+interpret.c:1258:12: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int findme(tData *src1, tData *src2, tData *dest){
+            ^
+interpret.c:1258:25: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int findme(tData *src1, tData *src2, tData *dest){
+                         ^
+interpret.c:1258:38: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int findme(tData *src1, tData *src2, tData *dest){
+                                      ^
+interpret.c:1280:18: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int lengthstring(tData *src1, tData *dest){
+                  ^
+interpret.c:1280:31: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int lengthstring(tData *src1, tData *dest){
+                               ^
+interpret.c:1304:17: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int concatenate(tData *src1, tData *src2, tData *dest){
+                 ^
+interpret.c:1304:30: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int concatenate(tData *src1, tData *src2, tData *dest){
+                              ^
+interpret.c:1304:43: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int concatenate(tData *src1, tData *src2, tData *dest){
+                                           ^
+interpret.c:1325:15: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int substring(tData *src1, tData *src2, tData *dest){
+               ^
+interpret.c:1325:28: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int substring(tData *src1, tData *src2, tData *dest){
+                            ^
+interpret.c:1325:41: error: expected declaration specifiers or ‘...’ before ‘tDa                                      ta’
+ int substring(tData *src1, tData *src2, tData *dest){
+                                         ^
+In file included from interpret.c:12:0:
+ial.h:11:6: error: old-style parameter declarations in prototyped function defin                                      ition
+ void siftdown(char *str1, int left, int right)
+      ^
+interpret.c:1327:1: error: expected ‘{’ at end of input
+ }
