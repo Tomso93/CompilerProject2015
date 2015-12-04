@@ -7,11 +7,11 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "str.h" //soubor od Martin Kvapil. funkce pro praci s retezci
+#include "define.h" //definice konstant
+#include "str.h" //funkce pro praci s retezci
 #include "ial.h" //funkce find a sort a hashovaci tabulka
 #include "stable.h" //tabulka symbolu
 #include "instlist.h" //seznamem instrukci
-#include "define.h" //definice konstant
 #include "errors.h" 
 #include "interpret.h"
 
