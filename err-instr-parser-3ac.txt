@@ -1,23 +1,9 @@
-parser.c:540:48: note: each undeclared identifier is reported only once for each function it appears in
+
 parser.c: In function ‘_for’:
-parser.c:763:31: error: ‘Lable_1’ undeclared (first use in this function)
-     genInstr(ILABEL,(void *) &Lable_1, NULL, NULL);
-                               ^
-parser.c:770:34: error: ‘instrList’ undeclared (first use in this function)
-     string LastVar = ReadNameVar(instrList);
+parser.c:770:34: error: ‘list’ undeclared (first use in this function)
+     string LastVar = ReadNameVar(list);
                                   ^
 parser.c: In function ‘_if’:
-parser.c:925:34: error: ‘instrList’ undeclared (first use in this function)
-     string LastVar = ReadNameVar(instrList); // funkce na cteni nazvu posledni instrukce
+parser.c:925:34: error: ‘list’ undeclared (first use in this function)
+     string LastVar = ReadNameVar(list); // funkce na cteni nazvu posledni instrukce
                                   ^
-parser.c: In function ‘parse’:
-parser.c:1164:3: error: ‘table’ undeclared (first use in this function)
-   table = ST;
-   ^
-parser.c:1165:3: error: ‘list’ undeclared (first use in this function)
-   list = instrList;
-   ^
-parser.c:1169:28: error: ‘atrr’ undeclared (first use in this function)
-  if((token = getNextToken(&atrr))== LEX_ERROR)
-                            ^
-make: *** [parser.o] Error 1
