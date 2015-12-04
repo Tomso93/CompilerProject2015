@@ -126,7 +126,7 @@ int select_ruler(string *zas_term, int term){
 
 	return prec_table[radek][sloupec];
 }
-//---------------------------------------------------------------------------------
+//-------------------------------------------------------------------------
 // struktura zasobniku
 typedef struct	{                          
     string a[25];	// text
@@ -137,7 +137,7 @@ typedef struct	{
 } tStackTN;
 
 
-//---------------------------Init-zasobnik-----------------------------------------
+//---------------------------Init-zasobnik----------------------------------
 void StackInit(tStackTN * S){
 // inicializuje zasobnik, na nultou pozici da "eps"
 	string a;
@@ -153,7 +153,7 @@ void StackInit(tStackTN * S){
 } 
 
 
-//----------------------------Vloz--token--terminal--------------------------------
+//----------------------------Vloz--token--terminal-------------------------
 void SPushTerm (tStackTN *S){
 //dam terminal na zasobnik
   if (S->top==25) 
@@ -161,7 +161,7 @@ void SPushTerm (tStackTN *S){
   else {  
 		string a;
 		strInit(&a);
-		strCopyString(&a, &token);
+		strCopyString(&a, &attr);
 			
 		S->top++;  
 		S->type[S->top] = 'T';
@@ -170,7 +170,7 @@ void SPushTerm (tStackTN *S){
 }	
 
 
-//-----------hod--pravidlo--na--zasobnik--a--oznac--jako--neterminal-------------
+//-----------hod--pravidlo--na--zasobnik--a--oznac--jako--neterminal--------
 void SPushNeterm(tStackTN *S, char Type, void * data){
 //dam pravidlo na zasobnik
   if (S->top==25) 
@@ -192,7 +192,7 @@ void SPushNeterm(tStackTN *S, char Type, void * data){
 }	
 
 
-//--------------index--vrcholu--zasobniku----------------------------------------
+//--------------index--vrcholu--zasobniku------------------------------------
 int SSearchTerm(tStackTN * S){
 	// index prvniho terminalu
 	int i=0;	
@@ -202,7 +202,7 @@ int SSearchTerm(tStackTN * S){
 	return S->top - i;
 }
 
-//-------------hleda--prvni--handle-----------------------------------------------
+//-------------hleda--prvni--handle-------------------------------------------
 int SSearchBracket(tStackTN * S){
  // hleda prvni handle, jinak vraci syn. err
 	int i=0;
@@ -224,7 +224,7 @@ int SSearchBracket(tStackTN * S){
 }
 
 
-//--------------hodnota--vrcholu--zasobniku---------------------------------------
+//--------------hodnota--vrcholu--zasobniku------------------------------------
 string STopTerm(tStackTN * S){
 	// hodnota prvniho terminalu
 	return S->a[SSearchTerm(S)];
@@ -233,7 +233,7 @@ string STopTerm(tStackTN * S){
 } 
 
 
-//-------------prida---handle--za--terminal---------------------------------------
+//-------------prida---handle--za--terminal------------------------------------
 void SAddTerm(tStackTN * S, char symbol){
 	// prida k terminalu nakonec znak
 	strAddChar(&(S->a[SSearchTerm(S)]), symbol);
@@ -242,7 +242,7 @@ void SAddTerm(tStackTN * S, char symbol){
 }
 
 
-//-------------smaze--urcite--polozky--ve--stacku---------------------------------
+//-------------smaze--urcite--polozky--ve--stacku-----------------------------
 void SDeleteItem(tStackTN * S, int count){
 	// smaze polozky ze zasobniku
 	int i=0;
@@ -255,7 +255,7 @@ void SDeleteItem(tStackTN * S, int count){
 }
 
 
-//-----------------smaze-zasobnik--------------------------------------------------
+//-----------------smaze-zasobnik----------------------------------------------
 void SDipose(tStackTN *S){
 // smaze zasobnik
 	while (S->top > 0){
@@ -263,7 +263,7 @@ void SDipose(tStackTN *S){
 		S->top--;
 	}
 }
-
+//------------Redugujeme--:D---------------------------------------------------
 int SReduction_expr (tStackTN * S, int index){
 // pokusi se aplikovat pravidlo a zredukovat vyraz
 	char E1;
@@ -274,7 +274,7 @@ int SReduction_expr (tStackTN * S, int index){
 		value1 = S-> value[index];
 		value3 = malloc(sizeof (double));
 	}
-	
+//----------------------------------------------------------------------------	
 	if (strCmpConstStr(&(S->a[index]), "id")==0){
 	// E-> id
 		// generuje instrukci ve ktere priradi hodnotu z adresy 1 do adresy 3
@@ -285,8 +285,7 @@ int SReduction_expr (tStackTN * S, int index){
 		SPushNeterm(S, E1, value3);
 		return SYNTAX_OK;
 	}
-
-
+//----------------------------------------------------------------------------	
 	else if (strCmpConstStr(&(S->a[index]), "(")==0){
 		if (strCmpConstStr(&(S->a[index+1]), "E")==0){ 
 			if (strCmpConstStr(&(S->a[index+2]), ")")==0){
@@ -303,34 +302,32 @@ int SReduction_expr (tStackTN * S, int index){
 			} 		
 		}
 	}
+//----------------------------------------------------------------------------	
+	else if (strCmpConstStr(&(S->a[index]), "E") == 0) {
+		if (strCmpConstStr(&(S->a[index + 1]), "*") == 0) {
+			if (strCmpConstStr(&(S->a[index + 2]), "E") == 0) {
+				// E-> E*E
 
-
-		else if (strCmpConstStr(&(S->a[index]), "E")==0){
-		
-		if (strCmpConstStr(&(S->a[index+1]), "*")==0){
-			if (strCmpConstStr(&(S->a[index+2]), "E")==0){
-			// E-> E*E
-			
-				if (error != 2){
-					char E2 = S->valueType[index+2];
-					double *value2  = S->value[index+2];
+				if (error != 2) {
+					char E2 = S->valueType[index + 2];
+					double *value2 = S->value[index + 2];
 
 					if (E1 != E2) return SEMANTIC_ERROR;
-				// nezapomen na kontrolu semantiky
+					// nezapomen na kontrolu semantiky
 					genInstr(IMUL, (void *)value3, (void *)value1, (void *)value2);
 					// generuje istrulci ve ktere se vynasoby hodnoty na adresach 1 a 2
 					// a vysledek se ulozi na adresu 3 se kterou dale pracujeme
-					
+
 				}
 				SDeleteItem(S, 3);
 				// adresa 3 se ulozi do zasobniku a ceka na dalsi zpracovani
 				SPushNeterm(S, E1, value3);
 				return SYNTAX_OK;
 			}
-		} 
+		}
+	}
 
-
-
+//----------------------------------------------------------------------------	
 		else if (strCmpConstStr(&(S->a[index+1]), "/")==0){
 			if (strCmpConstStr(&(S->a[index+2]), "E")==0){
 			// E-> E/E
@@ -349,7 +346,7 @@ int SReduction_expr (tStackTN * S, int index){
 			}
 		} 
 
-
+//----------------------------------------------------------------------------	
 		else if (strCmpConstStr(&(S->a[index+1]), "+")==0){
 			if (strCmpConstStr(&(S->a[index+2]), "E")==0){
 			// E-> E+E
@@ -366,7 +363,7 @@ int SReduction_expr (tStackTN * S, int index){
 			}
 		} 
 
-
+//----------------------------------------------------------------------------	
 		else if (strCmpConstStr(&(S->a[index+1]), "-")==0){
 			if (strCmpConstStr(&(S->a[index+2]), "E")==0){
 			// E-> E-E
@@ -385,7 +382,7 @@ int SReduction_expr (tStackTN * S, int index){
 		} 
 
 
-
+//----------------------------------------------------------------------------	
 		else if (strCmpConstStr(&(S->a[index+1]), ">")==0){
 			if (strCmpConstStr(&(S->a[index+2]), "E")==0){
 			// E-> E>E				
@@ -404,7 +401,7 @@ int SReduction_expr (tStackTN * S, int index){
 			}
 		} 
 
-
+//----------------------------------------------------------------------------	
 		else if (strCmpConstStr(&(S->a[index+1]), ">=")==0){
 			if (strCmpConstStr(&(S->a[index+2]), "E")==0){
 			// E-> E>=E
@@ -424,7 +421,7 @@ int SReduction_expr (tStackTN * S, int index){
 			}	
 		} 
 
-
+//----------------------------------------------------------------------------	
 		else if (strCmpConstStr(&(S->a[index+1]), "<")==0){
 			if (strCmpConstStr(&(S->a[index+2]), "E")==0){
 			// E-> E<E
@@ -444,7 +441,7 @@ int SReduction_expr (tStackTN * S, int index){
 		} 
 
 
-
+//----------------------------------------------------------------------------	
 		else if (strCmpConstStr(&(S->a[index+1]), "<=")==0){
 			if (strCmpConstStr(&(S->a[index+2]), "E")==0){
 			// E-> E<=E
@@ -462,7 +459,7 @@ int SReduction_expr (tStackTN * S, int index){
 		}
 
 
-
+//----------------------------------------------------------------------------	
 		 else if (strCmpConstStr(&(S->a[index+1]), "==")==0){
 			if (strCmpConstStr(&(S->a[index+2]), "E")==0){
 			// E-> E=E
@@ -481,7 +478,7 @@ int SReduction_expr (tStackTN * S, int index){
 		} 
 
 
-
+//----------------------------------------------------------------------------	
 		else if (strCmpConstStr(&(S->a[index+1]), "!=")==0){
 			if (strCmpConstStr(&(S->a[index+2]), "E")==0){
 			// E-> E<>E
@@ -501,8 +498,6 @@ int SReduction_expr (tStackTN * S, int index){
 		
 		} 
 			
-	}
-	
 	return SYNTAX_ERROR;
 	
 }
