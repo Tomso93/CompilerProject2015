@@ -135,3 +135,4 @@
 #define STR_SUCCESS 0
 
 #define SYNTAX_OK 0
+#define SEM_ERROR SEMANTIC_ERROR
