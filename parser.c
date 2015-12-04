@@ -977,26 +977,26 @@ int stmnt(TinstList *instrList){
 		case TOK_IF:
 			result= _if(instrList);
 			if (result != SYNTAX_OK) return result;
-			return stmnt();
+			return stmnt(instrList);
 			break;
 		
 		case TOK_FOR:
 			result= _for(instrList);
 			if (result != SYNTAX_OK) return result;
-			return stmnt();
+			return stmnt(instrList);
 			break;
 
 		case TOK_CIN:
 			result= _cin();
 			if (result != SYNTAX_OK) return result;
-			return stmnt();
+			return stmnt(instrList);
 			break;
 
 		case TOK_COUT:
 			result= _cout();
 			if (result != SYNTAX_OK) return result;
 			// volam rekurzvine funkci
-			return stmnt();
+			return stmnt(instrList);
 			break;
 		
 		case TOK_RETURN:

@@ -1,4 +1,4 @@
-
+parser.c:540:48: note: each undeclared identifier is reported only once for each function it appears in
 parser.c: In function ‘_for’:
 parser.c:770:34: error: ‘list’ undeclared (first use in this function)
      string LastVar = ReadNameVar(list);
