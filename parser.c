@@ -281,7 +281,7 @@ int SReduction_expr (tStackTN * S, int index){
 	// E-> id
 		// generuje instrukci ve ktere priradi hodnotu z adresy 1 do adresy 3
 		if (error != 2)
-			genInstr(IMOV, (void *)value1, NULL, (void *)value3);
+			genInstr(IMOV, (void *)value1, NULL, (void *)value3, list);
 		SDeleteItem(S, 1);
 		// adresa 3 je pote ulozena do zasobniku a pouzita pro dalsi vypocty
 		SPushNeterm(S, E1, value3);
@@ -295,7 +295,7 @@ int SReduction_expr (tStackTN * S, int index){
 				if (error != 2){
 					E1 = S-> valueType[index+1];
 					value1 = S-> value[index+1];
-					genInstr(IMOV,(void *)value1, NULL, (void *)value3);
+					genInstr(IMOV,(void *)value1, NULL, (void *)value3,, list);
 					//tady instrukce
 				}
 				SDeleteItem(S, 3);
@@ -316,7 +316,7 @@ int SReduction_expr (tStackTN * S, int index){
 
 					if (E1 != E2) return SEMANTIC_ERROR;
 					// nezapomen na kontrolu semantiky
-					genInstr(IMUL, (void *)value1, (void *)value2,(void *)value3);
+					genInstr(IMUL, (void *)value1, (void *)value2,(void *)value3,, list);
 					// generuje istrulci ve ktere se vynasoby hodnoty na adresach 1 a 2
 					// a vysledek se ulozi na adresu 3 se kterou dale pracujeme
 
@@ -339,7 +339,7 @@ int SReduction_expr (tStackTN * S, int index){
 					//seman
 					if (E1 != E2) return SEMANTIC_ERROR;
 
-					genInstr(IDIV, (void *)value1, (void *)value2, (void *)value3);
+					genInstr(IDIV, (void *)value1, (void *)value2, (void *)value3, list);
 					
 				}	
 				SDeleteItem(S, 3);
@@ -357,7 +357,7 @@ int SReduction_expr (tStackTN * S, int index){
 					double *value2  = S->value[index+2];
 					//seman
 					if (E1 != E2) return SEMANTIC_ERROR;
-					genInstr(IADD,(void *)value1, (void *)value2, (void *)value3);
+					genInstr(IADD,(void *)value1, (void *)value2, (void *)value3, list);
 				}
 				SDeleteItem(S, 3);
 				SPushNeterm(S, E1, value3);
@@ -375,7 +375,7 @@ int SReduction_expr (tStackTN * S, int index){
 					
 					//seman
 					if (E1 != E2) return SEMANTIC_ERROR;
-					genInstr(ISUB, (void *)value1, (void *)value2, (void *)value3);
+					genInstr(ISUB, (void *)value1, (void *)value2, (void *)value3, list);
 				}
 				SDeleteItem(S, 3);
 				SPushNeterm(S, E1, value3);
@@ -394,7 +394,7 @@ int SReduction_expr (tStackTN * S, int index){
 					
 					//seman
 					if (E1 != E2) return SEMANTIC_ERROR;
-					genInstr(IBIG,  (void *)value1, (void *)value2, (void *)value3);
+					genInstr(IBIG,  (void *)value1, (void *)value2, (void *)value3, list);
 
 				}
 				SDeleteItem(S, 3);
@@ -413,7 +413,7 @@ int SReduction_expr (tStackTN * S, int index){
 					
 					//seman
 					if (E1 != E2) return SEMANTIC_ERROR;
-					genInstr(IEQBG, (void *)value1, (void *)value2, (void *)value3);
+					genInstr(IEQBG, (void *)value1, (void *)value2, (void *)value3, list);
 					// viz komentar k nasobeni
 					
 				}
@@ -433,7 +433,7 @@ int SReduction_expr (tStackTN * S, int index){
 					
 					if (E1 != E2) return SEMANTIC_ERROR;
 				//seman
-					genInstr(ISMALL, (void *)value1, (void *)value2, (void *)value3);
+					genInstr(ISMALL, (void *)value1, (void *)value2, (void *)value3, list);
 
 				}
 				SDeleteItem(S, 3);
@@ -452,7 +452,7 @@ int SReduction_expr (tStackTN * S, int index){
 				
 				//seman
 				if (E1 != E2) return SEMANTIC_ERROR;
-				genInstr(IEQSM, (void *)value1, (void *)value2, (void *)value3);
+				genInstr(IEQSM, (void *)value1, (void *)value2, (void *)value3, list);
 
 				SDeleteItem(S, 3);
 				SPushNeterm(S, E1, value3);
@@ -471,7 +471,7 @@ int SReduction_expr (tStackTN * S, int index){
 					
 					//seman
 					if (E1 != E2) return SEMANTIC_ERROR;
-					genInstr(IEQUAL, (void *)value1, (void *)value2, (void *)value3);
+					genInstr(IEQUAL, (void *)value1, (void *)value2, (void *)value3, list);
 				}
 				SDeleteItem(S, 3);
 				SPushNeterm(S, E1, value3);
@@ -490,7 +490,7 @@ int SReduction_expr (tStackTN * S, int index){
 
 					if (E1 != E2) return SEMANTIC_ERROR;
 					
-					genInstr(INOTEQ, (void *)value1, (void *)value2, (void *)value3);
+					genInstr(INOTEQ, (void *)value1, (void *)value2, (void *)value3, list);
 			
 				}
 				SDeleteItem(S, 3);
@@ -762,7 +762,7 @@ int _for(TinstList *instrList){
    // newVariableInfo = tableSearch(local_table, &Label_1);
    // strFree(&Label_1);
     // instrukce pro label
-    genInstr(ILABEL,(void *) &Label_1, NULL, NULL);
+    genInstr(ILABEL,(void *) &Label_1, NULL, NULL, list);
     
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	result= comp_expr();
@@ -770,13 +770,13 @@ int _for(TinstList *instrList){
     
     // najde promennou ve ktere je vyhodnocena podminka
     string LastVar = ReadNameVar(instrList);
-    genInstr(INOT,(void *) &LastVar, NULL,(void *) &LastVar);
+    genInstr(INOT,(void *) &LastVar, NULL,(void *) &LastVar, list);
     
     string Label_2; //label, pro navrat
     strInit(&Label_2); //inicializace
     GenNewVariable(&Label_2);  // vygenerovani promenne
     tableInsert(local_table, &Label_2, TOK_INT);
-    genInstr(IIFGOTO,(void *) &LastVar, NULL,(void *) &Label_2);
+    genInstr(IIFGOTO,(void *) &LastVar, NULL,(void *) &Label_2, list);
      
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_SEMICOLON) return SYNTAX_ERROR;
@@ -801,9 +801,9 @@ int _for(TinstList *instrList){
 	result= body(instrList);
 
     // instrukce skoku
-    genInstr(IGOTO, NULL, NULL,(void *) &Label_1);
+    genInstr(IGOTO, NULL, NULL,(void *) &Label_1, list);
     //instrukce label pro skonceni cyklu
-    genInstr(ILABEL,(void *) &Label_1, NULL, NULL);
+    genInstr(ILABEL,(void *) &Label_1, NULL, NULL, list);
 	if(result !=SYNTAX_OK) return result;
 
 
@@ -827,7 +827,7 @@ int term_n(){
 			if (result != SYNTAX_OK) return result;
 			
 			//generovani instukce
-			genInstr(IWRITE, NULL, NULL,(void *) &token);
+			genInstr(IWRITE, NULL, NULL,(void *) &token, list);
 			
 			//mozna jich je jeste vic, radeji si ho zavolam znovu
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -850,7 +850,7 @@ int _cout(){
 	if(token !=SYNTAX_OK) return result;
 	
 	// instrukce pro zapis, pokud jich je vice generuji se v term_n()
-    	genInstr(IWRITE, NULL, NULL,(void *) &token);
+    	genInstr(IWRITE, NULL, NULL,(void *) &token, list);
 	
 	//zavolam scanner a jdu zjistit, jestli termu neni vic a jestli jsou ok
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -874,7 +874,7 @@ int _id_n(){
 			if (token !=TOK_ID) return SYNTAX_ERROR;
 			
 			// vygeneruju instrukci
-			genInstr(IREAD, NULL, NULL,(void *) &token);
+			genInstr(IREAD, NULL, NULL,(void *) &token, list);
 			
 			//a zavolam si ji znova
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -895,7 +895,7 @@ int _cin(){
 	if (token !=TOK_ID) return SYNTAX_ERROR;
 	
 	// generuji prvni instrukci, ostatni se generujou v _id_n()
-	genInstr(IREAD, NULL, NULL,(void *) &token);
+	genInstr(IREAD, NULL, NULL,(void *) &token, list);
 	
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	
@@ -926,7 +926,7 @@ int _if(TinstList *instrList){
 
     //generovani pomocne promenne
     string LastVar = ReadNameVar(instrList); // funkce na cteni nazvu posledni instrukce 
-    genInstr(INOT,(void *) &LastVar, NULL,(void *) &LastVar); // negace podminky
+    genInstr(INOT,(void *) &LastVar, NULL,(void *) &LastVar, list); // negace podminky
     
     string Label_1; //novy label, skok na vetev else
     strInit(&Label_1); //inicializace
@@ -934,7 +934,7 @@ int _if(TinstList *instrList){
     tableInsert(local_table, &Label_1, TOK_INT);    // vlozeni do lokalni tabulky symbolu
     
     //generovani skoku na ELSE vetev
-    genInstr(IIFGOTO,(void *) &LastVar, NULL,(void *) &Label_1);
+    genInstr(IIFGOTO,(void *) &LastVar, NULL,(void *) &Label_1, list);
     
 	//telo pokud je v if pravda
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -947,8 +947,8 @@ int _if(TinstList *instrList){
     tableInsert(local_table, &Label_1, TOK_INT);
     
     // skok za ELSE
-    genInstr(IGOTO, NULL, NULL,(void *) &Label_2);
-    genInstr(ILABEL,(void *) &Label_1, NULL, NULL); // musime vlozit label za telo IFu
+    genInstr(IGOTO, NULL, NULL,(void *) &Label_2, list);
+    genInstr(ILABEL,(void *) &Label_1, NULL, NULL, list); // musime vlozit label za telo IFu
     
 	if(result !=SYNTAX_OK) return result;
 	//vse ok, nasleduje else a za ni else
@@ -961,7 +961,7 @@ int _if(TinstList *instrList){
 	result= body(instrList);
 
     // instrukce pro label_2, sem se skoci jestlize podminka IF byla pravda
-    genInstr(ILABEL,(void *) &Label_2, NULL, NULL);
+    genInstr(ILABEL,(void *) &Label_2, NULL, NULL, list);
     
 	if(result !=SYNTAX_OK) return result;
 	// konstrukce if je v poradku muze opustit s pozitvni odpovedi
@@ -1156,7 +1156,7 @@ int program(TinstList *instrList){
 	//prosel jsem cely program a scanner uz nema co davat
 	if (token != TOK_END_OF_FILE) return SYNTAX_ERROR;
 	//generuji konec programu
-	genInstr(IEND,NULL,NULL,NULL);
+	genInstr(IEND,NULL,NULL,NULL, list);
 	return SYNTAX_OK;
 	
 }
