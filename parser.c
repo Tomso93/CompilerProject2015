@@ -767,7 +767,7 @@ int _for(TinstList *instrList){
 	if (result !=SYNTAX_OK) return SYNTAX_ERROR;
     
     // najde promennou ve ktere je vyhodnocena podminka
-    string LastVar = ReadNameVar(list);
+    string LastVar = ReadNameVar(instrList);
     genInstr(INOT,(void *) &LastVar, NULL,(void *) &LastVar);
     
     string Label_2; //label, pro navrat
@@ -922,7 +922,7 @@ int _if(TinstList *instrList){
 	if (token !=TOK_RIGHT_BRACKET) return SYNTAX_ERROR;
 
     //generovani pomocne promenne
-    string LastVar = ReadNameVar(list); // funkce na cteni nazvu posledni instrukce 
+    string LastVar = ReadNameVar(instrList); // funkce na cteni nazvu posledni instrukce 
     genInstr(INOT,(void *) &LastVar, NULL,(void *) &LastVar); // negace podminky
     
     string Label_1; //novy label, skok na vetev else
