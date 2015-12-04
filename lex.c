@@ -11,7 +11,7 @@ void set_source_file(FILE *f){
     sourceFile = f;
 }
 
-int get_next_token(string *attr){
+int getNextToken(string *attr){
     char c;
     int stav = STATE_START;
     strClear(attr);

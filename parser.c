@@ -21,6 +21,7 @@ int token; //Globalni promennna pro pradavani tokenu
 string attr; //retezec tokenu
 tSymbolTable *global_table;	// tabulka pro funkce a deklarace
 tSymbolTable *local_table; //tabulka pro telo kazde funkce
+TinstList *list;
 int error;
 
 
@@ -521,8 +522,7 @@ int comp_expr(){
 
 		if (result == '='){
 			SPushTerm(&stack);
-			
-			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+			token = getNextToken(&attr);
 			
 		} 
 		
@@ -530,8 +530,8 @@ int comp_expr(){
 				// pushuj
 				SAddTerm(&stack, '<');		
 				SPushTerm(&stack);
+				token = getNextToken(&attr);
 				
-				if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 		
 			} 
 			
@@ -783,7 +783,7 @@ int _for(TinstList *instrList){
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_ID) return SYNTAX_ERROR;
-	if(!(tableSearch(local_table, token))) return SEMANTIC_ERROR;
+	if(!(tableSearch(local_table, &attr))) return SEMANTIC_ERROR;
 	
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_EQUALS) return SYNTAX_ERROR;
@@ -1164,7 +1164,8 @@ int program(TinstList *instrList){
 int parse(tSymbolTable *ST, TinstList *instrList){
 
   int result;
-  
+  global_table = ST;
+  local_table = ST;
   list = instrList;
   strInit(&attr);
 	
@@ -1174,6 +1175,6 @@ int parse(tSymbolTable *ST, TinstList *instrList){
 	else
 		result=program(list);	// volam prvni neterminal 
 	
-	
+	strFree(&attr);
 	return result;
 }
