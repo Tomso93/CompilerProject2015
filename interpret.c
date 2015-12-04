@@ -7,11 +7,11 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "define.h" //definice konstant
-#include "str.h" //funkce pro praci s retezci
+#include "str.h" //soubor od Martin Kvapil. funkce pro praci s retezci
 #include "ial.h" //funkce find a sort a hashovaci tabulka
 #include "stable.h" //tabulka symbolu
 #include "instlist.h" //seznamem instrukci
+#include "define.h" //definice konstant
 #include "errors.h" 
 #include "interpret.h"
 
@@ -1230,19 +1230,13 @@ int sortme(tData *src1, tData *dest){
 
   if (src1->varType == TOK_STRING){
     if (dest->varType == TOK_STRING){
-      if ( sort(&(src1->varValue.s), &(dest->varValue.s)) != 0){
-        return RUNTIME_ERROR;
-      }else{
-        return SUCCESS;
-      }
+      dest->varValue.s = sort(src1->varValue.s);
+      return SUCCESS;
 
     }else if (dest->varType == TOK_AUTO){
       dest->varType = TOK_STRING;
-      if ( sort(&(src1->varValue.s), &(dest->varValue.s)) != 0){
-        return RUNTIME_ERROR;
-      }else{
-        return SUCCESS;
-      }
+      dest->varValue.s = sort(src1->varValue.s);
+      return SUCCESS;
 
     }else{
       return TYPE_ERROR; 
@@ -1280,14 +1274,14 @@ int findme(tData *src1, tData *src2, tData *dest){
 int lengthstring(tData *src1, tData *dest){
   if (src1->varType == TOK_STRING){
     if (dest->varType == TOK_INT){
-      dest->varValue.i = strGetLength(&(src1->varValue.s));
+      dest->varValue.i = length(src1->varValue.s);
       return SUCCESS;
     }else if (dest->varType == TOK_DOUBLE){
-      dest->varValue.d = (double)strGetLength(&(src1->varValue.s));
+      dest->varValue.d = (double)length(src1->varValue.s);
       return SUCCESS;
     }else if (dest->varType == TOK_AUTO){
       dest->varType = TOK_INT;
-      dest->varValue.i = strGetLength(&(src1->varValue.s));
+      dest->varValue.i = length(src1->varValue.s);
       return SUCCESS;
     }else{
       return TYPE_ERROR;
@@ -1305,11 +1299,11 @@ int concatenate(tData *src1, tData *src2, tData *dest){
   if ( (src1->varType == TOK_STRING) && 
        (src2->varType == TOK_STRING) ){
     if (dest->varType == TOK_STRING){
-      dest->varValue.s = concat(&(src1->varValue.s), &(src2->varValue.s));
+      dest->varValue.s = concat(src1->varValue.s, src2->varValue.s);
       return SUCCESS;
     }else if (dest->varType == TOK_AUTO){
       dest->varType = TOK_STRING;
-      dest->varValue.s = concat(&(src1->varValue.s), &(src2->varValue.s));
+      dest->varValue.s = concat(src1->varValue.s, src2->varValue.s);
       return SUCCESS;
     }else{
       return TYPE_ERROR;
