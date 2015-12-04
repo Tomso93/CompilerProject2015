@@ -40,7 +40,7 @@ int find(string *s, string *str1){
   }else{
     return istr1;
   }*/
-Return 0;
+return 0;
 }
 /*
 void FailCreate(char *s, int delka, int fail[]){
