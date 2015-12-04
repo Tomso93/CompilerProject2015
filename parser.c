@@ -488,9 +488,11 @@ int SReduction_expr (tStackTN * S, int index){
 				if (error != 2){
 					char E2 = S->valueType[index+2];
 					double *value2  = S->value[index+2];
+
+					if (E1 != E2) return SEMANTIC_ERROR;
 					
-					
-				//seman
+					genInstr(INOTEQ, (void *)value3, (void *)value1, (void *)value2);
+			
 				}
 				SDeleteItem(S, 3);
 				SPushNeterm(S, E1, value3);
