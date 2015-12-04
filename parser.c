@@ -1,6 +1,6 @@
 /*
 *	Projekt: Kompilator pro jazyk IFJ15=>podmnozina C++11
-*	Autor: Tomas STRNKA & Martin Wojaczek 
+*	Autor: Tomas STRNKA & Martin WOJACZEK
 *	Login: xstrnk01
 *	Cast: Parser .c +.h
 *	Verze: 1.4 
@@ -50,33 +50,33 @@ int select_ruler(string *zas_term, int term){
 	int radek, sloupec;
 	
 	//radek--jeste neni reseno, ze by bylo =<
-	if (strCmpConstStr(Pchar, "*")==0) radek=0;
+	if (strCmpConstStr(zas_term, "*")==0  || strCmpConstStr(zas_term, "*<") == 0)  radek=0;
 	
-	if (strCmpConstStr(Pchar, "/")==0) radek=1;
+	if (strCmpConstStr(zas_term, "/")==0  || strCmpConstStr(zas_term, "/<") == 0) radek=1;
 	
-	if (strCmpConstStr(Pchar, "+")==0) radek=2;
+	if (strCmpConstStr(zas_term, "+")==0  || strCmpConstStr(zas_term, "+<") == 0) radek=2;
 	
-	if (strCmpConstStr(Pchar, "-")==0) radek=3;
+	if (strCmpConstStr(zas_term, "-")==0  || strCmpConstStr(zas_term, "-<") == 0) radek=3;
 	
-	if (strCmpConstStr(Pchar, "<")==0) radek=4;
+	if (strCmpConstStr(zas_term, "<")==0  || strCmpConstStr(zas_term, "<<") == 0) radek=4;
 
-	if (strCmpConstStr(Pchar, ">")==0) radek=5;
+	if (strCmpConstStr(zas_term, ">")==0  || strCmpConstStr(zas_term, "><") == 0) radek=5;
 
-	if (strCmpConstStr(Pchar, "<=")==0) radek=6;
+	if (strCmpConstStr(zas_term, "<=")==0 || strCmpConstStr(zas_term, "<=<") == 0) radek=6;
 
-	if (strCmpConstStr(Pchar, ">=")==0) radek=7;
+	if (strCmpConstStr(zas_term, ">=")==0 || strCmpConstStr(zas_term, ">=<") == 0) radek=7;
 
-	if (strCmpConstStr(Pchar, "==")==0) radek=8;
+	if (strCmpConstStr(zas_term, "==")==0 || strCmpConstStr(zas_term, "==<") == 0) radek=8;
 
-	if (strCmpConstStr(Pchar, "!=")==0) radek=9;
+	if (strCmpConstStr(zas_term, "!=")==0 || strCmpConstStr(zas_term, "!=<") == 0) radek=9;
 
-	if (strCmpConstStr(Pchar, "(")==0) radek=10;
+	if (strCmpConstStr(zas_term, "(")==0  || strCmpConstStr(zas_term, "(<") == 0) radek=10;
 
-	if (strCmpConstStr(Pchar, ")")==0) radek=11;
+	if (strCmpConstStr(zas_term, ")")==0  || strCmpConstStr(zas_term, ")<") == 0) radek=11;
 
-	if (strCmpConstStr(Pchar, "id")==0) radek=12;
+	if (strCmpConstStr(zas_term, "id")==0 || strCmpConstStr(zas_term, "id<") == 0) radek=12;
 
-	if (strCmpConstStr(Pchar, "$")==0) radek=13;
+	if (strCmpConstStr(zas_term, "$")==0  || strCmpConstStr(zas_term, "$<") == 0) radek=13;
 
 	//sloupec
 	switch (term){
@@ -157,8 +157,7 @@ void StackInit(tStackTN * S){
 void SPushTerm (tStackTN *S){
 //dam terminal na zasobnik
   if (S->top==25) 
-    fprintf(stderr,"zasobnik pretekl\n");
-  
+	  //vnitrni chyba interperetu
   else {  
 		string a;
 		strInit(&a);
@@ -175,7 +174,7 @@ void SPushTerm (tStackTN *S){
 void SPushNeterm(tStackTN *S, char Type, void * data){
 //dam pravidlo na zasobnik
   if (S->top==25) 
-    fprintf(stderr,"zasobnik pretekl\n");
+  
   else {  
 		string a;
 		strInit(&a);
@@ -253,7 +252,6 @@ void SDeleteItem(tStackTN * S, int count){
 		S->top--;
 		i++;
 	}
-
 }
 
 
@@ -282,6 +280,7 @@ int SReduction_expr (tStackTN * S, int index){
 		// generuje instrukci ve ktere priradi hodnotu z adresy 1 do adresy 3
 		if (error != 2)
 			//tady asi instrukce
+			//!!Co mam tady generovat?
 		SDeleteItem(S, 1);
 		// adresa 3 je pote ulozena do zasobniku a pouzita pro dalsi vypocty
 		SPushNeterm(S, E1, value3);
@@ -319,7 +318,7 @@ int SReduction_expr (tStackTN * S, int index){
 
 					// generuje istrulci ve ktere se vynasoby hodnoty na adresach 1 a 2
 					// a vysledek se ulozi na adresu 3 se kterou dale pracujeme
-					
+					genInstr(IMUL,)
 				}
 				SDeleteItem(S, 3);
 				// adresa 3 se ulozi do zasobniku a ceka na dalsi zpracovani
@@ -503,7 +502,7 @@ int comp_expr(){
 
 	while(strCmpConstStr(&a,"$")!=0  &&(token !=TOK_LEFT_BRACE || token !=TOK_SEMICOLON)){
 
-		result = select_ruler(&top,token);
+		result = select_ruler(&a,token);
 
 		switch (result){
 			case "=":
@@ -1119,7 +1118,7 @@ int func_dclr(){
 	result=select();
 
 	if (result !=SYNTAX_OK) return result;
-	// nevim, jestli muzu ukoncit uspesne, protoze pokud prijde pouze dekalarace
+	//!!!!!!! nevim, jestli muzu ukoncit uspesne, protoze pokud prijde pouze dekalarace
 	// a nenasleduje zadna fuknce, neni to prece validni
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	// mela bz prijit rekurze, ale nevim jestli bude fungovat
