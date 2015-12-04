@@ -42,9 +42,9 @@ void GenNewVariable(string *item)
     cnt++;                             
 }
 
-string ReadNameVar(TinstList *list)
+tData *ReadNameVar(TinstList *list)
 {
-    tInst *I = ListGetLastInst(list);
+    Tinst *I = ListGetLastInst(list);
     
     return I->dest;
 }
