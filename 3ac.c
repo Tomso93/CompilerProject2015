@@ -44,7 +44,7 @@ void GenNewVariable(string *item)
 
 string ReadNameVar(TinstList *list)
 {
-    I = ListGetLastInst(list);
+    tInst *I = ListGetLastInst(list);
     
     return I->dest;
 }
