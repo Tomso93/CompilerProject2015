@@ -1,55 +1,15 @@
 parser.c:540:48: note: each undeclared identifier is reported only once for each function it appears in
 parser.c: In function ‘_for’:
+parser.c:763:31: error: ‘Lable_1’ undeclared (first use in this function)
+     genInstr(ILABEL,(void *) &Lable_1, NULL, NULL);
+                               ^
 parser.c:770:34: error: ‘instrList’ undeclared (first use in this function)
      string LastVar = ReadNameVar(instrList);
                                   ^
-parser.c:777:5: error: cannot convert to a pointer type
-     genInstr(IIFGOTO,(void *) LastVar, NULL,(void *) Label_2);
-     ^
-parser.c:777:5: error: cannot convert to a pointer type
-parser.c:801:5: error: cannot convert to a pointer type
-     genInstr(IGOTO, NULL, NULL,(void *) Label_1);
-     ^
-parser.c:803:5: error: cannot convert to a pointer type
-     genInstr(ILABEL,(void *) Label_1, NULL, NULL);
-     ^
-parser.c: In function ‘term_n’:
-parser.c:827:32: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-    genInstr(IWRITE, NULL, NULL,(void *) token);
-                                ^
-parser.c: In function ‘_cout’:
-parser.c:850:34: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-      genInstr(IWRITE, NULL, NULL,(void *) token);
-                                  ^
-parser.c: In function ‘_id_n’:
-parser.c:874:31: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-    genInstr(IREAD, NULL, NULL,(void *) token);
-                               ^
-parser.c: In function ‘_cin’:
-parser.c:895:29: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-  genInstr(IREAD, NULL, NULL,(void *) token);
-                             ^
 parser.c: In function ‘_if’:
 parser.c:925:34: error: ‘instrList’ undeclared (first use in this function)
      string LastVar = ReadNameVar(instrList); // funkce na cteni nazvu posledni instrukce
                                   ^
-parser.c:926:5: error: cannot convert to a pointer type
-     genInstr(INOT,(void *) LastVar, NULL,(void *) LastVar); // negace podminky
-     ^
-parser.c:926:5: error: cannot convert to a pointer type
-parser.c:934:5: error: cannot convert to a pointer type
-     genInstr(IIFGOTO,(void *) LastVar, NULL,(void *) Label_1);
-     ^
-parser.c:934:5: error: cannot convert to a pointer type
-parser.c:947:5: error: cannot convert to a pointer type
-     genInstr(IGOTO, NULL, NULL,(void *) Label_2);
-     ^
-parser.c:948:5: error: cannot convert to a pointer type
-     genInstr(ILABEL,(void *) Label_1, NULL, NULL); // musime vlozit label za telo IFu
-     ^
-parser.c:961:5: error: cannot convert to a pointer type
-     genInstr(ILABEL,(void *) Label_2, NULL, NULL);
-     ^
 parser.c: In function ‘parse’:
 parser.c:1164:3: error: ‘table’ undeclared (first use in this function)
    table = ST;
@@ -59,4 +19,5 @@ parser.c:1165:3: error: ‘list’ undeclared (first use in this function)
    ^
 parser.c:1169:28: error: ‘atrr’ undeclared (first use in this function)
   if((token = getNextToken(&atrr))== LEX_ERROR)
-
+                            ^
+make: *** [parser.o] Error 1
