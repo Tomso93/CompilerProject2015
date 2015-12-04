@@ -14,7 +14,7 @@
 //-------------vyhledavani-----------------------------------------------------
 
 int find(string *s, string *str1){
-  int delkas = strGetLength(s);
+ /* int delkas = strGetLength(s);
   int delkastr1 = strGetLength(str1);
   int fail[delkas];
   FailCreate(s->str, delkas, fail);
@@ -39,9 +39,10 @@ int find(string *s, string *str1){
     return (istr1 - delkas);
   }else{
     return istr1;
-  }
+  }*/
+Return 0;
 }
-
+/*
 void FailCreate(char *s, int delka, int fail[]){
   int k,r;
 //  int fail[delka];
@@ -57,11 +58,11 @@ void FailCreate(char *s, int delka, int fail[]){
     fail[k] = r+1;
   }
 }
-
+*/
 //------------------rezeni-----------------------------------------------------
 
 int sort(string *str0, string *str1){
-
+/*
   strCopyString(str1, str0);
 
   char pom; 
@@ -75,10 +76,10 @@ int sort(string *str0, string *str1){
     str1->str[0] = str1->str[right];
     str1->str[right] = pom;
     siftdown(str1->str, 0, right-1);
-  }
+  }*/
   return 0;
 }
-
+/*
 void siftdown(char *str1, int left, int right){
   int i = left;
   int j = (2*i);
@@ -105,3 +106,4 @@ void siftdown(char *str1, int left, int right){
   str1[i] = temp;
 }
 
+*/
