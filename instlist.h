@@ -8,9 +8,9 @@
 
 typedef struct {
 	int itype; 	//typ instrukce
-	tData *src1;	//zdroj1
-	tData *src2;	//zdroj2
-	tData *dest;	//cil
+	void *src1;	//zdroj1
+	void *src2;	//zdroj2
+	void *dest;	//cil
 }Tinst;
 
 typedef struct listItem{
