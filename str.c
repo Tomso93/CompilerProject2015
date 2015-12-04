@@ -58,7 +58,7 @@ int strDelLastChar(string *s1){
 	{
       // pamet nestaci nebo ji je zbytecne hodne, je potreba provest realokaci
 		if ((s1->str = (char*) realloc(s1->str, newLength)) == NULL)
-			return I_E;
+			return INTERN_ERROR;
 		s1->allocSize = newLength;
 	}
    
