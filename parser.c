@@ -1091,7 +1091,7 @@ int param(){
 			return SYNTAX_OK;
 			break;
 	}
-	return SYNTAX_ERROR
+	return SYNTAX_ERROR;
 }
 //-----------FUNC_DCLR->TYPE--id--(--PARAM--)--SELECT---FUNC_DCLR------------
 int func_dclr(){
@@ -1134,7 +1134,7 @@ int program(){
 	//prosel jsem cely program a scanner uz nema co davat
 	if (token != END_OF_FILE) return SYNTAX_ERROR;
 	//generuji konec programu
-	genInstr(IEND,NULL,NULL,NULL)
+	genInstr(IEND,NULL,NULL,NULL);
 	return SYNTAX_OK;
 	
 }
