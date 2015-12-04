@@ -122,7 +122,7 @@ int select_ruler(string *zas_term, int term){
 			break;
 	}
 
-	return prec_table[radek][sloupec]
+	return prec_table[radek][sloupec];
 }
 //---------------------------------------------------------------------------------
 // struktura zasobniku
