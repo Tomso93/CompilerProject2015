@@ -1155,7 +1155,7 @@ int program(){
 	
 }
 //------------------START-POINT--------------------------------------------------
-int parse(tSymbolTable *ST, tListOfInstr *instrList){
+int parse(tSymbolTable *ST, TinstList *instrList){
 
   int result;
   table = ST;
