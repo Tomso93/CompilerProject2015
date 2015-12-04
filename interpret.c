@@ -163,27 +163,61 @@ int interpret (TinstList *LOI){
 
 int move(tData *src1, tData *dest){
 
-  if ( (src1->varType == TOK_INT) && (dest->varType == TOK_INT) ){
-    dest->varValue.i = src1->varValue.i;
-    return SUCCESS;
-  }else if ( (src1->varType == TOK_DOUBLE) && (dest->varType == TOK_DOUBLE) ){
-    dest->varValue.d = src1->varValue.d;
-    return SUCCESS;
-  }else if ( (src1->varType == TOK_DOUBLE) && (dest->varType == TOK_INT) ){
-    dest->varValue.i = (int)src1->varValue.d;
-    return SUCCESS;
-  }else if ( (src1->varType == TOK_INT) && (dest->varType == TOK_DOUBLE) ){
-    dest->varValue.d = (double)src1->varValue.i;
-    return SUCCESS;
-  }else if ( (src1->varType == TOK_STRING) && (dest->varType == TOK_STRING) ){
-    if (strCopyString(&(dest->varValue.s), &(src1->varValue.s)) == STR_ERROR){
-      return RUNTIME_ERROR;
-    }else{
+  if (src1->varType == TOK_INT){
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = src1->varValue.i;
       return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = (double)src1->varValue.i;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = src1->varValue.i;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
     }
+
+  }else if (src1->varType == TOK_DOUBLE){
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (int)src1->varValue.d;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = src1->varValue.d;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_DOUBLE;
+      dest->varValue.d = src1->varValue.d;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
+  }else if (src1->varType == TOK_STRING){
+    if (dest->varType == TOK_STRING){
+      if (strCopyString(&dest->varValue.s, &src1->varValue.s) == STR_SUCCESS){
+        return SUCCESS;
+      }else{
+        return INTERN_ERROR;
+      }
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_STRING;
+      if (strCopyString(&dest->varValue.s, &src1->varValue.s) == STR_SUCCESS){
+        return SUCCESS;
+      }else{
+        return INTERN_ERROR;
+      }
+    }else{
+      return TYPE_ERROR;
+    }
+
+  }else if (src1->varType == TOK_AUTO){
+    return CONVERT_ERROR;
+
   }else{
     return TYPE_ERROR;
   }
+
   return INTERN_ERROR;
 }
 
@@ -198,6 +232,12 @@ int addition(tData *src1, tData *src2, tData *dest){
      }else if (dest->varType == TOK_DOUBLE){
        dest->varValue.d = (double)(src1->varValue.i + src2->varValue.i);
        return SUCCESS;
+     }else if (dest->varType == TOK_AUTO){
+       dest->varType = TOK_INT;
+       dest->varValue.i = (src1->varValue.i + src2->varValue.i);
+       return SUCCESS;
+     }else{
+       return TYPE_ERROR;
      }
 
   }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_INT) ){
@@ -207,6 +247,12 @@ int addition(tData *src1, tData *src2, tData *dest){
      }else if (dest->varType == TOK_DOUBLE){
        dest->varValue.d = (src1->varValue.d + (double)src2->varValue.i);
        return SUCCESS;
+     }else if (dest->varType == TOK_AUTO){
+       dest->varType = TOK_DOUBLE;
+       dest->varValue.d = (src1->varValue.d + (double)src2->varValue.i);
+       return SUCCESS;
+     }else{
+       return TYPE_ERROR;
      }
 
   }else if ( (src1->varType == TOK_INT) && (src2->varType == TOK_DOUBLE) ){
@@ -214,8 +260,14 @@ int addition(tData *src1, tData *src2, tData *dest){
        dest->varValue.i = (int)((double)src1->varValue.i + src2->varValue.d);
        return SUCCESS;
      }else if (dest->varType == TOK_DOUBLE){
-       dest->varValue.d = (double)src1->varValue.i + src2->varValue.d;
+       dest->varValue.d = ((double)src1->varValue.i + src2->varValue.d);
        return SUCCESS;
+     }else if (dest->varType == TOK_AUTO){
+       dest->varType = TOK_DOUBLE;
+       dest->varValue.d = ((double)src1->varValue.i + src2->varValue.d);
+       return SUCCESS;
+     }else{
+       return TYPE_ERROR;
      }
 
   }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_DOUBLE) ){
@@ -225,10 +277,21 @@ int addition(tData *src1, tData *src2, tData *dest){
      }else if (dest->varType == TOK_DOUBLE){
        dest->varValue.d = src1->varValue.d + src2->varValue.d;
        return SUCCESS;
+     }else if (dest->varType == TOK_AUTO){
+       dest->varType = TOK_DOUBLE;
+       dest->varValue.d = (src1->varValue.d + src2->varValue.d);
+       return SUCCESS;
+     }else{
+       return TYPE_ERROR;
      }
+
+  }else if ( (src1->varType == TOK_AUTO) || (src2->varType == TOK_AUTO) ){
+    return CONVERT_ERROR;
+
   }else{
     return TYPE_ERROR;
   }
+
   return INTERN_ERROR;
 
 }
@@ -243,6 +306,12 @@ int substraction(tData *src1, tData *src2, tData *dest){
      }else if (dest->varType == TOK_DOUBLE){
        dest->varValue.d = (double)(src1->varValue.i - src2->varValue.i);
        return SUCCESS;
+     }else if (dest->varType == TOK_AUTO){
+       dest->varType = TOK_INT;
+       dest->varValue.i = (src1->varValue.i - src2->varValue.i);
+       return SUCCESS;
+     }else{
+       return TYPE_ERROR;
      }
 
   }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_INT) ){
@@ -252,6 +321,12 @@ int substraction(tData *src1, tData *src2, tData *dest){
      }else if (dest->varType == TOK_DOUBLE){
        dest->varValue.d = (src1->varValue.d - (double)src2->varValue.i);
        return SUCCESS;
+     }else if (dest->varType == TOK_AUTO){
+       dest->varType = TOK_DOUBLE;
+       dest->varValue.d = (src1->varValue.d - (double)src2->varValue.i);
+       return SUCCESS;
+     }else{
+       return TYPE_ERROR;
      }
 
   }else if ( (src1->varType == TOK_INT) && (src2->varType == TOK_DOUBLE) ){
@@ -261,6 +336,12 @@ int substraction(tData *src1, tData *src2, tData *dest){
      }else if (dest->varType == TOK_DOUBLE){
        dest->varValue.d = (double)src1->varValue.i - src2->varValue.d;
        return SUCCESS;
+     }else if (dest->varType == TOK_AUTO){
+       dest->varType = TOK_DOUBLE;
+       dest->varValue.d = (double)src1->varValue.i - src2->varValue.d;
+       return SUCCESS;
+     }else{
+       return TYPE_ERROR;
      }
 
   }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_DOUBLE) ){
@@ -270,10 +351,21 @@ int substraction(tData *src1, tData *src2, tData *dest){
      }else if (dest->varType == TOK_DOUBLE){
        dest->varValue.d = src1->varValue.d - src2->varValue.d;
        return SUCCESS;
+     }else if (dest->varType == TOK_AUTO){
+       dest->varType = TOK_INT;
+       dest->varValue.d = src1->varValue.d - src2->varValue.d;
+       return SUCCESS;
+     }else{
+       return TYPE_ERROR;
      }
+
+  }else if ( (src1->varType == TOK_AUTO) || (src2->varType == TOK_AUTO) ){
+    return CONVERT_ERROR;
+
   }else{
     return TYPE_ERROR;
   }
+
   return INTERN_ERROR;
 }
 
@@ -287,6 +379,12 @@ int multiplication(tData *src1, tData *src2, tData *dest){
      }else if (dest->varType == TOK_DOUBLE){
        dest->varValue.d = (double)(src1->varValue.i * src2->varValue.i);
        return SUCCESS;
+     }else if (dest->varType == TOK_AUTO){
+       dest->varType = TOK_INT;
+       dest->varValue.i = src1->varValue.i * src2->varValue.i;
+       return SUCCESS;
+     }else{
+       return TYPE_ERROR;
      }
 
   }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_INT) ){
@@ -296,6 +394,12 @@ int multiplication(tData *src1, tData *src2, tData *dest){
      }else if (dest->varType == TOK_DOUBLE){
        dest->varValue.d = (src1->varValue.d * (double)src2->varValue.i);
        return SUCCESS;
+     }else if (dest->varType == TOK_AUTO){
+       dest->varType = TOK_DOUBLE;
+       dest->varValue.d = (src1->varValue.d * (double)src2->varValue.i);
+       return SUCCESS;
+     }else{
+       return TYPE_ERROR;
      }
 
   }else if ( (src1->varType == TOK_INT) && (src2->varType == TOK_DOUBLE) ){
@@ -305,6 +409,12 @@ int multiplication(tData *src1, tData *src2, tData *dest){
      }else if (dest->varType == TOK_DOUBLE){
        dest->varValue.d = (double)src1->varValue.i * src2->varValue.d;
        return SUCCESS;
+     }else if (dest->varType == TOK_AUTO){
+       dest->varType = TOK_DOUBLE;
+       dest->varValue.d = (double)src1->varValue.i * src2->varValue.d;
+       return SUCCESS;
+     }else{
+       return TYPE_ERROR;
      }
 
   }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_DOUBLE) ){
@@ -314,10 +424,21 @@ int multiplication(tData *src1, tData *src2, tData *dest){
      }else if (dest->varType == TOK_DOUBLE){
        dest->varValue.d = src1->varValue.d * src2->varValue.d;
        return SUCCESS;
+     }else if (dest->varType == TOK_AUTO){
+       dest->varType = TOK_DOUBLE;
+       dest->varValue.d = src1->varValue.d * src2->varValue.d;
+       return SUCCESS;
+     }else{
+       return TYPE_ERROR;
      }
+
+  }else if ( (src1->varType == TOK_AUTO) || (src2->varType == TOK_AUTO) ){
+    return CONVERT_ERROR;
+
   }else{
     return TYPE_ERROR;
   }
+
   return INTERN_ERROR;
 }
 
@@ -332,6 +453,12 @@ int division(tData *src1, tData *src2, tData *dest){
      }else if (dest->varType == TOK_DOUBLE){
        dest->varValue.d = (double)(src1->varValue.i / src2->varValue.i);
        return SUCCESS;
+     }else if (dest->varType == TOK_AUTO){
+       dest->varType = TOK_INT;
+       dest->varValue.i = src1->varValue.i / src2->varValue.i;
+       return SUCCESS;
+     }else{
+       return TYPE_ERROR;
      }
 
   }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_INT) ){
@@ -343,6 +470,12 @@ int division(tData *src1, tData *src2, tData *dest){
      }else if (dest->varType == TOK_DOUBLE){
        dest->varValue.d = (src1->varValue.d / (double)src2->varValue.i);
        return SUCCESS;
+     }else if (dest->varType == TOK_AUTO){
+       dest->varType = TOK_DOUBLE;
+       dest->varValue.d = (src1->varValue.d / (double)src2->varValue.i);
+       return SUCCESS;
+     }else{
+       return TYPE_ERROR;
      }
 
   }else if ( (src1->varType == TOK_INT) && (src2->varType == TOK_DOUBLE) ){
@@ -354,6 +487,12 @@ int division(tData *src1, tData *src2, tData *dest){
      }else if (dest->varType == TOK_DOUBLE){
        dest->varValue.d = (double)src1->varValue.i / src2->varValue.d;
        return SUCCESS;
+     }else if (dest->varType == TOK_AUTO){
+       dest->varType = TOK_DOUBLE;
+       dest->varValue.d = (double)src1->varValue.i / src2->varValue.d;
+       return SUCCESS;
+     }else{
+       return TYPE_ERROR;
      }
 
   }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_DOUBLE) ){
@@ -365,7 +504,17 @@ int division(tData *src1, tData *src2, tData *dest){
      }else if (dest->varType == TOK_DOUBLE){
        dest->varValue.d = src1->varValue.d / src2->varValue.d;
        return SUCCESS;
+     }else if (dest->varType == TOK_AUTO){
+       dest->varType = TOK_DOUBLE;
+       dest->varValue.d = src1->varValue.d / src2->varValue.d;
+       return SUCCESS;
+     }else{
+       return TYPE_ERROR;
      }
+
+  }else if ( (src1->varType == TOK_AUTO) || (src2->varType == TOK_AUTO) ){
+    return CONVERT_ERROR;
+
   }else{
     return TYPE_ERROR;
   }
@@ -375,214 +524,587 @@ int division(tData *src1, tData *src2, tData *dest){
 //-------------------IEQUAL----------------------------------------------------
 int equal(tData *src1, tData *src2, tData *dest){
 
-  if (dest->varType != TOK_INT){
-    if (dest->varType == TOK_DOUBLE){
+  if ( (src1->varType == TOK_INT) && (src2->varType == TOK_INT) ){
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (src1->varValue.i == src2->varValue.i) ? 1 : 0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = (src1->varValue.i == src2->varValue.i) ? 1.0 : 0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
       dest->varType = TOK_INT;
+      dest->varValue.i = (src1->varValue.i == src2->varValue.i) ? 1 : 0;
+      return SUCCESS;
     }else{
       return TYPE_ERROR;
     }
-  }
-  if ( (src1->varType == TOK_INT) && (src2->varType == TOK_INT) ){
-    dest->varValue.i = (src1->varValue.i == src2->varValue.i) ? 1 : 0;
-//    dest->varValue.i = (int)(src1->varValue.i == src2->varValue.i);
-    return SUCCESS;
+
   }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_DOUBLE) ){
-    dest->varValue.i = (src1->varValue.d == src2->varValue.d) ? 1 : 0;
-//    dest->varValue.i = (int)(src1->varValue.d == src2->varValue.d);
-    return SUCCESS;
-  }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_INT) ){
-    dest->varValue.i = ((double)src1->varValue.i == src2->varValue.d) ? 1 : 0;
-//    dest->varValue.i = (int)(src1->varValue.d == (double)src2->varValue.i);
-    return SUCCESS;
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (src1->varValue.d == src2->varValue.d) ? 1 : 0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = (src1->varValue.d == src2->varValue.d) ? 1.0 : 0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = (src1->varValue.d == src2->varValue.d) ? 1 : 0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
   }else if ( (src1->varType == TOK_INT) && (src2->varType == TOK_DOUBLE) ){
-    dest->varValue.i = (src1->varValue.i == (double)src2->varValue.d) ? 1 : 0;
-//    dest->varValue.i = (int)((double)src1->varValue.i == src2->varValue.d);
-    return SUCCESS;
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = ((double)src1->varValue.i == src2->varValue.d) ? 1:0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+     dest->varValue.d = ((double)src1->varValue.i == src2->varValue.d)?1.0:0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = ((double)src1->varValue.i == src2->varValue.d) ? 1:0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
+  }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_INT) ){
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (src1->varValue.d == (double)src2->varValue.i) ? 1:0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+     dest->varValue.d = (src1->varValue.d == (double)src2->varValue.i)?1.0:0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = (src1->varValue.d == (double)src2->varValue.i) ? 1:0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
   }else if ( (src1->varType == TOK_STRING) && (src2->varType == TOK_STRING) ){
-    dest->varValue.i = (strCmpString(&(src1->varValue.s), &(src2->varValue.s)) == 0) ? 1 : 0;
-//    dest->varValue.i = (int)(strCmpString(&(src1->varValue.s), &(src2->varValue.s)) == 0);
-    return SUCCESS;
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = 
+           (strCmpString(&(src1->varValue.s), &(src2->varValue.s)) == 0) ? 1:0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = 
+         (strCmpString(&(src1->varValue.s), &(src2->varValue.s)) == 0)?1.0:0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i =
+           (strCmpString(&(src1->varValue.s), &(src2->varValue.s)) == 0) ? 1:0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
+  }else if ( (src1->varType == TOK_AUTO) || (src2->varType == TOK_AUTO) ){
+    return CONVERT_ERROR;
+
   }else{
     return TYPE_ERROR;
   }
+
   return INTERN_ERROR;
 }
 
 //-------------------ISMALL----------------------------------------------------
 int smaller(tData *src1, tData *src2, tData *dest){
 
-  if (dest->varType != TOK_INT){
-    if (dest->varType == TOK_DOUBLE){
+  if ( (src1->varType == TOK_INT) && (src2->varType == TOK_INT) ){
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (src1->varValue.i < src2->varValue.i) ? 1 : 0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = (src1->varValue.i < src2->varValue.i) ? 1.0 : 0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
       dest->varType = TOK_INT;
+      dest->varValue.i = (src1->varValue.i < src2->varValue.i) ? 1 : 0;
+      return SUCCESS;
     }else{
       return TYPE_ERROR;
     }
-  }
-  if ( (src1->varType == TOK_INT) && (src2->varType == TOK_INT) ){
-    dest->varValue.i = (int)(src1->varValue.i < src2->varValue.i);
-    return SUCCESS;
+
   }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_DOUBLE) ){
-    dest->varValue.i = (int)(src1->varValue.d < src2->varValue.d);
-    return SUCCESS;
-  }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_INT) ){
-    dest->varValue.i = (int)(src1->varValue.d < (double)src2->varValue.i);
-    return SUCCESS;
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (src1->varValue.d < src2->varValue.d) ? 1 : 0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = (src1->varValue.d < src2->varValue.d) ? 1.0 : 0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = (src1->varValue.d < src2->varValue.d) ? 1 : 0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
   }else if ( (src1->varType == TOK_INT) && (src2->varType == TOK_DOUBLE) ){
-    dest->varValue.i = (int)((double)src1->varValue.i < src2->varValue.d);
-    return SUCCESS;
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = ((double)src1->varValue.i < src2->varValue.d) ? 1:0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = ((double)src1->varValue.i < src2->varValue.d)?1.0:0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = ((double)src1->varValue.i < src2->varValue.d) ? 1:0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
+  }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_INT) ){
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (src1->varValue.d < (double)src2->varValue.i) ? 1:0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = (src1->varValue.d < (double)src2->varValue.i)?1.0:0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = (src1->varValue.d < (double)src2->varValue.i) ? 1:0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
   }else if ( (src1->varType == TOK_STRING) && (src2->varType == TOK_STRING) ){
-  dest->varValue.i = (int)(strCmpString(&(src1->varValue.s), &(src2->varValue.s)) < 0);
-    return SUCCESS;
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = 
+           (strCmpString(&(src1->varValue.s), &(src2->varValue.s)) < 0) ? 1:0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = 
+          (strCmpString(&(src1->varValue.s), &(src2->varValue.s)) < 0)?1.0:0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i =
+           (strCmpString(&(src1->varValue.s), &(src2->varValue.s)) < 0) ? 1:0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
+  }else if ( (src1->varType == TOK_AUTO) || (src2->varType == TOK_AUTO) ){
+    return CONVERT_ERROR;
+
   }else{
     return TYPE_ERROR;
   }
+
   return INTERN_ERROR;
 }
 
 //-------------------IBIG------------------------------------------------------
 int bigger(tData *src1, tData *src2, tData *dest){
 
-  if (dest->varType != TOK_INT){
-    if (dest->varType == TOK_DOUBLE){
+  if ( (src1->varType == TOK_INT) && (src2->varType == TOK_INT) ){
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (src1->varValue.i > src2->varValue.i) ? 1 : 0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = (src1->varValue.i > src2->varValue.i) ? 1.0 : 0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
       dest->varType = TOK_INT;
+      dest->varValue.i = (src1->varValue.i > src2->varValue.i) ? 1 : 0;
+      return SUCCESS;
     }else{
       return TYPE_ERROR;
     }
-  }
-  if ( (src1->varType == TOK_INT) && (src2->varType == TOK_INT) ){
-    dest->varValue.i = (int)(src1->varValue.i > src2->varValue.i);
-    return SUCCESS;
+
   }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_DOUBLE) ){
-    dest->varValue.i = (int)(src1->varValue.d > src2->varValue.d);
-    return SUCCESS;
-  }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_INT) ){
-    dest->varValue.i = (int)(src1->varValue.d > (double)src2->varValue.i);
-    return SUCCESS;
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (src1->varValue.d > src2->varValue.d) ? 1 : 0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = (src1->varValue.d > src2->varValue.d) ? 1.0 : 0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = (src1->varValue.d > src2->varValue.d) ? 1 : 0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
   }else if ( (src1->varType == TOK_INT) && (src2->varType == TOK_DOUBLE) ){
-    dest->varValue.i = (int)((double)src1->varValue.i > src2->varValue.d);
-    return SUCCESS;
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = ((double)src1->varValue.i > src2->varValue.d) ? 1:0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = ((double)src1->varValue.i > src2->varValue.d)?1.0:0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = ((double)src1->varValue.i > src2->varValue.d) ? 1:0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
+  }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_INT) ){
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (src1->varValue.d > (double)src2->varValue.i) ? 1:0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = (src1->varValue.d > (double)src2->varValue.i)?1.0:0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = (src1->varValue.d > (double)src2->varValue.i) ? 1:0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
   }else if ( (src1->varType == TOK_STRING) && (src2->varType == TOK_STRING) ){
-  dest->varValue.i = (int)(strCmpString(&(src1->varValue.s), &(src2->varValue.s)) > 0);
-    return SUCCESS;
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = 
+           (strCmpString(&(src1->varValue.s), &(src2->varValue.s)) > 0) ? 1:0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = 
+          (strCmpString(&(src1->varValue.s), &(src2->varValue.s)) > 0)?1.0:0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i =
+           (strCmpString(&(src1->varValue.s), &(src2->varValue.s)) > 0) ? 1:0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
+  }else if ( (src1->varType == TOK_AUTO) || (src2->varType == TOK_AUTO) ){
+    return CONVERT_ERROR;
+
   }else{
     return TYPE_ERROR;
   }
+
   return INTERN_ERROR;
 }
 
 //-------------------IEQSM-----------------------------------------------------
 int equalsmaller(tData *src1, tData *src2, tData *dest){
 
-  if (dest->varType != TOK_INT){
-    if (dest->varType == TOK_DOUBLE){
+  if ( (src1->varType == TOK_INT) && (src2->varType == TOK_INT) ){
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (src1->varValue.i <= src2->varValue.i) ? 1 : 0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = (src1->varValue.i <= src2->varValue.i) ? 1.0 : 0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
       dest->varType = TOK_INT;
+      dest->varValue.i = (src1->varValue.i <= src2->varValue.i) ? 1 : 0;
+      return SUCCESS;
     }else{
       return TYPE_ERROR;
     }
-  }
-  if ( (src1->varType == TOK_INT) && (src2->varType == TOK_INT) ){
-    dest->varValue.i = (int)(src1->varValue.i <= src2->varValue.i);
-    return SUCCESS;
+
   }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_DOUBLE) ){
-    dest->varValue.i = (int)(src1->varValue.d <= src2->varValue.d);
-    return SUCCESS;
-  }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_INT) ){
-    dest->varValue.i = (int)(src1->varValue.d <= (double)src2->varValue.i);
-    return SUCCESS;
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (src1->varValue.d <= src2->varValue.d) ? 1 : 0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = (src1->varValue.d <= src2->varValue.d) ? 1.0 : 0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = (src1->varValue.d <= src2->varValue.d) ? 1 : 0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
   }else if ( (src1->varType == TOK_INT) && (src2->varType == TOK_DOUBLE) ){
-    dest->varValue.i = (int)((double)src1->varValue.i <= src2->varValue.d);
-    return SUCCESS;
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = ((double)src1->varValue.i <= src2->varValue.d) ? 1:0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+     dest->varValue.d = ((double)src1->varValue.i <= src2->varValue.d)?1.0:0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = ((double)src1->varValue.i <= src2->varValue.d) ? 1:0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
+  }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_INT) ){
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (src1->varValue.d <= (double)src2->varValue.i) ? 1:0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+     dest->varValue.d = (src1->varValue.d <= (double)src2->varValue.i)?1.0:0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = (src1->varValue.d <= (double)src2->varValue.i) ? 1:0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
   }else if ( (src1->varType == TOK_STRING) && (src2->varType == TOK_STRING) ){
-  dest->varValue.i = (int)(strCmpString(&(src1->varValue.s), &(src2->varValue.s)) <= 0);
-    return SUCCESS;
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = 
+           (strCmpString(&(src1->varValue.s), &(src2->varValue.s)) <= 0) ? 1:0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = 
+         (strCmpString(&(src1->varValue.s), &(src2->varValue.s)) <= 0)?1.0:0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i =
+           (strCmpString(&(src1->varValue.s), &(src2->varValue.s)) <= 0) ? 1:0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
+  }else if ( (src1->varType == TOK_AUTO) || (src2->varType == TOK_AUTO) ){
+    return CONVERT_ERROR;
+
   }else{
     return TYPE_ERROR;
   }
+
   return INTERN_ERROR;
 }
 
 //-------------------IEQBG-----------------------------------------------------
 int equalbigger(tData *src1, tData *src2, tData *dest){
 
-  if (dest->varType != TOK_INT){
-    if (dest->varType == TOK_DOUBLE){
+  if ( (src1->varType == TOK_INT) && (src2->varType == TOK_INT) ){
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (src1->varValue.i >= src2->varValue.i) ? 1 : 0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = (src1->varValue.i >= src2->varValue.i) ? 1.0 : 0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
       dest->varType = TOK_INT;
+      dest->varValue.i = (src1->varValue.i >= src2->varValue.i) ? 1 : 0;
+      return SUCCESS;
     }else{
       return TYPE_ERROR;
     }
-  }
-  if ( (src1->varType == TOK_INT) && (src2->varType == TOK_INT) ){
-    dest->varValue.i = (int)(src1->varValue.i >= src2->varValue.i);
-    return SUCCESS;
+
   }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_DOUBLE) ){
-    dest->varValue.i = (int)(src1->varValue.d >= src2->varValue.d);
-    return SUCCESS;
-  }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_INT) ){
-    dest->varValue.i = (int)(src1->varValue.d >= (double)src2->varValue.i);
-    return SUCCESS;
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (src1->varValue.d >= src2->varValue.d) ? 1 : 0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = (src1->varValue.d >= src2->varValue.d) ? 1.0 : 0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = (src1->varValue.d >= src2->varValue.d) ? 1 : 0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
   }else if ( (src1->varType == TOK_INT) && (src2->varType == TOK_DOUBLE) ){
-    dest->varValue.i = (int)((double)src1->varValue.i >= src2->varValue.d);
-    return SUCCESS;
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = ((double)src1->varValue.i >= src2->varValue.d) ? 1:0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+     dest->varValue.d = ((double)src1->varValue.i >= src2->varValue.d)?1.0:0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = ((double)src1->varValue.i >= src2->varValue.d) ? 1:0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
+  }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_INT) ){
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (src1->varValue.d >= (double)src2->varValue.i) ? 1:0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+     dest->varValue.d = (src1->varValue.d >= (double)src2->varValue.i)?1.0:0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = (src1->varValue.d >= (double)src2->varValue.i) ? 1:0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
   }else if ( (src1->varType == TOK_STRING) && (src2->varType == TOK_STRING) ){
-  dest->varValue.i = (int)(strCmpString(&(src1->varValue.s), &(src2->varValue.s)) >= 0);
-    return SUCCESS;
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = 
+           (strCmpString(&(src1->varValue.s), &(src2->varValue.s)) >= 0) ? 1:0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = 
+         (strCmpString(&(src1->varValue.s), &(src2->varValue.s)) >= 0)?1.0:0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i =
+           (strCmpString(&(src1->varValue.s), &(src2->varValue.s)) >= 0) ? 1:0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
+  }else if ( (src1->varType == TOK_AUTO) || (src2->varType == TOK_AUTO) ){
+    return CONVERT_ERROR;
+
   }else{
     return TYPE_ERROR;
   }
+
   return INTERN_ERROR;
 }
 
 //-------------------INOTEQ----------------------------------------------------
 int notequal(tData *src1, tData *src2, tData *dest){
 
-  if (dest->varType != TOK_INT){
-    if (dest->varType == TOK_DOUBLE){
+  if ( (src1->varType == TOK_INT) && (src2->varType == TOK_INT) ){
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (src1->varValue.i != src2->varValue.i) ? 1 : 0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = (src1->varValue.i != src2->varValue.i) ? 1.0 : 0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
       dest->varType = TOK_INT;
+      dest->varValue.i = (src1->varValue.i != src2->varValue.i) ? 1 : 0;
+      return SUCCESS;
     }else{
       return TYPE_ERROR;
     }
-  }
-  if ( (src1->varType == TOK_INT) && (src2->varType == TOK_INT) ){
-    dest->varValue.i = (int)(src1->varValue.i != src2->varValue.i);
-    return SUCCESS;
+
   }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_DOUBLE) ){
-    dest->varValue.i = (int)(src1->varValue.d != src2->varValue.d);
-    return SUCCESS;
-  }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_INT) ){
-    dest->varValue.i = (int)(src1->varValue.d != (double)src2->varValue.i);
-    return SUCCESS;
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (src1->varValue.d != src2->varValue.d) ? 1 : 0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = (src1->varValue.d != src2->varValue.d) ? 1.0 : 0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = (src1->varValue.d != src2->varValue.d) ? 1 : 0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
   }else if ( (src1->varType == TOK_INT) && (src2->varType == TOK_DOUBLE) ){
-    dest->varValue.i = (int)((double)src1->varValue.i != src2->varValue.d);
-    return SUCCESS;
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = ((double)src1->varValue.i != src2->varValue.d) ? 1:0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+     dest->varValue.d = ((double)src1->varValue.i != src2->varValue.d)?1.0:0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = ((double)src1->varValue.i != src2->varValue.d) ? 1:0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
+  }else if ( (src1->varType == TOK_DOUBLE) && (src2->varType == TOK_INT) ){
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (src1->varValue.d != (double)src2->varValue.i) ? 1:0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+     dest->varValue.d = (src1->varValue.d != (double)src2->varValue.i)?1.0:0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = (src1->varValue.d != (double)src2->varValue.i) ? 1:0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
   }else if ( (src1->varType == TOK_STRING) && (src2->varType == TOK_STRING) ){
-  dest->varValue.i = (int)(strCmpString(&(src1->varValue.s), &(src2->varValue.s)) != 0);
-    return SUCCESS;
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = 
+           (strCmpString(&(src1->varValue.s), &(src2->varValue.s)) != 0) ? 1:0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = 
+         (strCmpString(&(src1->varValue.s), &(src2->varValue.s)) != 0)?1.0:0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i =
+           (strCmpString(&(src1->varValue.s), &(src2->varValue.s)) != 0) ? 1:0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
+  }else if ( (src1->varType == TOK_AUTO) || (src2->varType == TOK_AUTO) ){
+    return CONVERT_ERROR;
+
   }else{
     return TYPE_ERROR;
   }
+
   return INTERN_ERROR;
 }
 
 //-------------------INOT------------------------------------------------------
 int negation(tData *src1, tData *dest){
 
-  if (dest->varType != TOK_INT){
-    if (dest->varType == TOK_DOUBLE){
-      dest->varType = TOK_INT;
+  if (src1->varType == TOK_INT){
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (src1->varValue.i == 0) ? 1 : 0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = (src1->varValue.i == 0) ? 1.0 : 0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varValue.i = (src1->varValue.i == 0) ? 1 : 0;
+      return SUCCESS;
     }else{
       return TYPE_ERROR;
-    }    
-  }
+    }
 
-  if (src1->varType == TOK_INT){
-      dest->varValue.i = (int)(src1->varValue.i == 0);
-      return SUCCESS;
   }else if (src1->varType == TOK_DOUBLE){
-      dest->varValue.i = (int)((int)src1->varValue.d == 0);
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = (src1->varValue.d == 0.0) ? 1 : 0;
       return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = (src1->varValue.d == 0.0) ? 1.0 : 0.0;
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varValue.i = (src1->varValue.d == 0.0) ? 1 : 0;
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
+  }else if (src1->varType == TOK_AUTO){
+    return CONVERT_ERROR;
+
   }else{
       return TYPE_ERROR;
   }
+
   return INTERN_ERROR;
 }
 
@@ -605,7 +1127,7 @@ int jumpif(tData *src1, tData *dest, TinstList *LOI){
 int readint(tData *dest){ 
   if (dest->varType != TOK_INT){
     return TYPE_ERROR;
-  }else if (scanf("%d", &(dest->varValue.i)) < 0){
+  }else if (scanf("%d", &(dest->varValue.i)) != 1){
     return READ_NUM_ERROR;
   }
   return SUCCESS;
@@ -615,7 +1137,7 @@ int readint(tData *dest){
 int readdouble(tData *dest){ 
   if (dest->varType != TOK_DOUBLE){
     return TYPE_ERROR;
-  }else if (scanf("%lg", &(dest->varValue.d)) < 0){
+  }else if (scanf("%lg", &(dest->varValue.d)) != 1){
     return READ_NUM_ERROR;
   }
   return SUCCESS;
@@ -629,19 +1151,25 @@ int readstring(tData *dest){
     return TYPE_ERROR;
   }
 
-  scanf("%c", &c);
-//  c = getchar();
+  strFree(&dest->varValue.s);
+  strInit(&dest->varValue.s);
+
+  if (scanf("%c", &c) != 1){
+    return RUNTIME_ERROR;
+  }
   while ((c == '\n') || (c == '\t') || (c == ' ')){
-    scanf("%c", &c);
-//    c = getchar();
+    if (scanf("%c", &c) != 1){
+      return RUNTIME_ERROR;
+    }
   }
 
   while((c != '\n') && (c != '\t') && (c != ' ') && (c != EOF) && (c != ';')){
     if ( strAddChar(&(dest->varValue.s), c) == 1 ){
       return INTERN_ERROR;
     }
-    scanf("%c", &c);
-//    c = getchar();
+    if (scanf("%c", &c) != 1){
+      return RUNTIME_ERROR;
+    }
   }
   return SUCCESS;
 }
@@ -650,10 +1178,16 @@ int readstring(tData *dest){
 int read(tData *dest){ 
   if (dest->varType == TOK_INT){
     return readint(dest);
+
   }else if (dest->varType == TOK_DOUBLE){
     return readdouble(dest);
+
   }else if (dest->varType == TOK_STRING){
     return readstring(dest);
+
+  }else if (dest->varType == TOK_AUTO){
+    return CONVERT_ERROR;
+
   }else{
     return INTERN_ERROR;
   }
@@ -681,29 +1215,55 @@ int write(tData *src1){
      }else{
        return SUCCESS;
      }
+
+  }else if (src1->varType == TOK_AUTO){
+    return CONVERT_ERROR;
   }
+
   return INTERN_ERROR;
 }
 
 //-------------------ISORT-----------------------------------------------------
 int sortme(tData *src1, tData *dest){
 
-  if ( (dest->varType == TOK_STRING) && (src1->varType == TOK_STRING) ){
-    return sort(&(src1->varValue.s), &(dest->varValue.s));
+  if (src1->varType == TOK_STRING){
+    if (dest->varType == TOK_STRING){
+      if ( sort(&(src1->varValue.s), &(dest->varValue.s)) != 0){
+        return RUNTIME_ERROR;
+      }else{
+        return SUCCESS;
+      }
+
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_STRING;
+      if ( sort(&(src1->varValue.s), &(dest->varValue.s)) != 0){
+        return RUNTIME_ERROR;
+      }else{
+        return SUCCESS;
+      }
+
+    }else{
+      return TYPE_ERROR; 
+    }
+
   }else{
     return TYPE_ERROR;
   }
   return INTERN_ERROR;
 }
 
-//-------------------IFIND----------------------------------------------------
+//-------------------IFIND-----------------------------------------------------
 int findme(tData *src1, tData *src2, tData *dest){
   if ( (src1->varType == TOK_STRING) && (src2->varType == TOK_STRING) ){
     if (dest->varType == TOK_INT){
       dest->varValue.i = find(&(src1->varValue.s), &(src2->varValue.s));
       return SUCCESS;
     }else if (dest->varType == TOK_DOUBLE){
-	      dest->varValue.d = (double)find(&(src1->varValue.s), &(src2->varValue.s));
+      dest->varValue.d = (double)find(&src1->varValue.s, &src2->varValue.s);
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = find(&src1->varValue.s, &src2->varValue.s);
       return SUCCESS;
     }else{
       return TYPE_ERROR;
@@ -714,32 +1274,52 @@ int findme(tData *src1, tData *src2, tData *dest){
   return INTERN_ERROR;
 }
 
-//-------------------ILENGTH-----------------------------------------------------
+//-------------------ILENGTH---------------------------------------------------
 int lengthstring(tData *src1, tData *dest){
-  if ( (dest->varType == TOK_INT) && (src1->varType == TOK_STRING) ){
-    dest->varValue.i = strGetLength(&(src1->varValue.s));
-    return SUCCESS;
-  }else if ( (dest->varType == TOK_DOUBLE) && (src1->varType == TOK_STRING) ){
-    dest->varValue.d = (double)strGetLength(&(src1->varValue.s));
-    return SUCCESS;
+  if (src1->varType == TOK_STRING){
+    if (dest->varType == TOK_INT){
+      dest->varValue.i = strGetLength(&(src1->varValue.s));
+      return SUCCESS;
+    }else if (dest->varType == TOK_DOUBLE){
+      dest->varValue.d = (double)strGetLength(&(src1->varValue.s));
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_INT;
+      dest->varValue.i = strGetLength(&(src1->varValue.s));
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
   }else{
     return TYPE_ERROR;
   }
+
   return INTERN_ERROR;
 }
 
-//-------------------ICAT-----------------------------------------------------
+//-------------------ICAT------------------------------------------------------
 int concatenate(tData *src1, tData *src2, tData *dest){
-  if ( (src1->varType == TOK_STRING) && (src2->varType == TOK_STRING) && (dest->varType == TOK_STRING) ){
-    dest->varValue.s = concat(&(src1->varValue.s), &(src2->varValue.s));
-    return SUCCESS;
+  if ( (src1->varType == TOK_STRING) && 
+       (src2->varType == TOK_STRING) ){
+    if (dest->varType == TOK_STRING){
+      dest->varValue.s = concat(&(src1->varValue.s), &(src2->varValue.s));
+      return SUCCESS;
+    }else if (dest->varType == TOK_AUTO){
+      dest->varType = TOK_STRING;
+      dest->varValue.s = concat(&(src1->varValue.s), &(src2->varValue.s));
+      return SUCCESS;
+    }else{
+      return TYPE_ERROR;
+    }
+
   }else{
     return TYPE_ERROR;
   }
   return INTERN_ERROR;
 }
 
-//-------------------ISUBSTR--------------------------------------------------
+//-------------------ISUBSTR---------------------------------------------------
 int substring(tData *src1, tData *src2, tData *dest){
   return INTERN_ERROR;
 }
