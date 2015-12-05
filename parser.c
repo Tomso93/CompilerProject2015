@@ -769,8 +769,8 @@ int _for(TinstList *instrList){
 	if (result !=SYNTAX_OK) return SYNTAX_ERROR;
     
     // najde promennou ve ktere je vyhodnocena podminka
-    string LastVar = ReadNameVar(instrList);
-    genInstr(INOT,(void *) &LastVar, NULL,(void *) &LastVar, list);
+    tData *LastVar = ReadNameVar(instrList);
+    genInstr(INOT, LastVar, NULL, LastVar, list);
     
     string Label_2; //label, pro navrat
     strInit(&Label_2); //inicializace
@@ -925,8 +925,8 @@ int _if(TinstList *instrList){
 	if (token !=TOK_RIGHT_BRACKET) return SYNTAX_ERROR;
 
     //generovani pomocne promenne
-    string LastVar = ReadNameVar(instrList); // funkce na cteni nazvu posledni instrukce 
-    genInstr(INOT,(void *) &LastVar, NULL,(void *) &LastVar, list); // negace podminky
+    tData *LastVar = ReadNameVar(instrList); // funkce na cteni nazvu posledni instrukce 
+    genInstr(INOT, LastVar, NULL, LastVar, list); // negace podminky
     
     string Label_1; //novy label, skok na vetev else
     strInit(&Label_1); //inicializace
