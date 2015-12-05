@@ -1,8 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "str.h"
-#include "lex.h"
 #include "define.h"
+#include "str.h"
+#include "stable.h"
+#include "instlist.h"
+#include "lex.h"
+#include "errors.h"
+#include "interpret.h"
+#include "parser.h"
 
 string attr;
 
