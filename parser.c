@@ -1120,13 +1120,16 @@ int func_dclr(TinstList *instrList){
 	int result;
 	
 	
+	
 	result= type();
 	if (result != SYNTAX_OK) return SYNTAX_ERROR;
-///
+///	
 	
 	// dalsi token ID
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token != TOK_ID) return SYNTAX_ERROR;
+
+
 ///
 	
 	// po ID nasleduje (
@@ -1154,7 +1157,12 @@ int program(TinstList *instrList){
 	result= func_dclr(instrList);
 	if(result != SYNTAX_OK) return result;
 	//prosel jsem cely program a scanner uz nema co davat
-	if (token != TOK_END_OF_FILE) return SYNTAX_ERROR;
+	while (token != TOK_END_OF_FILE) {
+		//cyklim, dokud mi nedojde konec souboru
+		if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+		func_dclr(instrList);
+	}
+	
 	//generuji konec programu
 	genInstr(IEND,NULL,NULL,NULL, instrList);
 	return SYNTAX_OK;
@@ -1170,8 +1178,8 @@ int parse(tSymbolTable *ST, TinstList *instrList){
   strInit(&attr);
 	
 
-	if((token = getNextToken(&attr))== LEX_ERROR)
-		result=LEX_ERROR;
+	if((token = getNextToken(&attr))== LEX_ERROR) return LEX_ERROR;
+	
 	else
 		result=program(list);	// volam prvni neterminal 
 	
