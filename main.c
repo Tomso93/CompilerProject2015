@@ -10,6 +10,9 @@ int main(int argc, char *argv[]){
     //int token = 0;
     FILE * f;
     strInit(&attr);
+    
+    tSymbolTable symtab;
+    TinstList instlist;
 
     if(argc >= 2){
         f = fopen (argv[1],"rt");
@@ -17,8 +20,18 @@ int main(int argc, char *argv[]){
                 fprintf(stderr, "Soubor se nepodarilo otevrit!");
                 return 99;
         } else {
-            // volání parseru
+            // volÃ¡nÃ­ parseru
+            result = parse(&symbtab, &instlist);
+            if (result != SUCCESS){
+                printerror(result);
+                return result;
             }
+            result = interpret(&instlist);
+            if (result != SUCCESS){
+                printerror(result);
+                return result;
+            }
+        }
 
     } else {
         fprintf(stderr, "Zadej soubor!");
