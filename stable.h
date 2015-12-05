@@ -37,7 +37,7 @@ void tableFree(tSymbolTable *T);
 int tableInsertValue (tSymbolTable *T, string *key, Tvalue v);
 
 //zasobnik lokalnich tabulek -------------------------------------
-
+/*
 typedef struct{
   tSymbolTable *ltable;
   tSymbolTable *ntable;
@@ -65,3 +65,4 @@ typedef struct
   struct GtableItem *first;
 } GtSymbolTable;
 
+*/
