@@ -1159,7 +1159,7 @@ int program(TinstList *instrList){
 	//prosel jsem cely program a scanner uz nema co davat
 	while (token != TOK_END_OF_FILE) {
 		//cyklim, dokud mi nedojde konec souboru
-		if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+		
 		func_dclr(instrList);
 	}
 	
