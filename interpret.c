@@ -24,7 +24,6 @@ int interpret (TinstList *LOI){
   instr = ListGetInst(LOI);
   if (instr == NULL){
     ListDispose(LOI);
-    printerror(INTERN_ERROR);
     return INTERN_ERROR;
   }
 
@@ -145,13 +144,11 @@ int interpret (TinstList *LOI){
 
     if (success != SUCCESS){
       ListDispose(LOI);
-      printerror(success);
       return success;
     }
     ListSucc(LOI);
     instr = ListGetInst(LOI);
     if (instr == NULL){
-      printerror(INTERN_ERROR);
       ListDispose(LOI);
       return INTERN_ERROR;
     }
