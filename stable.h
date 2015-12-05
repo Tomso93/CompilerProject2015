@@ -36,17 +36,23 @@ void tableFree(tSymbolTable *T);
 
 int tableInsertValue (tSymbolTable *T, string *key, Tvalue v);
 
+//zasobnik lokalnich tabulek -------------------------------------
 
-// globalni tabulka symbolu -------------------------------------
+typedef struct{
+  tSymbolTable *ltable;
+  tSymbolTable *ntable;
+}ltstack
 
 typedef struct
 {
   int type;
   Tvalue retValue;
-  paramList param;
-  ltList ltables;
+  tSymbolTable *param;
+  ltstack *ltables;
 } GtData;
 
+
+// globalni tabulka symbolu -------------------------------------
 typedef struct GtableItem
 {
   string key;                  // klic, podle ktereho se bude vyhledavat = nazev identifikatoru
