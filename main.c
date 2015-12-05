@@ -30,7 +30,7 @@ int main(int argc, char *argv[]){
                 return 99;
         } else {
             // volání parseru
-            result = parse(&symbtab, &instlist);
+            result = parse(&symtab, &instlist);
             if (result != SUCCESS){
                 printerror(result);
                 return result;
