@@ -12,7 +12,6 @@ typedef struct
 {
   int varType;  // typ dane promenne
   Tvalue varValue;
-  bool isinit;
 } tData;
 
 typedef struct tableItem
