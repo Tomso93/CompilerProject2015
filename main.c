@@ -14,6 +14,9 @@ int main(int argc, char *argv[]){
     tSymbolTable symtab;
     TinstList instlist;
     int result;
+     
+    ListInit(&instlist);
+    tableInit(&symtab);
 
     if(argc >= 2){
         f = fopen (argv[1],"rt");
