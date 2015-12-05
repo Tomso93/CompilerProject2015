@@ -1,5 +1,7 @@
 // definice jednotlivych typu
 
+//lokalni tabulka symbolu -----------------------------------
+
 typedef union {
   int i;
   double d;
@@ -10,6 +12,7 @@ typedef struct
 {
   int varType;  // typ dane promenne
   Tvalue varValue;
+  bool isinit;
 } tData;
 
 typedef struct tableItem
@@ -32,3 +35,27 @@ void tableItemDelete ( tSymbolTable *T, string *key );
 void tableFree(tSymbolTable *T);
 
 int tableInsertValue (tSymbolTable *T, string *key, Tvalue v);
+
+
+// globalni tabulka symbolu -------------------------------------
+
+typedef struct
+{
+  int type;
+  Tvalue retValue;
+  paramList param;
+  ltList ltables;
+} GtData;
+
+typedef struct GtableItem
+{
+  string key;                  // klic, podle ktereho se bude vyhledavat = nazev identifikatoru
+  GtData data;                  // data, ktera jsou ke klici pridruzena
+  struct GtableItem *nextItem;  // ukazatel na dalsi prvek tabulky symbolu
+} GtTableItem;
+
+typedef struct
+{
+  struct GtableItem *first;
+} GtSymbolTable;
+
