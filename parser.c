@@ -295,7 +295,7 @@ int SReduction_expr (tStackTN * S, int index){
 				if (error != 2){
 					E1 = S-> valueType[index+1];
 					value1 = S-> value[index+1];
-					genInstr(IMOV,(void *)value1, NULL, (void *)value3,, list);
+					genInstr(IMOV,(void *)value1, NULL, (void *)value3, list);
 					//tady instrukce
 				}
 				SDeleteItem(S, 3);
@@ -316,7 +316,7 @@ int SReduction_expr (tStackTN * S, int index){
 
 					if (E1 != E2) return SEMANTIC_ERROR;
 					// nezapomen na kontrolu semantiky
-					genInstr(IMUL, (void *)value1, (void *)value2,(void *)value3,, list);
+					genInstr(IMUL, (void *)value1, (void *)value2,(void *)value3, list);
 					// generuje istrulci ve ktere se vynasoby hodnoty na adresach 1 a 2
 					// a vysledek se ulozi na adresu 3 se kterou dale pracujeme
 
