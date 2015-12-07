@@ -933,11 +933,11 @@ int _if(TinstList *instrList){
     string Label_1; //novy label, skok na vetev else
     strInit(&Label_1); //inicializace
     GenNewVariable(&Label_1);  // vygenerovani promenne
-    tableInsert(local_table, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+    tTableItem* prom  = tableInsert(local_table, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
     tableInsertValue (local_table, &Label_1, Label_1);
     
     //generovani skoku na ELSE vetev
-    genInstr(IIFGOTO, LastVar, NULL, Label_1, instrList);
+    genInstr(IIFGOTO, LastVar, NULL, prom->data, instrList);tTableItem*
     
 	//telo pokud je v if pravda
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
