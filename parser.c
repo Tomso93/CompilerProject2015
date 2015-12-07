@@ -759,12 +759,13 @@ int _for(TinstList *instrList){
     string Label_1; //label, pro navrat
     strInit(&Label_1); //inicializace
     GenNewVariable(&Label_1);  // vygenerovani promenne
-    tableInsert(local_table, &Label_1, TOK_INT);
+    tTableItem* prom = tableInsert(local_table, &Label_1, TOK_STRING);
+    tableInsertValue(local_table, &Label_1, Label_1)
    // tData *newVariableInfo;
    // newVariableInfo = tableSearch(local_table, &Label_1);
    // strFree(&Label_1);
     // instrukce pro label
-    genInstr(ILABEL,(void *) &Label_1, NULL, NULL, instrList);
+    genInstr(ILABEL, &prom->data, NULL, NULL, instrList);
     
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	result= comp_expr(instrList);
@@ -777,8 +778,9 @@ int _for(TinstList *instrList){
     string Label_2; //label, pro navrat
     strInit(&Label_2); //inicializace
     GenNewVariable(&Label_2);  // vygenerovani promenne
-    tableInsert(local_table, &Label_2, TOK_INT);
-    genInstr(IIFGOTO,(void *) &LastVar, NULL,(void *) &Label_2, instrList);
+    tTableItem* prom2 = tableInsert(local_table, &Label_2, TOK_INT);
+    tableInsertValue(local_table, &Label_2, Label_2)
+    genInstr(IIFGOTO, LastVar, NULL, &prom2->data, instrList);
      
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_SEMICOLON) return SYNTAX_ERROR;
@@ -803,9 +805,9 @@ int _for(TinstList *instrList){
 	result= body(instrList);
 
     // instrukce skoku
-    genInstr(IGOTO, NULL, NULL,(void *) &Label_1, instrList);
+    genInstr(IGOTO, NULL, NULL, &prom->data, instrList);
     //instrukce label pro skonceni cyklu
-    genInstr(ILABEL,(void *) &Label_1, NULL, NULL, instrList);
+    genInstr(ILABEL, &prom->data, NULL, NULL, instrList);
 	if(result !=SYNTAX_OK) return result;
 
 
@@ -829,7 +831,7 @@ int term_n(TinstList *instrList){
 			if (result != SYNTAX_OK) return result;
 			
 			//generovani instukce
-			genInstr(IWRITE, NULL, NULL,(void *) &token, instrList);
+			genInstr(IWRITE, NULL, NULL, token, instrList);
 			
 			//mozna jich je jeste vic, radeji si ho zavolam znovu
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -852,7 +854,7 @@ int _cout(TinstList *instrList){
 	if(token !=SYNTAX_OK) return result;
 	
 	// instrukce pro zapis, pokud jich je vice generuji se v term_n()
-    	genInstr(IWRITE, NULL, NULL,(void *) &token, instrList);
+    	genInstr(IWRITE, NULL, NULL, token, instrList);
 	
 	//zavolam scanner a jdu zjistit, jestli termu neni vic a jestli jsou ok
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -876,7 +878,7 @@ int _id_n(TinstList *instrList){
 			if (token !=TOK_ID) return SYNTAX_ERROR;
 			
 			// vygeneruju instrukci
-			genInstr(IREAD, NULL, NULL,(void *) &token, instrList);
+			genInstr(IREAD, NULL, NULL, token, instrList);
 			
 			//a zavolam si ji znova
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -897,7 +899,7 @@ int _cin(TinstList *instrList){
 	if (token !=TOK_ID) return SYNTAX_ERROR;
 	
 	// generuji prvni instrukci, ostatni se generujou v _id_n()
-	genInstr(IREAD, NULL, NULL,(void *) &token, instrList);
+	genInstr(IREAD, NULL, NULL, token, instrList);
 	
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	
@@ -947,11 +949,12 @@ int _if(TinstList *instrList){
     string Label_2;  // label dva, skok az za else, podminka v IF byla pravda
     strInit(&Label_2);
     GenNewVariable(&Label_2);
-    tableInsert(local_table, &Label_1, TOK_INT);
+    tTableItem* prom2 = tableInsert(local_table, &Label_2, TOK_STRING);
+    tableInsertValue(local_table, &Label_2, Label_2);
     
     // skok za ELSE
-    genInstr(IGOTO, NULL, NULL,(void *) &Label_2, instrList);
-    genInstr(ILABEL,(void *) &Label_1, NULL, NULL, instrList); // musime vlozit label za telo IFu
+    genInstr(IGOTO, NULL, NULL, &prom2->data, instrList);
+    genInstr(ILABEL, &prom->data, NULL, NULL, instrList); // musime vlozit label za telo IFu
     
 	if(result !=SYNTAX_OK) return result;
 	//vse ok, nasleduje else a za ni else
