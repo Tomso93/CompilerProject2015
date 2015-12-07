@@ -275,6 +275,8 @@ int SReduction_expr (tStackTN * S, int index, TinstList *instrList){
 		E1 =  S -> valueType[index];
 		value1 = S-> value[index];
 		value3 = malloc(sizeof (double));
+		if(value3 == NULL)
+			return 99;
 	}
 //----------------------------------------------------------------------------	
 	if (strCmpConstStr(&(S->a[index]), "id")==0){
