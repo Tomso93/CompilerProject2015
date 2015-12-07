@@ -937,7 +937,7 @@ int _if(TinstList *instrList){
     tableInsertValue (local_table, &Label_1, Label_1);
     
     //generovani skoku na ELSE vetev
-    genInstr(IIFGOTO, LastVar, NULL, prom->data, instrList);tTableItem*
+    genInstr(IIFGOTO, LastVar, NULL, prom->data, instrList);
     
 	//telo pokud je v if pravda
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
