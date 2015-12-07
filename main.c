@@ -34,6 +34,7 @@ int main(int argc, char *argv[]){
             if (result != SUCCESS){
                 printerror(result);
                 return result;
+                fclose(f);
             }
             result = interpret(&instlist);
             if (result != SUCCESS){
