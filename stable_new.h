@@ -22,7 +22,7 @@ typedef struct LtableItem
   struct LtableItem *nextItem;  // ukazatel na dalsi prvek tabulky symbolu
 } tLTableItem;
 
-struct LtableItem *localTS[30];
+struct LtableItem *localTS[20];
 
 
 //globalni tabulka symbolu
@@ -43,7 +43,7 @@ typedef struct GtableItem
   struct GtableItem *nextItem;  // ukazatel na dalsi prvek tabulky symbolu
 } tGTableItem;
 
-struct GtableItem *globalTS[30];
+struct GtableItem *globalTS[20];
 
 
 //hashovaci funkce
