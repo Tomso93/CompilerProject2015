@@ -876,6 +876,7 @@ int _id_n(TinstList *instrList){
 		case TOK_DOUBLE_ARROW_RIGHT:
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			if (token !=TOK_ID) return SYNTAX_ERROR;
+			if(!(tableSearch(local_table, &attr))) return SEMANTIC_ERROR;
 			
 			// vygeneruju instrukci
 			genInstr(IREAD, NULL, NULL, token, instrList);
@@ -897,6 +898,7 @@ int _cin(TinstList *instrList){
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_ID) return SYNTAX_ERROR;
+	if(!(tableSearch(local_table, &attr))) return SEMANTIC_ERROR;
 	
 	// generuji prvni instrukci, ostatni se generujou v _id_n()
 	genInstr(IREAD, NULL, NULL, token, instrList);
