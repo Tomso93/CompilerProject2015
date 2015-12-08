@@ -63,7 +63,7 @@ struct Frame *FrameCreate(string funcName){
     return NULL;
   }
 
-  //copy Ltables (LTable + params) do LTS
+  //copy Ltables (LTable + params) to LTS
   localTS LTS;
   struct LtableItem *prom;
   int i;
