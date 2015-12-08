@@ -8,7 +8,7 @@
 // to do 
 //int substring();		//najde podretezec
 
-int interpret(TinstList *LOI); 	//hlavni funkce. prochazi seznam instrukci
+int interpret(glabal *GTS); 	//hlavni funkce. prochazi seznam instrukci
        				//a vola prislusne funkce
 
 //IMOV
@@ -97,19 +97,20 @@ int sortme(tData *src1, tData *dest);
 
 //IFIND
 //dest = find(src1, src2)
-//funkce v ial.c
+//vestavena funkce
 int findme(tData *src1, tData *src2, tData *dest);  
 
 //ILENGTH
 //dest = length(src1) 
-//funkce v inbuild.c
+//vestavena funkce
 int lengthstring(tData *src1, tData *dest);	
 
 //ICAT
 //dest=concat(src1,src2)
-//funkce v inbuild.c
+//vestavena funkce
 int concatenate(tData *src1, tData *src2, tData *dest);
 
 //ISUBSTR
-//jeste nedela nic. vrati chybu
-int substring(tData *src1, tData *src2, tData *dest);
+//dest=substr(src1, src2, src3)
+//vestavena funkce
+int substring(tData *src1, tData *src2, tData *src3, tData *dest);
