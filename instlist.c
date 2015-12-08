@@ -102,3 +102,21 @@ int ListActFirst(TinstList *L){
   L->act = L->first;
   return SUCCESS;
 }
+
+int ListConect(TinstList *L1, TinstList *L2){
+  if (L1->first == NULL){
+    L1->first = L2->first;
+    L1->last = L2->last;
+    L1->act = L1->first;
+    return SUCCESS;
+  }else if (L1->act == NULL){
+    return INTERN_ERROR;
+  }else{
+    L2->last->nextInst = L1->act->nextInst;
+    L1->act->nextInst = L2->first;
+    if (L1->act == L1->last){
+      L1->last = L2->Last;
+    }
+    return SUCCESS;
+  }
+} 
