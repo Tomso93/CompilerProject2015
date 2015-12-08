@@ -60,12 +60,12 @@ int ListSucc(TinstList *L){
   return SUCCESS;
 }
 
-int ListGoto(TinstList *L, tData *dest){
+int ListGoto(TinstList *L, string *dest){
   bool found = false;
   L->act = L->first;
-  while ( (!found) && (L->act->nextInst != NULL) ){
+  while ( (!found) && (L->act != NULL) ){
     if (L->act->inst.itype == ILABEL){
-      if (strCmpString(&(L->act->inst.src1->varValue.s), &(dest->varValue.s)) == 0){
+      if (strCmpString(L->act->inst.src1, dest) == 0){
         found = true;
       }else{
         L->act = L->act->nextInst;
