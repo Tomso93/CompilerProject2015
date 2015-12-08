@@ -131,7 +131,8 @@ int FrameInsertValue(TstackFrame *S, string varName, Tvalue val){
   if (pom == NULL) {
     return DEFINE_ERROR;
   }else{
-    pom->value = val;
+    pom->varValue = val;
+    pom->isinit = true;
   }
   return SUCCESS;
 }
