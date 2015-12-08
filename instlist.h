@@ -33,3 +33,4 @@ Tinst *ListGetInst(TinstList *L);
 Tinst *ListGetLastInst(TinstList *L);
 int ListActLast(TinstList *L);
 int ListActFirst(TinstList *L);
+int ListConect(TinstList *L1, TinstList *L2); //vlozi L2 do L1 za L1->act
