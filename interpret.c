@@ -26,6 +26,7 @@ int interpret (globalTS *GTS){
   tLData *source1;
   tLData *source2;
   tLData *source3;
+  int counter;
 
   //vytvori seznam instrukci  
   TinstList LOI;
@@ -68,129 +69,167 @@ int interpret (globalTS *GTS){
   }
 
   //aktivuje prvni instrukci
-  ListActFirst(LOI);  
+  ListActFirst(&LOI);  
 
   //ziska instrukci ze seznamu instrukci
-  instr = ListGetInst(LOI);
+  instr = ListGetInst(&LOI);
   if (instr == NULL){
-    ListDispose(LOI);
+    ListDispose(&LOI);
     return INTERN_ERROR;
   }
-
-  //vyhleda operandy instrukce a ulozi si uazatele na jejich data
-  source1 = VariableSearch(LOI, instr->src1);
-  source2 = VariableSearch(LOI, instr->src2);
-  destination = VariableSearch(LOI, instr->dest);
-
 
   //zavola funkci, ktera provede prislusnou instrukci
   while ( instr->itype != IEND ){
     switch (instr->itype){
 
       case IMOV:
+        source1 = VariableSearch(&SF, instr->src1);
+        destination = VariableSearch(&SF, instr->dest);
         success = move(source1, destination);
-        break;
+      break;
 
       case IADD:
+        source1 = VariableSearch(&SF, instr->src1);
+        source2 = VariableSearch(&SF, instr->src2);
+        destination = VariableSearch(&SF, instr->dest);
         success = addition(source1, source2, destination);
-        break;
+      break;
 
       case ISUB:
+        source1 = VariableSearch(&SF, instr->src1);
+        source2 = VariableSearch(&SF, instr->src2);
+        destination = VariableSearch(&SF, instr->dest);
         success = substraction(source1, source2, destination);
-        break;
+      break;
 
       case IMUL:
+        source1 = VariableSearch(&SF, instr->src1);
+        source2 = VariableSearch(&SF, instr->src2);
+        destination = VariableSearch(&SF, instr->dest);
         success = multiplication(source1, source2, destination);
-        break;
+      break;
 
       case IDIV:
+        source1 = VariableSearch(&SF, instr->src1);
+        source2 = VariableSearch(&SF, instr->src2);
+        destination = VariableSearch(&SF, instr->dest);
         success = division(source1, source2, destination);
-        break;
+      break;
 
       case IEQUAL:
+        source1 = VariableSearch(&SF, instr->src1);
+        source2 = VariableSearch(&SF, instr->src2);
+        destination = VariableSearch(&SF, instr->dest);
         success = equal(source1, source2, destination);
-        break;
+      break;
 
       case ISMALL:
+        source1 = VariableSearch(&SF, instr->src1);
+        source2 = VariableSearch(&SF, instr->src2);
+        destination = VariableSearch(&SF, instr->dest);
         success = smaller(source1, source2, destination);
-        break;
+      break;
 
       case IBIG:
+        source1 = VariableSearch(&SF, instr->src1);
+        source2 = VariableSearch(&SF, instr->src2);
+        destination = VariableSearch(&SF, instr->dest);
         success = bigger(source1, source2, destination);
-        break;
+      break;
 
       case IEQSM:
+        source1 = VariableSearch(&SF, instr->src1);
+        source2 = VariableSearch(&SF, instr->src2);
+        destination = VariableSearch(&SF, instr->dest);
         success = equalsmaller(source1, source2, destination);
-        break;
+      break;
 
       case IEQBG:
+        source1 = VariableSearch(&SF, instr->src1);
+        source2 = VariableSearch(&SF, instr->src2);
+        destination = VariableSearch(&SF, instr->dest);
         success = equalbigger(source1, source2, destination);
-        break;
+      break;
 
       case INOTEQ:
+        source1 = VariableSearch(&SF, instr->src1);
+        source2 = VariableSearch(&SF, instr->src2);
+        destination = VariableSearch(&SF, instr->dest);
         success = notequal(source1, source2, destination);
-        break;
+      break;
 
       case INOT:
+        source1 = VariableSearch(&SF, instr->src1);
+        destination = VariableSearch(&SF, instr->dest);
         success = negation(source1, destination);
-        break;
-/*
-      case IAND:
-        success = konjunction(source1, source2, destination);
-        break;
+      break;
 
-      case IOR:
-        success = disjunction(source1, source2, destination);
-        break;
-*/
       case ILABEL:
-        break;
+      break;
 
       case IGOTO:
         success = jump(instr->dest, LOI);
-        break;
+      break;
 
       case IIFGOTO:
+        source1 = VariableSearch(&SF, instr->src1);
         success = jumpif(source1, instr->dest, LOI);
-        break;
+      break;
 
       case IREADI:
+        destination = VariableSearch(&SF, instr->dest);
         success = readint(destination);
-        break;
+      break;
 
-      case IREADD:  
+      case IREADD:
+        destination = VariableSearch(&SF, instr->dest);  
         success = readdouble(destination);
-        break;
+      break;
 
-      case IREADS:  
+      case IREADS:
+        destination = VariableSearch(&SF, instr->dest);  
         success = readstring(destination);
-        break;
+      break;
 
       case IREAD: 
+        destination = VariableSearch(&SF, instr->dest);
         success = read(destination);
-        break;
+      break;
 
-      case IWRITE:  
+      case IWRITE:
+        source1 = VariableSearch(&SF, instr->src1);  
         success = write(source1);
-        break;
+      break;
 
       case IFIND:
+        source1 = VariableSearch(&SF, instr->src1);
+        source2 = VariableSearch(&SF, instr->src2);
+        destination = VariableSearch(&SF, instr->dest);
         success = findme(source1, source2, destination);
-        break;
+      break;
 
       case ISORT:
+        source1 = VariableSearch(&SF, instr->src1);
+        destination = VariableSearch(&SF, instr->dest);
         success = sortme(source1, destination);
-        break;
+      break;
 
       case ICAT:
+        source1 = VariableSearch(&SF, instr->src1);
+        source2 = VariableSearch(&SF, instr->src2);
+        destination = VariableSearch(&SF, instr->dest);
         success = concatenate(source1, source2, destination);
-        break;
+      break;
 
       case ILENGTH:
+        source1 = VariableSearch(&SF, instr->src1);
+        destination = VariableSearch(&SF, instr->dest);
         success = lengthstring(source1, destination);
-        break;
+      break;
 
       case ISUBSTR1:
+        source1 = VariableSearch(&SF, instr->src1);
+        destination = VariableSearch(&SF, instr->dest);
         //nacte dalsi instrukci (ocekava ISUBSTR2)
         ListSucc(LOI);
         instr = ListGetInst(LOI);
@@ -198,47 +237,63 @@ int interpret (globalTS *GTS){
           ListDispose(LOI);
           return INTERN_ERROR;
         }
-
         //pokud byla ISUBSTR2 provede funkci. jinak chyba.
         if (instr->itype == ISUBSTR2){
-          source2 = VariableSearch(LOI, *instr->src1);
-          source3 = VariableSearch(LOI, *instr->src2);
+          source2 = VariableSearch(&SF, *instr->src1);
+          source3 = VariableSearch(&SF, *instr->src2);
           success = substring(source1, source2, source3, destination);
         }else{
           success = INTERN_ERROR;
         }
-        break;
+      break;
+
+      case IPRECALL:
+        success = precall(instr->src1, GTS, newF);
+        counter = 0;
+      break;
+
+      case IPAR:
+        source1 = VariableSearch(GTS, *instr->src1);
+        source2 = VariableSearch(&SF, *instr->src2);
+        success = parametr(source1, source2, newF, counter);
+        counter++;
+      break;
+
+      case ICALL:
+        source1 = VariableSearch(GTS, *instr->src1);
+        success = call(source1, newF, &LOI, &SF);
+      break;
+
+      case IRET:
+        source1 = VariableSearch(&SF, *instr->src1);        
+        success = ret(source1, &SF);
+      break;
 
       default:
         success = INTERN_ERROR;
-        break;
+      break;
     }
 
     //pokud skoncila funkce neuspechem vrati chybu
     if (success != SUCCESS){
-      ListDispose(LOI);
+      ListDispose(&LOI);
       return success;
     }
 
     //presune se na dalsi instrukci
-    ListSucc(LOI);
+    ListSucc(&LOI);
     
     //ziska instrukci ze seznamu instrukci
-    instr = ListGetInst(LOI);
+    instr = ListGetInst(&LOI);
     if (instr == NULL){
-      ListDispose(LOI);
+      ListDispose(&LOI);
       return INTERN_ERROR;
     }
     
-    //vyhleda operandy instrukce a ulozi si uazatele na jejich data
-    source1 = VariableSearch(LOI, *instr->src1);
-    source2 = VariableSearch(LOI, *instr->src2);
-    destination = VariableSearch(LOI, *instr->dest);
-
   }//opakuje dokud nenarazi na konec
 
   //uvolni seznam z pameti
-  ListDispose(LOI);
+  ListDispose(&LOI);
 
   //vrati 0 nebo cislo chyby
   return success;
@@ -1596,6 +1651,7 @@ int lengthstring(tData *src1, tData *dest){
 
 //-------------------ICAT------------------------------------------------------
 int concatenate(tData *src1, tData *src2, tData *dest){
+
   if (!src1->isinit || !src2->isinit){
     return UNINIT_ERROR;
 
@@ -1700,4 +1756,81 @@ int substring(tData *src1, tData *src2, tData *src3, tData *dest){
 
 
   return INTERN_ERROR;
+}
+
+
+//-------------------IPRECALL--------------------------------------------------
+int precall(string *funcName, globalTS *GTS, struct Frame *newF){
+  newF = FrameCreate(GTS, funcName);
+
+  if (newF == NULL){
+    return INTERN_ERROR;
+  }
+  return SUCCESS;
+}
+
+
+//-------------------IPAR------------------------------------------------------
+int parametr(tGData *source1, tLData *source2, struct Frame *newF, int cnt){
+  int success;
+  tLTableItem *param = source1->params[cnt];
+
+  if (!source2->isinit){
+    return UNINIT_ERROR;
+  }
+
+  if (param->data.varType != source2->varType){
+    return TYPE_ERROR;
+  }
+
+  success = FrameInsertVar(newF, param->key, param->data.varType, source2->varValue);
+
+  return success;
+}
+
+
+//-------------------ICALL-----------------------------------------------------
+int call(tGData *source1, struct Frame *newF, TinstList *LOI, Tstackframe *S){
+  int success;
+
+  success = PushFrame(S, newF);
+  if (success != SUCCESS){
+    return success;
+  }
+
+  success = ListConect(LOI, source1->LInstr);
+  if (success != SUCCESS){
+    return success;
+  }
+
+  return SUCCESS;
+}
+
+//-------------------IRET------------------------------------------------------
+int ret(tLData *source1, Tstackframe *S){
+  struct Frame *oldF;
+  tLData *RET;
+
+  string R;
+  strInit(&R);
+  strAddChar(&R, '#');
+  strAddChar(&R, 'R');
+  strAddChar(&R, 'E');
+  strAddChar(&R, 'T');
+  strAddChar(&R, 'U');
+  strAddChar(&R, 'R');
+  strAddChar(&R, 'N');
+
+  oldF = PopFrame(S);
+
+  RET = VariableSearch(S, R);
+  if (RET = NULL){
+    success = FrameInsertVar(S->top, R, source1->varType, source1->varValue); 
+  }else{
+    RET->varType = source->varTape;
+    success = FrameInsertValue(S, R, source1->varValue);
+  }
+  
+  FrameDelete(oldF);
+  return success;
 }
