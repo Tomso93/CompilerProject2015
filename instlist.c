@@ -9,7 +9,6 @@
 #include <stdio.h>
 #include <malloc.h>
 #include "str.h"
-#include "stable.h"
 #include "instlist.h"
 #include "define.h"
 
