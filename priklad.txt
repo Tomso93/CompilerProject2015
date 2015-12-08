@@ -1,0 +1,90 @@
+VSTUPNI PROGRAM:
+
+int F1 (int a, int b){
+  int c;
+  c = 5;
+  c = a + c;
+  return b * c;
+}
+
+int main (){
+  int d;
+  int e;
+  d = 2;
+  e = F1 (d, 3);
+  e = e + d;
+  return 0;
+}
+
+CO DELA NAS PROGRAM
+(cisla v zavorce rikaji zhruba kde ve vstupnim programu se to provede)
+
+(3) vytvori novy zaznam v globalni tabulce symbolu
+    (F1, int, ukazatel na pole parametru, ukazatel na LTS, ukazatel na instrukcni pasku)
+(3) vytvori pole parametru a vlozi tam parametry
+    (a, int, __ , false) false = neinicializovana, __ = nema hodnotu
+    (b, int, __ , false)
+(3) vytvori lokalni tabulku symbolu (zatim prazdna)
+(3) vytvori instrukcni pasku (zatim prazdna)
+(4) vytvori novy zaznam v LTS
+    (c, int, __, false)
+(5) generuje promennou s hodnotou 5, ulozi ji do LTS
+    (#1, int, 5, true)
+(5) generuje instrukci
+    (IMOV, #1, NULL, c)
+(6) generuje promennou
+    (#4, int, __, false)
+(6) generuje instrukci
+    (IADD, a, c, #4)
+(6) generuje instrukci
+    (IMOV, #4, NULL, c)
+(7) generuje promennou
+    (#3, int, __, false)
+(7) generuje instrukci
+    (IMUL, b, c, #3)
+(7) generuje instrukci
+    (IRET, #3, NULL, NULL)
+
+(10) vytvori novy zaznam v globalni tabulce symbolu
+     (main, int, ukazatel na pole parametru, ukazatel na LTS, ukazatel na instrukcni pasku)
+(10) vytvori pole parametru (prazdne)
+(10) vytvori lokalni tabulku symbolu (zatim prazdna)
+(10) vytvori instrukcni pasku (zatim prazdna)
+(11) vytvori novy zaznam v LTS
+     (d, int, __, false)
+(12) vytvori novy zaznam v LTS
+     (e, int, __, false)
+(13) generuje promennou s hodnotou 2, ulozi ji do LTS
+     (#4, int, 2, true)
+(13) generuje instrukci
+     (IMOV, #4, NULL, d)
+(14) generuje instrukci
+     (IPRECALL, F1, NULL, NULL)
+(14) generuje instrukci
+     (IPAR, d, NULL, NULL)
+(14) generuje promennou s hodnotou 3, ulozi ji do LTS
+     (#5, int, 3, true)
+(14) generuje instrukci
+     (IPAR, #5, NULL, NULL)
+(14) generuje instrukci
+     (ICALL, F1, NULL, NULL)
+(14) generuje instrukci
+     (IMOV, #RETURN, NULL, e)
+(15) generuje promennou
+     (#6, int, __, false)
+(15) generuje instrukci
+     (IADD, e, d, #6)
+(15) generuje instrukci
+     (iMOV, #6, NULL, e)
+(16) generuje promennou
+     (#7, int, 0, true)
+(16) generuje instrukci
+     (IRET, #7, NULL, NULL)
+
+----------------------------------------------------------------------
+to je vsechno
+vsechny vygenerovane promenne se samozrejme ihned ukladaji do prislusnych lokalnich tabulek
+a vsechny generovane instrukce do proslusnych seznamu instrukci.
+
+instrukce na radku (4) by sli spojit do jedne (IADD, a, c, c), 
+obdobne na radku (15) ale myslim, ze to delame takhle. Jestli ne, opravte me.
