@@ -29,14 +29,14 @@ int StackDispose(Tstackframe *S);
 //vynda ramec ze zasobniku a vrati na nej uazatel
 struct Frame *PopFrame(Tstackframe *S);
 
+//vlozi ramec na vrchol zasobniku
+int PushFrame(Tstackframe *S, struct Frame *F);
+
 //odstrani ramec (ktery uz neni na zasobniku)
 int FrameDelete(struct Frame *F);
 
 //vytvori ramec (ale neda ho na zasobnik)	
-struct Frame *FrameCreate(string funcName);
-
-//vlozi ramec na vrchol zasobniku
-int PushFrame(Tstackframe *S, struct Frame *F);
+struct Frame *FrameCreate(globalTS *GTS, string funcName);
 
 //vyhleda promennou v zasobniku (nejhloubeji v zakladnim ramci)
 tLData *VariableSearch(TstackFrame *S, string varName);
