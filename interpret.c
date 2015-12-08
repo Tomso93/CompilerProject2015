@@ -21,9 +21,13 @@ int interpret (TinstList *LOI){
   Tinst *instr;
   ListActFirst(LOI);  
 
+  tData *destination;
+  tData *source1;
+
   instr = ListGetInst(LOI);
   if (instr == NULL){
     ListDispose(LOI);
+    printerror(INTERN_ERROR);
     return INTERN_ERROR;
   }
 
@@ -133,8 +137,22 @@ int interpret (TinstList *LOI){
         success = lengthstring(instr->src1, instr->dest);
         break;
 
-      case ISUBSTR:
-        success = substring(instr->src1, instr->src2, instr->dest);
+      case ISUBSTR1:
+        destination = instr->dest;
+        source1 = instr->src1;
+        ListSucc(LOI);
+        instr = ListGetInst(LOI);
+        if (instr == NULL){
+          printerror(INTERN_ERROR);
+          ListDispose(LOI);
+          return INTERN_ERROR;
+        }
+
+        if (instr->itype == ISUBSTR2){
+          success = substring(source1, instr->src1, instr->src2, destination);
+        }else{
+          success = INTERN_ERROR;
+        }
         break;
 
       default:
@@ -144,11 +162,13 @@ int interpret (TinstList *LOI){
 
     if (success != SUCCESS){
       ListDispose(LOI);
+      printerror(success);
       return success;
     }
     ListSucc(LOI);
     instr = ListGetInst(LOI);
     if (instr == NULL){
+      printerror(INTERN_ERROR);
       ListDispose(LOI);
       return INTERN_ERROR;
     }
@@ -1313,6 +1333,63 @@ int concatenate(tData *src1, tData *src2, tData *dest){
 }
 
 //-------------------ISUBSTR---------------------------------------------------
-int substring(tData *src1, tData *src2, tData *dest){
+int substring(tData *src1, tData *src2, tData *src3, tData *dest){
+  if (src1->varType == TOK_STRING){
+    if ( (src2->varType == TOK_INT) && 
+         (src3->varType == TOK_INT) ){
+      if (dest->varType == TOK_STRING){
+        dest->varValue.s = substr(src1->varValue.s, src2->varValue.i, src3->varValue.i);
+      }else if (dest->varType == TOK_AUTO){
+        dest->varType = TOK_STRING;
+        dest->varValue.s = substr(src1->varValue.s, src2->varValue.i, src3->varValue.i);
+      }else{
+        return TYPE_ERROR;
+      }
+
+    }else if ( (src2->varType == TOK_INT)    && 
+               (src3->varType == TOK_DOUBLE) ){
+      if (dest->varType == TOK_STRING){
+        dest->varValue.s = substr(src1->varValue.s, src2->varValue.i, (int)src3->varValue.d);
+      }else if (dest->varType == TOK_AUTO){
+        dest->varType = TOK_STRING;
+        dest->varValue.s = substr(src1->varValue.s, src2->varValue.i, (int)src3->varValue.d);
+      }else{
+        return TYPE_ERROR;
+      }
+
+    }else if ( (src2->varType == TOK_DOUBLE) && 
+               (src3->varType == TOK_INT)    ){
+      if (dest->varType == TOK_STRING){
+        dest->varValue.s = substr(src1->varValue.s, (int)src2->varValue.d, src3->varValue.i);
+      }else if (dest->varType == TOK_AUTO){
+        dest->varType = TOK_STRING;
+        dest->varValue.s = substr(src1->varValue.s, (int)src2->varValue.d, src3->varValue.i);
+      }else{
+        return TYPE_ERROR;
+      }
+
+    }else if ( (src2->varType == TOK_DOUBLE) && 
+               (src3->varType == TOK_DOUBLE) ){
+      if (dest->varType == TOK_STRING){
+        dest->varValue.s = substr(src1->varValue.s, (int)src2->varValue.d, (int)src3->varValue.d);
+      }else if (dest->varType == TOK_AUTO){
+        dest->varType = TOK_STRING;
+        dest->varValue.s = substr(src1->varValue.s, (int)src2->varValue.d, (int)src3->varValue.d);
+      }else{
+        return TYPE_ERROR;
+      }
+
+
+    }else if ( (src2->varType == TOK_AUTO) || 
+               (src3->varType == TOK_AUTO) ){
+      return CONVERT_ERROR;
+    }else{
+      return TYPE_ERROR;
+    }
+  }else{
+    return TYPE_ERROR;
+  }
+
+
   return INTERN_ERROR;
 }
