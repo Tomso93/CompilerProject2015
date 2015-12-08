@@ -30,7 +30,7 @@ struct LtableItem *localTS[20];
 typedef struct
 {
   int funcType;
-  bool isdef
+  bool isdef;
   localTS *params;
   localTS *LTable;
   TinstList *LInstr;
@@ -58,17 +58,17 @@ int hash(string *key);
 int GtableInit (globalTS *T);
 int GtableFree (globalTS *T);
 int GtableInsert (globalTS *T, string *key, int varType);
-tGData* GtableSearch (globalTS *T, string *key);
+tGData* GtableSearch (globalTS *T, string key);
 int GtableItemDelete (globalTS *T, string *key);
-tGData* GtableRead (globalTS *T, string *key);
+tGData* GtableRead (globalTS *T, string key);
 int GtableInsertValue (globalTS *T, string *key, Tvalue v);
 
 //lokalni
 int LtableInit (localTS *T);
 int LtableFree (localTS *T);
 int LtableInsert (localTS *T, string *key, int varType);
-tLData* LtableSearch (localTS *T, string *key);
+tLData* LtableSearch (localTS *T, string key);
 int LtableItemDelete (localTS *T, string *key);
-tLData* LtableRead (localTS *T, string *key);
+tLData* LtableRead (localTS *T, string key);
 int LtableInsertValue (localTS *T, string *key, Tvalue v);
 
