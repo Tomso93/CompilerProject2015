@@ -13,9 +13,6 @@
 #include "instlist.h"
 #include "stable.h"
 
-//!!!!!!!!!!!!!!globalni promenna!!!!!!!!!!!!!!
-globalTS *GTS;
-
 
 int StackInit(Tstackframe *S){
   S->top = NULL;
@@ -53,7 +50,7 @@ int FrameDelete(struct Frame *F){
 }
 
 
-struct Frame *FrameCreate(string funcName){
+struct Frame *FrameCreate(globalTS *GTS, string funcName){
   int success = 0;
   struct Frame *newF;
   tGData *func;
@@ -63,7 +60,7 @@ struct Frame *FrameCreate(string funcName){
     return NULL;
   }
 
-  //copy Ltables (LTable + params) to LTS
+  //copy Ltables (LTable + params) do LTS
   localTS LTS;
   struct LtableItem *prom;
   int i;
