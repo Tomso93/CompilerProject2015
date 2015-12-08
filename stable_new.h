@@ -31,7 +31,7 @@ typedef struct
 {
   int funcType;
   bool isdef;
-  localTS *params;
+  tLTableItem *params[20];
   localTS *LTable;
   TinstList *LInstr;
 } tGData;
