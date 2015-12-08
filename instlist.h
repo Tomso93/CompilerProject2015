@@ -8,9 +8,9 @@
 
 typedef struct {
 	int itype; 	//typ instrukce
-	tData *src1;	//zdroj1
-	tData *src2;	//zdroj2
-	tData *dest;	//cil
+	string *src1;	//zdroj1
+	string *src2;	//zdroj2
+	string *dest;	//cil
 }Tinst;
 
 typedef struct listItem{
@@ -28,7 +28,7 @@ int ListInit(TinstList *L);
 int ListDispose(TinstList *L);
 int ListInsert(TinstList *L, Tinst I);
 int ListSucc(TinstList *L);
-int ListGoto(TinstList *L, tData *dest);
+int ListGoto(TinstList *L, string *dest);
 Tinst *ListGetInst(TinstList *L);
 Tinst *ListGetLastInst(TinstList *L);
 int ListActLast(TinstList *L);
