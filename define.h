@@ -131,6 +131,10 @@
 			//tyto dve instrukce musi nasledovat ihned za sebou
 #define ISUBSTR1 927	//src1=vstupni string, src2=NULL, dest=vystupni string
 #define ISUBSTR2 928    //src1=prvni int, src2=druhy int, dest=NULL
+#define IPRECALL 929	//provede operace nezbytne pred volanim funkce
+#define IPAR	 930	//ulozi parametr
+#define ICALL	 931	//zavola funkci
+#define IRET	 932	//vrati se z funkce
 
 
 
