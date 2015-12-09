@@ -44,3 +44,5 @@ tLData *VariableSearch(TstackFrame *S, string varName);
 //vlozi hodnotu do promenne
 int FrameInsertValue(TstackFrame *S, string varName, Tvalue val);
 
+//vlozi promennou do ramce
+int FrameInsertVar(struct Frame *F, string varName, int varType, Tvalue varVal);
