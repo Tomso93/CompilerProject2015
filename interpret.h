@@ -114,3 +114,22 @@ int concatenate(tData *src1, tData *src2, tData *dest);
 //dest=substr(src1, src2, src3)
 //vestavena funkce
 int substring(tData *src1, tData *src2, tData *src3, tData *dest);
+
+//IPRECALL
+//vytvori novy ramec promennych z lokalni tabulky symbolu funkce
+int precall(string *funcName, globalTS *GTS, struct Frame *newF);
+
+//IPAR
+//inicializuje parametr v source1 urceny cotacem cnt hodnotou v source2,
+//vlozi ho do ramce promennych
+int parametr(tGData *source1, tLData *source2, struct Frame *newF, int cnt);
+
+//ICALL
+//vlozi ramec do zasobniku
+//vlozi instrukce do seznamu 
+int call(tGData *source1, struct Frame *newF, TinstList *LOI, Tstackframe *S);
+
+//IRET
+//odstrani ramec z vrcholu zasobniku
+//navratovou hodnotu funkce ulozi do promenne #RETURN
+int ret(tLData *source1, Tstackframe *S);
