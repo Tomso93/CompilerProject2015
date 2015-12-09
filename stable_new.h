@@ -57,11 +57,11 @@ int hash(string *key);
 //globalni
 int GtableInit (globalTS *T);
 int GtableFree (globalTS *T);
-int GtableInsert (globalTS *T, string *key, int varType);
+int GtableInsert (globalTS *T, string *key, int funcType);
 tGData* GtableSearch (globalTS *T, string key);
 int GtableItemDelete (globalTS *T, string *key);
 tGData* GtableRead (globalTS *T, string key);
-int GtableInsertValue (globalTS *T, string *key, Tvalue v);
+//int GtableInsertValue (globalTS *T, string *key, Tvalue v);
 
 //lokalni
 int LtableInit (localTS *T);
