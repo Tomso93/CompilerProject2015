@@ -1,6 +1,6 @@
 /*
  *	varframe.c
- *	definice zasobniku ramcu promennych
+*	definice zasobniku ramcu promennych
  *	Autor: Petr Zufan
  *	
  */
@@ -60,7 +60,7 @@ struct Frame *FrameCreate(globalTS *GTS, string funcName){
     return NULL;
   }
 
-  //copy Ltables (LTable + params) do LTS
+  //copy Ltables (LTable) do LTS
   localTS LTS;
   struct LtableItem *prom;
   int i;
@@ -69,15 +69,8 @@ struct Frame *FrameCreate(globalTS *GTS, string funcName){
   if (success != 0){
     return NULL;
   }
+
   for(i = 0; i < 20; i++){
-    prom = func->params[i]; 
-    while(prom != NULL){
-      success = LtableInsert (&LTS, &prom->key, prom->data.varType);
-      if (success != 0){
-        return NULL;
-      }
-      prom = prom->nextItem;
-    }
     prom = func->LTable[i]; 
     while(prom != NULL){
       success = LtableInsert (&LTS, &prom->key, prom->data.varType);
@@ -128,6 +121,15 @@ int FrameInsertValue(TstackFrame *S, string varName, Tvalue val){
   if (pom == NULL) {
     return DEFINE_ERROR;
   }else{
+    if (pom -> varType == TOK_INT){
+      pom->varValue.i = val.i;
+    }else if (pom -> varType == TOK_DOUBLE){
+      pom->varValue.d = val.d;
+    }else if (pom -> varType == TOK_STRING){
+      strCopyString(&pom->varValue.s = &val.s);
+    }else{
+      return TYPE_ERROR;
+    }
     pom->varValue = val;
     pom->isinit = true;
   }
@@ -151,4 +153,14 @@ int StackDispose (TstackFrame *S){
   }
 
   return SUCCESS;
+}
+
+int FrameInsertVar(struct Frame *F, string varName, int varType, Tvalue varVal){
+  int success;
+  success = LtableInsert (F->proms, &varName, varType);
+  if (success == SUCCESS){
+    success = LtableInsertValue (F->proms, &varName, varVal);    
+  }
+
+  return success;
 }
