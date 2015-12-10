@@ -1,0 +1,7 @@
+ - funkce tabulek symbolu - stable (comming soon)
+ - vytvareni tabulek symbolu - parser
+ - generovani promennych a vkladani do tabulek - parser
+ - generovani instrukci - parser
+ - semantika?
+ - testovani (vseho krome lex)
+ - dokumentace
