@@ -518,6 +518,7 @@ int comp_expr(TinstList *instrList) {
 		case TOK_LESS_THAN:
 			TAdd(&St, '<');
 			strAddChar(&(St->a[FindT(St)]), symbol);
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			token = getNextToken(&attr);
 			break;
 
@@ -540,7 +541,7 @@ int comp_expr(TinstList *instrList) {
 		case TOK_EQUALS:
 			chba = Tpush(&stack);
 			if (chba != SUCCESS) return chba;
-
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			token = getNextToken(&attr);
 			break;
 
