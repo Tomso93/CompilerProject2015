@@ -145,3 +145,7 @@
 
 #define SYNTAX_OK 0
 #define SEM_ERROR SEMANTIC_ERROR
+// Vedlejsi potreby parseru
+#define MAX_SIZE 20 
+#define OTHER 871
+#define ERR	  872

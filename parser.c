@@ -7,7 +7,7 @@
 */
 
 #include <stdio.h>
-#include <stdbool.h>
+#include <stdbool.h>	
 #include <malloc.h>
 #include "define.h"		// instrukce, tokeny, err
 #include "str.h"		// retezce
@@ -19,13 +19,11 @@
 
 int token; //Globalni promennna pro pradavani tokenu 
 string attr; //retezec tokenu
-tSymbolTable *global_table;	// tabulka pro funkce a deklarace
-tSymbolTable *local_table; //tabulka pro telo kazde funkce
-TinstList *list;
+TinstList *list;	//instrukcni paska
 int error;
 
 
-int body(TinstList *instrList);	// fce je volana drive nez je definovana
+
 //--------------------------------------------------------------------------------//
 //					PRECEDENCNI SYNTAKTICKY ANALYZATOR							  //
 //--------------------------------------------------------------------------------//																				
@@ -127,452 +125,438 @@ int select_ruler(string *zas_term, int term){
 
 	return prec_table[radek][sloupec];
 }
-//-------------------------------------------------------------------------
-// struktura zasobniku
-typedef struct	{                          
-    string a[25];	// text
-	char type[25];	// T , N 
-	double *value[25];	// hodnota 
-	char valueType [25]; // type promenne
-    int top;
-} tStackTN;
 
 
-//---------------------------Init-zasobnik----------------------------------
-void StackInit(tStackTN * S){
-// inicializuje zasobnik, na nultou pozici da "eps"
-	string a;
-	strInit(&a);
-	
-	strAddChar(&a, '$');
-	
-	S->top = 0; 
-	S->type[S->top] = 'T';
-	S->a[S->top]=a;
-	S->value[S->top] = NULL;
-	S->valueType[S->top] = 'N';
-} 
+//----------------------------Smaze---zasobnik------------------------------
+void SDipose(Tstack* St) {
 
+	while (St->top > 0) {
+		strFree(&(St->pom[St->top]));
+		St->top--;
+	}
+}
+//----------------------------INIT-Zasobniku--------------------------------
+void InitialSt(Tstack* St) {
+	string pom;
+	strInit(&pom);
+	strAddChar(&pom, '$');
+
+	St->top = 0;
+	St->t_n[St->top] = 'T';
+	St->pom[St->top] = pom;
+	St->val[St->top] = NULL;
+	St->prom_val[St->top] = 'N';
+}
+
+//--------------------------------------------------------------------------
+void PushE(Tstack *St, char Type, void * data) {
+	//dam pravidlo na zasobnik
+	if (St->top != MAX) {
+		string pom;
+		strInit(&pom);
+		strAddChar(&pom, 'E');
+
+		// vlozi o vlozem informace
+		St->top++;
+		St->t_n[St->top] = 'N';
+		St->pom[St->top] = a;
+		St->val[St->top] = data;	//
+
+		if (data == NULL)
+			St->prom_val[St->top] = Type;	//
+	}
+}
+//----------------------------hleda--prvni--hnadle--------------------------
+int FindBrc(Tstack *St) {
+	// hleda prvni handle, jinak vraci syn. err
+	int i = 0;
+	char pom;
+	if (St->pom[(St->top - i)].length >1)
+		pom = St->pom[(St->top - i)].str[St->pom[(St->top - i)].length - 1];
+
+	else pom = 0;
+
+	while (pom != '<' && i < St->top) {
+		i++;
+
+		if (St->pom[(St->top - i)].length >1)
+			pom = St->pom[(St->top - i)].str[S->pom[(St->top - i)].length - 1];
+		else pom = 0;
+	}
+
+	if (pom != '<' && i == St->top) return SYNTAX_ERROR;
+
+	else return St->top - i;
+}
 
 //----------------------------Vloz--token--terminal-------------------------
-void SPushTerm (tStackTN *S){
-//dam terminal na zasobnik
-  if (S->top==25) 
-	  fprintf(stderr, "pretekl zasobnik\n");
-	  //vnitrni chyba interperetu
-  else {  
-		string a;
-		strInit(&a);
-		strCopyString(&a, &attr);
-			
-		S->top++;  
-		S->type[S->top] = 'T';
-		S->a[S->top] = a;
-	}		
-}	
+int TPush(Tstack *St) {
+	//dam terminal na zasobnik
+	if (St->top == MAX) return INTERN_ERROR;	//vnitrni chyba interperetu
 
+	else {
+		string pom;
+		strInit(&pom);
+		strCopyString(&pom, &attr);			// vlozim na zasobnik prichozi terminal
 
-//-----------hod--pravidlo--na--zasobnik--a--oznac--jako--neterminal--------
-void SPushNeterm(tStackTN *S, char Type, void * data){
-//dam pravidlo na zasobnik
-  if (S->top==25) 
-	  fprintf(stderr, "pretekl zasobnik\n");
-  else {  
-		string a;
-		strInit(&a);
-		strAddChar(&a,'E');
-		
-		// vlozi o vlozem informace
-		S->top++;  
-		S->type[S->top] = 'N';
-		S->a[S->top] = a;		
-		S->value[S->top] = data;
-		if (data == NULL)
-		S->valueType[S->top] = Type ;
-	
+		St->top++;
+		St->type[St->top] = 'T';
+		St->pom[St->top] = pom;
 	}
-}	
 
-
-//--------------index--vrcholu--zasobniku------------------------------------
-int SSearchTerm(tStackTN * S){
-	// index prvniho terminalu
-	int i=0;	
-	while (S->type[(S->top-i)] != 'T' && i < S->top ){
-		i++;		
-	}
-	return S->top - i;
+	return SUCCESS;
 }
+//--------------------Mazu---polozky--------------------------------------------
+void DelI(Tstack* St, int n) {
+	int i = 0;
 
-//-------------hleda--prvni--handle-------------------------------------------
-int SSearchBracket(tStackTN * S){
- // hleda prvni handle, jinak vraci syn. err
-	int i=0;
-	char a;
-	if (S->a[(S->top - i)].length >1)
-		a=S->a[(S->top - i)].str[ S->a[(S->top - i)].length - 1];
-	else a = 0;
-	
-	while (a != '<' && i < S->top){
-		i++;
-		if (S->a[(S->top - i)].length >1)
-			a=S->a[(S->top - i)].str[ S->a[(S->top - i)].length - 1];
-		else a = 0;
-	}
-	
-	if (a != '<' && i == S->top)
-		return -1;
-	else return S->top - i;
-}
-
-
-//--------------hodnota--vrcholu--zasobniku------------------------------------
-string STopTerm(tStackTN * S){
-	// hodnota prvniho terminalu
-	return S->a[SSearchTerm(S)];
-
-
-} 
-
-
-//-------------prida---handle--za--terminal------------------------------------
-void SAddTerm(tStackTN * S, char symbol){
-	// prida k terminalu nakonec znak
-	strAddChar(&(S->a[SSearchTerm(S)]), symbol);
-
-
-}
-
-
-//-------------smaze--urcite--polozky--ve--stacku-----------------------------
-void SDeleteItem(tStackTN * S, int count){
-	// smaze polozky ze zasobniku
-	int i=0;
-	
-	while (i<count){
-		strFree(&(S->a[S->top]));
-		S->top--;
+	while (i<n) {
+		strFree(&(St->pom[St->top]));
+		St->top--;
 		i++;
 	}
 }
 
-
-//-----------------smaze-zasobnik----------------------------------------------
-void SDipose(tStackTN *S){
-// smaze zasobnik
-	while (S->top > 0){
-		strFree(&(S->a[S->top]));
-		S->top--;
+//--------------------hleda-prvni--term--v--zasobniku---------------------------
+int FindT(Tstack* St) {
+	int i = 0;
+	while (St->t_n[(St->top - i)] != 'T' && i < St->top) {
+		i++;
 	}
+	return St->top - i;
 }
 //------------Redugujeme--:D---------------------------------------------------
-int SReduction_expr (tStackTN * S, int index, TinstList *instrList){
-// pokusi se aplikovat pravidlo a zredukovat vyraz
+int SReduction_expr(Tstack* St, int i, TinstList *instrList) {
+	// pokusi se aplikovat pravidlo a zredukovat vyraz
 	char E1;
-	double * value1 ;
-	double * value3 ;
-	if (error != 2){
-		E1 =  S -> valueType[index];
-		value1 = S-> value[index];
-		value3 = malloc(sizeof (double));
-		if(value3 == NULL)
-			return 99;
+	double * value1;
+	double * value3;
+	if (error != ERR) {
+		E1 = St->promVal[i];
+		value1 = St->val[i];
+		value3 = malloc(sizeof(double));
+		if (value3 == NULL)
+			return INTERN_ERROR;
 	}
-//----------------------------------------------------------------------------	
-	if (strCmpConstStr(&(S->a[index]), "id")==0){
-	// E-> id
-		// generuje instrukci ve ktere priradi hodnotu z adresy 1 do adresy 3
-		if (error != 2)
+	//----------------------------- E-> id------------------------------------------	
+	if (strCmpConstStr(&(St->pom[i]), "id") == 0) {
+
+		if (error != ERR)
+			//Generovani instrukce
 			genInstr(IMOV, (void *)value1, NULL, (void *)value3, instrList);
-		SDeleteItem(S, 1);
-		// adresa 3 je pote ulozena do zasobniku a pouzita pro dalsi vypocty
-		SPushNeterm(S, E1, value3);
+		DelI(St, 1);
+
+		PushE(St, E1, value3);
 		return SYNTAX_OK;
 	}
-//----------------------------------------------------------------------------	
-	else if (strCmpConstStr(&(S->a[index]), "(")==0){
-		if (strCmpConstStr(&(S->a[index+1]), "E")==0){ 
-			if (strCmpConstStr(&(S->a[index+2]), ")")==0){
-			// E-> (E)
-				if (error != 2){
-					E1 = S-> valueType[index+1];
-					value1 = S-> value[index+1];
-					genInstr(IMOV,(void *)value1, NULL, (void *)value3, instrList);
-					//tady instrukce
-				}
-				SDeleteItem(S, 3);
-				SPushNeterm(S, E1, value3);
-				return SYNTAX_OK;	
-			} 		
+	//------------------------------E-> (E)------------------------------------------	
+	else if ((strCmpConstStr(&(St->a[i]), "(") == 0) &&
+		(strCmpConstStr(&(St->a[i + 1]), "E") == 0) &&
+		(strCmpConstStr(&(St->a[i + 2]), ")")) {
+
+
+		if (error != ERR) {
+			E1 = St->prom_val[i + 1];
+			value1 = St->val[i + 1];
+			//Generovani instrukce
+			genInstr(IMOV, (void *)value1, NULL, (void *)value3, instrList);
 		}
+
+		DelI(St, 3);
+		PushE(S, E1, value3);
+		return SYNTAX_OK;
 	}
-//----------------------------------------------------------------------------	
-	else if (strCmpConstStr(&(S->a[index]), "E") == 0) {
-		if (strCmpConstStr(&(S->a[index + 1]), "*") == 0) {
-			if (strCmpConstStr(&(S->a[index + 2]), "E") == 0) {
-				// E-> E*E
+	//------------------------------E-> E*E------------------------------------------	
+	else if ((strCmpConstStr(&(St->a[i]), "E") == 0) &&
+		(strCmpConstStr(&(St->a[i + 1]), "*") == 0) &&
+		(strCmpConstStr(&(St->a[i + 2]), "E") == 0)) {
 
-				if (error != 2) {
-					char E2 = S->valueType[index + 2];
-					double *value2 = S->value[index + 2];
 
-					if (E1 != E2) return SEMANTIC_ERROR;
-					// nezapomen na kontrolu semantiky
-					genInstr(IMUL, (void *)value1, (void *)value2,(void *)value3, instrList);
-					// generuje istrulci ve ktere se vynasoby hodnoty na adresach 1 a 2
-					// a vysledek se ulozi na adresu 3 se kterou dale pracujeme
+		if (error != ERR) {
+			char E2 = St->prom_val[i + 2];
+			double *value2 = St->val[i + 2];
 
-				}
-				SDeleteItem(S, 3);
-				// adresa 3 se ulozi do zasobniku a ceka na dalsi zpracovani
-				SPushNeterm(S, E1, value3);
-				return SYNTAX_OK;
-			}
+			if (E1 != E2) return SEMANTIC_ERROR;
+			//Generovani instrukce
+			genInstr(IMUL, (void *)value1, (void *)value2, (void *)value3, instrList);
 		}
+
+
+		DelI(St, 3);
+		// 3 se ulozi do zasobniku a ceka 
+		PushE(St, E1, value3);
+		return SYNTAX_OK;
+
 	}
 
-//----------------------------------------------------------------------------	
-		else if (strCmpConstStr(&(S->a[index+1]), "/")==0){
-			if (strCmpConstStr(&(S->a[index+2]), "E")==0){
-			// E-> E/E
-				if (error != 2){
-					char E2 = S->valueType[index+2];
-					double *value2 = S->value[index+2];
-					//seman
-					if (E1 != E2) return SEMANTIC_ERROR;
+	//---------------------------E-> E/E---------------------------------------------	
+	else if ((strCmpConstStr(&(St->a[i + 1]), "/") == 0) &&
+		(strCmpConstStr(&(St->a[i + 2]), "E") == 0)) {
 
-					genInstr(IDIV, (void *)value1, (void *)value2, (void *)value3, instrList);
-					
-				}	
-				SDeleteItem(S, 3);
-				SPushNeterm(S, E1, value3);
-				return SYNTAX_OK;
-			}
-		} 
+		// E-> E/E
+		if (error != ERR) {
+			char E2 = St->prom_val[i + 2];
+			double *value2 = St->val[i + 2];
 
-//----------------------------------------------------------------------------	
-		else if (strCmpConstStr(&(S->a[index+1]), "+")==0){
-			if (strCmpConstStr(&(S->a[index+2]), "E")==0){
-			// E-> E+E
-				if (error != 2){
-					char E2 = S->valueType[index+2];
-					double *value2  = S->value[index+2];
-					//seman
-					if (E1 != E2) return SEMANTIC_ERROR;
-					genInstr(IADD,(void *)value1, (void *)value2, (void *)value3, instrList);
-				}
-				SDeleteItem(S, 3);
-				SPushNeterm(S, E1, value3);
-				return SYNTAX_OK;
-			}
-		} 
-
-//----------------------------------------------------------------------------	
-		else if (strCmpConstStr(&(S->a[index+1]), "-")==0){
-			if (strCmpConstStr(&(S->a[index+2]), "E")==0){
-			// E-> E-E
-				if (error != 2){
-					char E2 = S->valueType[index+2];
-					double *value2  = S->value[index+2];
-					
-					//seman
-					if (E1 != E2) return SEMANTIC_ERROR;
-					genInstr(ISUB, (void *)value1, (void *)value2, (void *)value3, instrList);
-				}
-				SDeleteItem(S, 3);
-				SPushNeterm(S, E1, value3);
-				return SYNTAX_OK;					
-			}
-		} 
+			//seman
+			if (E1 != E2) return SEMANTIC_ERROR;
+			//Generovani instrukce
+			genInstr(IDIV, (void *)value1, (void *)value2, (void *)value3, instrList);
+		}
 
 
-//----------------------------------------------------------------------------	
-		else if (strCmpConstStr(&(S->a[index+1]), ">")==0){
-			if (strCmpConstStr(&(S->a[index+2]), "E")==0){
-			// E-> E>E				
-				if (error != 2){
-					char E2 = S->valueType[index+2];
-					double *value2  = S->value[index+2];
-					
-					//seman
-					if (E1 != E2) return SEMANTIC_ERROR;
-					genInstr(IBIG,  (void *)value1, (void *)value2, (void *)value3, instrList);
+		DelI(St, 3);
+		PushE(St, E1, value3);
+		return SYNTAX_OK;
 
-				}
-				SDeleteItem(S, 3);
-				SPushNeterm(S, E1, value3);
-				return SYNTAX_OK;
-			}
-		} 
+	}
 
-//----------------------------------------------------------------------------	
-		else if (strCmpConstStr(&(S->a[index+1]), ">=")==0){
-			if (strCmpConstStr(&(S->a[index+2]), "E")==0){
-			// E-> E>=E
-				if (error != 2){
-					char E2 = S->valueType[index+2];
-					double *value2  = S->value[index+2];
-					
-					//seman
-					if (E1 != E2) return SEMANTIC_ERROR;
-					genInstr(IEQBG, (void *)value1, (void *)value2, (void *)value3, instrList);
-					// viz komentar k nasobeni
-					
-				}
-				SDeleteItem(S, 3);
-				SPushNeterm(S, E1, value3);
-				return SYNTAX_OK;
-			}	
-		} 
-
-//----------------------------------------------------------------------------	
-		else if (strCmpConstStr(&(S->a[index+1]), "<")==0){
-			if (strCmpConstStr(&(S->a[index+2]), "E")==0){
-			// E-> E<E
-				if (error != 2){
-					char E2 = S->valueType[index+2];
-					double *value2  = S->value[index+2];
-					
-					if (E1 != E2) return SEMANTIC_ERROR;
-				//seman
-					genInstr(ISMALL, (void *)value1, (void *)value2, (void *)value3, instrList);
-
-				}
-				SDeleteItem(S, 3);
-				SPushNeterm(S, E1, value3);
-				return SYNTAX_OK;
-			}
-		} 
+	//------------------------E-> E+E----------------------------------------------	
+	else if ((strCmpConstStr(&(St->a[i + 1]), "+") == 0) &&
+		(strCmpConstStr(&(St->a[i + 2]), "E") == 0)) {
 
 
-//----------------------------------------------------------------------------	
-		else if (strCmpConstStr(&(S->a[index+1]), "<=")==0){
-			if (strCmpConstStr(&(S->a[index+2]), "E")==0){
-			// E-> E<=E
-				char E2 = S->valueType[index+2];
-				double *value2  = S->value[index+2];
-				
-				//seman
+		if (error != ERR) {
+			char E2 = St->prom_val[i + 2];
+			double *value2 = St->val[i + 2];
+
+			//seman
+			if (E1 != E2) return SEMANTIC_ERROR;
+			//Generovani instrukce
+			genInstr(IADD, (void *)value1, (void *)value2, (void *)value3, instrList);
+		}
+
+
+		DelI(St, 3);
+		PushE(St, E1, value3);
+		return SYNTAX_OK;
+
+	}
+
+	//-------------------------------E-> E-E---------------------------------------	
+	else if ((strCmpConstStr(&(St->a[i + 1]), "-") == 0) &&
+		(strCmpConstStr(&(St->a[i + 2]), "E") == 0)) {
+
+
+		if (error != ERR) {
+			char E2 = St->prom_val[i + 2];
+			double *value2 = St->val[i + 2];
+
+			//seman
+			if (E1 != E2) return SEMANTIC_ERROR;
+			//Generovani instrukce
+			genInstr(ISUB, (void *)value1, (void *)value2, (void *)value3, instrList);
+		}
+
+
+		DelI(St, 3);
+		PushE(St, E1, value3);
+		return SYNTAX_OK;
+	}
+
+
+	//---------------------------E-> E>E--------------------------------------------	
+	else if ((strCmpConstStr(&(St->a[i + 1]), ">") == 0) &&
+		(strCmpConstStr(&(St->a[i + 2]), "E") == 0)) {
+
+
+		if (error != ERR) {
+			char E2 = St->prom_val[i + 2];
+			double *value2 = St->val[i + 2];
+
+			//seman
+			if (E1 != E2) return SEMANTIC_ERROR;
+			//Generovani instrukce
+			genInstr(IBIG, (void *)value1, (void *)value2, (void *)value3, instrList);
+
+		}
+
+
+		DelI(St, 3);
+		PushE(St, E1, value3);
+		return SYNTAX_OK;
+	}
+
+	//----------------------------E-> E>=E--------------------------------------------	
+	else if ((strCmpConstStr(&(St->a[i + 1]), ">=") == 0) &&
+		(strCmpConstStr(&(St->a[i + 2]), "E") == 0)) {
+
+
+		if (error != ERR) {
+			char E2 = St->prom_val[i + 2];
+			double *value2 = St->val[i + 2];
+
+			//seman
+			if (E1 != E2) return SEMANTIC_ERROR;
+			//Generovani instrukce
+			genInstr(IEQBG, (void *)value1, (void *)value2, (void *)value3, instrList);
+
+
+		}
+
+
+		DelI(St, 3);
+		PushE(St, E1, value3);
+		return SYNTAX_OK;
+	}
+
+	//-----------------------E-> E<E-------------------------------------------------	
+	else if ((strCmpConstStr(&(St->a[i + 1]), "<") == 0) &&
+		(strCmpConstStr(&(St->a[i + 2]), "E") == 0)) {
+
+
+		if (error != ERR) {
+			char E2 = St->prom_val[i + 2];
+			double *value2 = St->val[i + 2];
+
+			//seman
+			if (E1 != E2) return SEMANTIC_ERROR;
+			//Generovani instrukce
+			genInstr(ISMALL, (void *)value1, (void *)value2, (void *)value3, instrList);
+
+		}
+
+
+		DelI(St, 3);
+		PushE(St, E1, value3);
+		return SYNTAX_OK;
+	}
+
+
+	//------------------------E-> E<=E-----------------------------------------------	
+	else if ((strCmpConstStr(&(St->a[i + 1]), "<=") == 0) &&
+		(strCmpConstStr(&(St->a[i + 2]), "E") == 0)) {
+
+		if (error != ERR) {
+			char E2 = St->prom_val[i + 2];
+			double *value2 = St->val[i + 2];
+
+			//seman
+			if (E1 != E2) return SEMANTIC_ERROR;
+			//Generovani instrukce
+			genInstr(IEQSM, (void *)value1, (void *)value2, (void *)value3, instrList);
+		}
+
+		DelI(St, 3);
+		PushE(St, E1, value3);
+		return SYNTAX_OK;
+	}
+
+
+	//------------------------E-> E=E------------------------------------------------	
+	else if ((strCmpConstStr(&(St->a[i + 1]), "==") == 0) &&
+		(strCmpConstStr(&(St->a[i + 2]), "E") == 0)) {
+
+
+		if (error != ERR) {
+			char E2 = St->prom_val[i + 2];
+			double *value2 = St->val[i + 2];
+
+			//seman
+			if (E1 != E2) return SEMANTIC_ERROR;
+			//Generovani instrukce
+			genInstr(IEQUAL, (void *)value1, (void *)value2, (void *)value3, instrList);
+		}
+
+
+		DelI(St, 3);
+		PushE(St, E1, value3);
+		return SYNTAX_OK;
+	}
+
+
+	//--------------------------E-> E!=E---------------------------------------------	
+	else if ((strCmpConstStr(&(St->a[i + 1]), "!=") == 0) &&
+		(strCmpConstStr(&(St->a[i + 2]), "E") == 0)) {
+
+
+		if (error != ERR) {
+			char E2 = St->prom_val[i + 2];
+			double *value2 = St->val[i + 2];
+
+			seman
 				if (E1 != E2) return SEMANTIC_ERROR;
-				genInstr(IEQSM, (void *)value1, (void *)value2, (void *)value3, instrList);
-
-				SDeleteItem(S, 3);
-				SPushNeterm(S, E1, value3);
-				return SYNTAX_OK;
-			}
-		}
-
-
-//----------------------------------------------------------------------------	
-		 else if (strCmpConstStr(&(S->a[index+1]), "==")==0){
-			if (strCmpConstStr(&(S->a[index+2]), "E")==0){
-			// E-> E=E
-				if (error != 2){
-					char E2 = S->valueType[index+2];
-					double *value2  = S->value[index+2];
-					
-					//seman
-					if (E1 != E2) return SEMANTIC_ERROR;
-					genInstr(IEQUAL, (void *)value1, (void *)value2, (void *)value3, instrList);
-				}
-				SDeleteItem(S, 3);
-				SPushNeterm(S, E1, value3);
-				return SYNTAX_OK;
-			}
-		} 
-
-
-//----------------------------------------------------------------------------	
-		else if (strCmpConstStr(&(S->a[index+1]), "!=")==0){
-			if (strCmpConstStr(&(S->a[index+2]), "E")==0){
-			// E-> E<>E
-				if (error != 2){
-					char E2 = S->valueType[index+2];
-					double *value2  = S->value[index+2];
-
-					if (E1 != E2) return SEMANTIC_ERROR;
-					
-					genInstr(INOTEQ, (void *)value1, (void *)value2, (void *)value3, instrList);
-			
-				}
-				SDeleteItem(S, 3);
-				SPushNeterm(S, E1, value3);
-				return SYNTAX_OK;
-			}
-		
-		} 
-			
-	return SYNTAX_ERROR;
-	
-}
-
-//--------------EXPR---------------------------------------------------------------	
-int comp_expr(TinstList *instrList){
-	
-	char result;
-	int index;
-	tStackTN stack;
-	string a;
-
-	strInit(&a);			
-	StackInit(&stack);
-	a = STopTerm (&stack);
-
-	while(strCmpConstStr(&a,"$")!=0  &&(token !=TOK_LEFT_BRACE || token !=TOK_SEMICOLON)){
-
-		result = select_ruler(&a,token);
-
-		if (result == '='){
-			SPushTerm(&stack);
-			token = getNextToken(&attr);
-			
-		} 
-		
-			else if ( result == '<') {
-				// pushuj
-				SAddTerm(&stack, '<');		
-				SPushTerm(&stack);
-				token = getNextToken(&attr);
-				
-		
-			} 
-			
-			else if (result == '>') {
-				// redukuj
-				if ((index = SSearchBracket(&stack)) != -1) {
-					strDelLastChar(&(stack.a[index]));
-					if (SReduction_expr(&stack, index + 1, instrList) == SYNTAX_ERROR) {
-
-						SDipose(&stack);
-						error = 2;
-						return SYNTAX_ERROR;
-					}
-				}
-			
-			
-			else{
-				
-				SDipose(&stack);
-				error=2;
-				return SYNTAX_ERROR;
-			}
-		}
-			
-			//prazdne misto v tabulce
-			else{
-				
-				SDipose(&stack);
-				error=2;
-				return SYNTAX_ERROR;
+			//Generovani instrukce
+			genInstr(INOTEQ, (void *)value1, (void *)value2, (void *)value3, instrList);
 
 		}
 
-		a = STopTerm (&stack);
+
+		DelI(St, 3);
+		PushE(St, E1, value3);
+		return SYNTAX_OK;
 	}
 
-		
-	strFree(&a);
-	SDipose(&stack);
+	return SYNTAX_ERROR;
+
+}
+//-----------------------------------------------------------------------------------------
+int comp_expr(TinstList *instrList) {
+
+	char result;
+	int i;
+	int chba;
+	int vyber;
+	Tstack St;
+	string pom;
+
+	strInit(&pom);
+	StackInit(&st);
+	pom = TopT(&st);
+
+	while (strCmpConstStr(&pom, "$") != 0 && (token != TOK_LEFT_BRACE || token != TOK_SEMICOLON)) {
+
+		result = select_ruler(&pom, token);
+
+		if (result == '<') vyber = TOK_LESS_THAN;
+		else if (result == '>') vyber = TOK_GREATER_THAN;
+		else if (result == '=') vyber = TOK_EQUALS;
+		else vyber = OTHER;
+
+
+		switch (vyber) {
+		case TOK_LESS_THAN:
+			TAdd(&St, '<');
+			strAddChar(&(St->a[FindT(St)]), symbol);
+			token = getNextToken(&attr);
+			break;
+
+		case TOK_GREATER_THAN:
+			if ((i = FindBrc(&St)) == SYNTAX_ERROR) {
+				SDipose(&St);
+				error = ERR;
+				return SYNTAX_ERROR;
+			}
+
+			strDelLastChar(&(St.pom[i]));
+			chba = (TReduction(&St, i + 1, instrList);
+			if (chba != SYNTAX_OK)
+				SDipose(&St);
+			error = ERR;
+			return result;
+
+			break;
+
+		case TOK_EQUALS:
+			chba = Tpush(&stack);
+			if (chba != SUCCESS) return chba;
+
+			token = getNextToken(&attr);
+			break;
+
+		case OTHER:
+			SDipose(&stack);
+			error = ERR;
+			return SYNTAX_ERROR;
+			break;
+		}
+
+		pom = St->pom[FinT(St)];	//prvni term.
+	}
+
+
+	strFree(&pom);
+	SDipose(&St);
 	return SYNTAX_OK;
 }
 
