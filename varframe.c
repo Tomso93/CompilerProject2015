@@ -5,14 +5,14 @@
  *	
  */
 
-#include "varframe.h"
+
 #include <string.h>
 #include "define.h"
 #include "str.h"
 #include <stdbool.h>
 #include "instlist.h"
 #include "stable.h"
-
+#include "varframe.h"
 
 int StackInit(Tstackframe *S){
   S->top = NULL;
@@ -105,7 +105,7 @@ struct Frame *FrameCreate(globalTS *GTS, string *funcName){
 }
 
 
-tLData *VariableSearch(TstackFrame *S, string *varName){
+tLData *VariableSearch(Tstackframe *S, string *varName){
   tLData *result;
   S->act = S->top;
 
@@ -124,7 +124,7 @@ tLData *VariableSearch(TstackFrame *S, string *varName){
 }
 
 
-int FrameInsertValue(TstackFrame *S, string *varName, Tvalue val){
+int FrameInsertValue(Tstackframe *S, string *varName, Tvalue val){
   tLData *pom;
 
   pom = VariableSearch(S, varName);
@@ -148,7 +148,7 @@ int FrameInsertValue(TstackFrame *S, string *varName, Tvalue val){
 }
 
 
-int StackDispose (TstackFrame *S){
+int StackDispose (Tstackframe *S){
   struct Frame *ramec;
   int success;
 
