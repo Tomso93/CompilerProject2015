@@ -227,7 +227,7 @@ int FindT(Tstack* St) {
 	return St->top - i;
 }
 //------------Redugujeme--:D---------------------------------------------------
-int SReduction_expr(Tstack* St, int i, tSymbolTable *global_table, string *id) {
+int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 	// pokusi se aplikovat pravidlo a zredukovat vyraz
 	char E1;
 	double * value1;
@@ -500,7 +500,7 @@ int SReduction_expr(Tstack* St, int i, tSymbolTable *global_table, string *id) {
 
 }
 //-----------------------------------------------------------------------------------------
-int comp_expr(tSymbolTable *global_table, string *id) {
+int comp_expr(globalTS *global_table, string *id) {
 
 	char result;
 	int i;
@@ -593,7 +593,7 @@ int type(){
 }
 
 //-----I_PROM->--=--EXPR--||--eps
-int _i_prom(tSymbolTable *global_table, string *id){
+int _i_prom(globalTS *global_table, string *id){
 	int result;
 
 	switch(token){
@@ -660,7 +660,7 @@ int list_par(){
 	return SYNTAX_ERROR;		
 }
 //-----CALLF_DEC->--id--(--LIST_PAR--)--||->EXPR---------------------------------
-int callf_dec(tSymbolTable *global_table){
+int callf_dec(globalTS *global_table){
 	int result;
 
 	switch(token){
@@ -687,7 +687,7 @@ int callf_dec(tSymbolTable *global_table){
 }
 
 //-----PROM->--id--=--CALL_DEF--;||->TYPE--id--I_PROM--;-------------------------
-int _prom(tSymbolTable *global_table, string *id){
+int _prom(globalTS *global_table, string *id){
 	int result;
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	
@@ -717,7 +717,7 @@ int _prom(tSymbolTable *global_table, string *id){
 }
 
 //-----RETURN->--return--EXPR--;------------------------------------------------
-int _return(tSymbolTable *global_table, string *id){
+int _return(globalTS *global_table, string *id){
 	int result;
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 
@@ -732,7 +732,7 @@ int _return(tSymbolTable *global_table, string *id){
 }
 
 //-----------FOR->for--(--TYPE--id--I_PROM--;--EXPR--;--id--=--EXPR)--BODY------
-int _for(tSymbolTable *global_table, string *id){
+int _for(globalTS *global_table, string *id){
 	int result; 
 	
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -816,7 +816,7 @@ int _for(tSymbolTable *global_table, string *id){
 }
 
 //-----------TERM_N->--<<--TERM--TERM_N--||eps--------------------------------
-int term_n(tSymbolTable *global_table, string *id){
+int term_n(globalTS *global_table, string *id){
 	int result;
 
 	switch (token) {
@@ -843,7 +843,7 @@ int term_n(tSymbolTable *global_table, string *id){
 }
 
 //-----------COUT->--cout--<<--TERM--TERM_N--;--------------------------------
-int _cout(tSymbolTable *global_table, string *id){
+int _cout(globalTS *global_table, string *id){
 	int result;
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -868,7 +868,7 @@ int _cout(tSymbolTable *global_table, string *id){
 }
 
 //-----------ID_N->-->>--id--ID_N--||--eps------------------------------------
-int _id_n(tSymbolTable *global_table, string *id){
+int _id_n(globalTS *global_table, string *id){
 
 	switch (token){
 		case TOK_SEMICOLON:
@@ -894,7 +894,7 @@ int _id_n(tSymbolTable *global_table, string *id){
 }
 
 //-----------CIN->cin-->>--id--ID_N--;
-int _cin(tSymbolTable *global_table, string *id){
+int _cin(globalTS *global_table, string *id){
 	int result;
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_DOUBLE_ARROW_RIGHT) return SYNTAX_ERROR;
@@ -918,7 +918,7 @@ int _cin(tSymbolTable *global_table, string *id){
 }
 
 //-----------IF->if--(--EXPR--)--BODY--else--BODY----------------------------
-int _if(tSymbolTable *global_table, string *id){
+int _if(globalTS *global_table, string *id){
 	int result;
 	
 	//nasleduje leva zavorka a v ni vyraz
@@ -983,7 +983,7 @@ int _if(tSymbolTable *global_table, string *id){
 
 }
 //-----------STMNT->IF||BODY||FOR||CIN||COUT||RETURN||PROM-------------------
-int stmnt(tSymbolTable *global_table, string *id){
+int stmnt(globalTS *global_table, string *id){
 	int result;
 
 	switch (token){
@@ -1041,7 +1041,7 @@ int stmnt(tSymbolTable *global_table, string *id){
 	return SYNTAX_ERROR;
 }
 //-----------BODY->{STMNT}----------prazdny-statement-nebo-zaplneny----------
-int body(tSymbolTable *global_table, string *id){
+int body(globalTS *global_table, string *id){
 	int result;
 	// jsme v body a melo bz nasledovat prud } nebo eps
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -1053,7 +1053,7 @@ int body(tSymbolTable *global_table, string *id){
 
 }
 //-----------SELECT->BODY--||--;----bud-je-to-funkce-nebo-deklarace----------
-int select(tSymbolTable *global_table, string *id){
+int select(globalTS *global_table, string *id){
 	int result;
 	//ocekavam v token { nebo ;, podle toho poznam, zda se jedna o fce nebo dek.
 
@@ -1073,7 +1073,7 @@ int select(tSymbolTable *global_table, string *id){
 }
 
 //-----------PARAM_N->-,-TYPE--ID--PARAM_N-----------------------------------
-int param_n(tSymbolTable *global_table, string *id){
+int param_n(globalTS *global_table, string *id){
 	int result;
 	
 	//pozadam o dalsi token a musi byt ) nebo ,
@@ -1105,7 +1105,7 @@ int param_n(tSymbolTable *global_table, string *id){
 }
 
 //-----------PARAM->TYPE--id--PARAM_N----------------------------------------
-int param(tSymbolTable *global_table, string *id){
+int param(globalTS *global_table, string *id){
 	int result;
 	
 	//pozdaval jsem o dalsi token a ocekavam () nebo type
@@ -1139,7 +1139,7 @@ int param(tSymbolTable *global_table, string *id){
 	return SYNTAX_ERROR;
 }
 //-----------FUNC_DCLR->TYPE--id--(--PARAM--)--SELECT---FUNC_DCLR------------
-int func_dclr(tSymbolTable *global_table){
+int func_dclr(globalTS *global_table){
 	int result;
 	
 	
@@ -1180,7 +1180,7 @@ int func_dclr(tSymbolTable *global_table){
 }
 
 //------------PROGRAM->FUNC_DCLR---------------------------------------------
-int program(tSymbolTable *global_table){
+int program(globalTS *global_table){
 	int result;
 	result= func_dclr(global_table);
 	if(result != SYNTAX_OK) return result;
@@ -1199,10 +1199,10 @@ int program(tSymbolTable *global_table){
 	
 }
 //------------------START-POINT--------------------------------------------------
-int parse(tSymbolTable *ST){
+int parse(globalTS *ST){
 
   int result;
-  tSymbolTable *global_table = ST;
+  globalTS *global_table = ST;
   strInit(&attr);
 
 	if((token = getNextToken(&attr))== LEX_ERROR) return LEX_ERROR;
