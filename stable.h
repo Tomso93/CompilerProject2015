@@ -1,5 +1,9 @@
 #include <stdbool.h>
-#define TABLE_SIZE 20
+#include <malloc.h>
+#include "define.h"
+#include "str.h"
+#include "instlist.h"
+#include "stable.h"
 
 //-----------lokalni tabulka symbolu------------------------------
 
