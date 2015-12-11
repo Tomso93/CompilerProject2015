@@ -487,7 +487,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 				if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
 			Tinst *instrukce = genInstr(INOTEQ, (void *)value1, (void *)value2, (void *)value3);
-			gtableInsertInstr(global_table, id, instrukce);
+			GtableInsertInstr(global_table, id, instrukce);
 		}
 
 
@@ -935,8 +935,9 @@ int _if(globalTS *global_table, string *id){
 	if (token !=TOK_RIGHT_BRACKET) return SYNTAX_ERROR;
 
     //generovani pomocne promenne
-    tData *LastVar //= ReadNameVar(instrList); // funkce na cteni nazvu posledni instrukce 
-    genInstr(INOT, LastVar, NULL, LastVar); // negace podminky
+    tData *LastVar = ReadNameVar(global_table->data->LInstr); // funkce na cteni nazvu posledni instrukce 
+    Tinst *instrukce = genInstr(INOT, LastVar, NULL, LastVar); // negace podminky
+    GtableInsertInstr(global_table, id, instrukce);
     
     string Label_1; //novy label, skok na vetev else
     strInit(&Label_1); //inicializace
