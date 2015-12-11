@@ -1,95 +1,85 @@
-
-stable.c:3:10: error: unknown type name ‘string’
- int hash(string *key){
-          ^
-stable.c:15:16: error: unknown type name ‘localTS’
- int LtableInit(localTS *T){
-                ^
-stable.c:23:17: error: unknown type name ‘localTS’
- int LtableFree (localTS *T){
-                 ^
-stable.c:42:19: error: unknown type name ‘localTS’
- int LtableInsert (localTS *T, string *key, int varType){
-                   ^
-stable.c:42:31: error: unknown type name ‘string’
- int LtableInsert (localTS *T, string *key, int varType){
-                               ^
-stable.c:61:1: error: unknown type name ‘tLData’
- tLData *LtableSearch (localTS *T, string *key){
- ^
-stable.c:61:23: error: unknown type name ‘localTS’
- tLData *LtableSearch (localTS *T, string *key){
-                       ^
-stable.c:61:35: error: unknown type name ‘string’
- tLData *LtableSearch (localTS *T, string *key){
-                                   ^
-stable.c:82:24: error: unknown type name ‘localTS’
- int LtableInsertValue (localTS *T, string *key, Tvalue v){
-                        ^
-stable.c:82:36: error: unknown type name ‘string’
- int LtableInsertValue (localTS *T, string *key, Tvalue v){
-                                    ^
-stable.c:82:49: error: unknown type name ‘Tvalue’
- int LtableInsertValue (localTS *T, string *key, Tvalue v){
-                                                 ^
-stable.c:114:17: error: unknown type name ‘globalTS’
- int GtableInit (globalTS *T){
-                 ^
-stable.c:122:17: error: unknown type name ‘globalTS’
- int GtableFree (globalTS *T){
-                 ^
-stable.c:145:19: error: unknown type name ‘globalTS’
- int GtableInsert (globalTS *T, string *key, int funcType){
-                   ^
-stable.c:145:32: error: unknown type name ‘string’
- int GtableInsert (globalTS *T, string *key, int funcType){
+/homes/eva/xw/xwojac00/CompilerProject2015-master (1)/CompilerProject2015-master$ make
+gcc -Wall -std=c99 -pedantic -g -lm -c main.c
+main.c: In function â€˜mainâ€™:
+main.c:49:9: warning: â€˜fâ€™ may be used uninitialized in this function [-Wmaybe-uninitialized]
+         fclose(f);
+         ^
+gcc -Wall -std=c99 -pedantic -g -lm -c str.c
+gcc -Wall -std=c99 -pedantic -g -lm -c instlist.c
+gcc -Wall -std=c99 -pedantic -g -lm -c stable.c
+gcc -Wall -std=c99 -pedantic -g -lm -c interpret.c
+gcc -Wall -std=c99 -pedantic -g -lm -c errors.c
+gcc -Wall -std=c99 -pedantic -g -lm -c ial.c
+gcc -Wall -std=c99 -pedantic -g -lm -c parser.c
+parser.c: In function â€˜comp_exprâ€™:
+parser.c:552:4: warning: implicit declaration of function â€˜TReductionâ€™ [-Wimplicit-function-declaration]
+    chba = (TReduction(&St, i + 1, prom->LInstr));
+    ^
+parser.c:561:4: warning: implicit declaration of function â€˜Tpushâ€™ [-Wimplicit-function-declaration]
+    chba = Tpush(&St);
+    ^
+gcc -Wall -std=c99 -pedantic -g -lm -c lex.c
+gcc -Wall -std=c99 -pedantic -g -lm -c 3ac.c
+In file included from 3ac.c:12:0:
+stable.h:16:3: error: unknown type name â€˜boolâ€™
+   bool isinit;
+   ^
+stable.h:26:30: error: â€˜TABLE_SIZEâ€™ undeclared here (not in a function)
+ typedef tLTableItem *localTS[TABLE_SIZE];
+                              ^
+stable.h:34:3: error: unknown type name â€˜boolâ€™
+   bool isdef;
+   ^
+stable.h:36:12: warning: type defaults to â€˜intâ€™ in declaration of â€˜LTableâ€™
+   localTS *LTable;
+            ^
+stable.h:37:3: error: unknown type name â€˜TinstListâ€™
+   TinstList *LInstr;
+   ^
+stable.h:60:27: warning: type defaults to â€˜intâ€™ in declaration of â€˜Tâ€™
+ int GtableInit (globalTS *T);
+                           ^
+stable.h:61:27: warning: type defaults to â€˜intâ€™ in declaration of â€˜Tâ€™
+ int GtableFree (globalTS *T);
+                           ^
+stable.h:68:29: warning: type defaults to â€˜intâ€™ in declaration of â€˜Tâ€™
+ int GtableInsert (globalTS *T, string *key, int funcType); 
+                             ^
+stable.h:70:33: warning: type defaults to â€˜intâ€™ in declaration of â€˜Tâ€™
+ tGData* GtableSearch (globalTS *T, string *key);
+                                 ^
+stable.h:71:34: warning: type defaults to â€˜intâ€™ in declaration of â€˜Tâ€™
+ int GtableInsertParam (globalTS *T, string *funcID, string *parID, int parType);
+                                  ^
+stable.h:72:32: warning: type defaults to â€˜intâ€™ in declaration of â€˜Tâ€™
+ int GtableInsertVar (globalTS *T, string *funcID, string *varID, int varType);
                                 ^
-stable.c:181:1: error: unknown type name ‘tGData’
- tGData* GtableSearch (globalTS *T, string *key){
- ^
-stable.c:181:23: error: unknown type name ‘globalTS’
- tGData* GtableSearch (globalTS *T, string *key){
-                       ^
-stable.c:181:36: error: unknown type name ‘string’
- tGData* GtableSearch (globalTS *T, string *key){
-                                    ^
-stable.c:202:22: error: unknown type name ‘globalTS’
- int GtableInsertVar (globalTS *T, string *funcID, string *varID, int varType){
-                      ^
-stable.c:202:35: error: unknown type name ‘string’
- int GtableInsertVar (globalTS *T, string *funcID, string *varID, int varType){
+stable.h:73:35: warning: type defaults to â€˜intâ€™ in declaration of â€˜Tâ€™
+ int GtableInsertVarVal (globalTS *T, string *funcID, string *varID, Tvalue v);
                                    ^
-stable.c:202:51: error: unknown type name ‘string’
- int GtableInsertVar (globalTS *T, string *funcID, string *varID, int varType){
-                                                   ^
-stable.c:215:25: error: unknown type name ‘globalTS’
- int GtableInsertVarVal (globalTS *T, string *funcID, string *varID, Tvalue v){
-                         ^
-stable.c:215:38: error: unknown type name ‘string’
- int GtableInsertVarVal (globalTS *T, string *funcID, string *varID, Tvalue v){
-                                      ^
-stable.c:215:54: error: unknown type name ‘string’
- int GtableInsertVarVal (globalTS *T, string *funcID, string *varID, Tvalue v){
-                                                      ^
-stable.c:215:69: error: unknown type name ‘Tvalue’
- int GtableInsertVarVal (globalTS *T, string *funcID, string *varID, Tvalue v){
-                                                                     ^
-stable.c:228:24: error: unknown type name ‘globalTS’
- int GtableInsertParam (globalTS *T, string *funcID, string *parID, int parType){
-                        ^
-stable.c:228:37: error: unknown type name ‘string’
- int GtableInsertParam (globalTS *T, string *funcID, string *parID, int parType){
-                                     ^
-stable.c:228:53: error: unknown type name ‘string’
- int GtableInsertParam (globalTS *T, string *funcID, string *parID, int parType){
+stable.h:74:34: warning: type defaults to â€˜intâ€™ in declaration of â€˜Tâ€™
+ int GtableInsertInstr (globalTS *T, string *funcID, Tinst *instrukce);
+                                  ^
+stable.h:74:53: error: unknown type name â€˜Tinstâ€™
+ int GtableInsertInstr (globalTS *T, string *funcID, Tinst *instrukce);
                                                      ^
-stable.c:249:24: error: unknown type name ‘globalTS’
- int GtableInsertInstr (globalTS *T, string *funcID, Tinst *instrukce){
-                        ^
-stable.c:249:37: error: unknown type name ‘string’
- int GtableInsertInstr (globalTS *T, string *funcID, Tinst *instrukce){
-                                     ^
-stable.c:249:53: error: unknown type name ‘Tinst’
- int GtableInsertInstr (globalTS *T, string *funcID, Tinst *instrukce){
-
-
+stable.h:81:26: warning: type defaults to â€˜intâ€™ in declaration of â€˜Tâ€™
+ int LtableInit (localTS *T);
+                          ^
+stable.h:82:26: warning: type defaults to â€˜intâ€™ in declaration of â€˜Tâ€™
+ int LtableFree (localTS *T);
+                          ^
+stable.h:86:28: warning: type defaults to â€˜intâ€™ in declaration of â€˜Tâ€™
+ int LtableInsert (localTS *T, string *key, int varType); 
+                            ^
+stable.h:88:32: warning: type defaults to â€˜intâ€™ in declaration of â€˜Tâ€™
+ tLData* LtableSearch (localTS *T, string *key);
+                                ^
+stable.h:89:33: warning: type defaults to â€˜intâ€™ in declaration of â€˜Tâ€™
+ int LtableInsertValue (localTS *T, string *key, Tvalue v);
+                                 ^
+3ac.c: In function â€˜genInstrâ€™:
+3ac.c:26:5: warning: function returns address of local variable [-Wreturn-local-addr]
+     return &TItem;
+     ^
+make: *** [3ac.o] Error 1
