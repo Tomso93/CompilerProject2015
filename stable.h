@@ -3,7 +3,7 @@
 #include "define.h"
 #include "str.h"
 #include "instlist.h"
-#include "stable.h"
+
 
 //-----------lokalni tabulka symbolu------------------------------
 
