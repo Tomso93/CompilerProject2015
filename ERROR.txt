@@ -1,483 +1,63 @@
-
-gcc -Wall -std=c99 -pedantic -g -lm -c stable.c
-In file included from stable.h:5:0,
-                 from stable.c:8:
-str.h:8:3: error: conflicting types for ‘string’
- } string;
+stable.h:15:3: error: unknown type name ‘bool’
+   bool isinit;
    ^
-In file included from stable.c:6:0:
-str.h:8:3: note: previous declaration of ‘string’ was here
- } string;
+stable.h:25:30: error: ‘TABLE_SIZE’ undeclared here (not in a function)
+ typedef tLTableItem *localTS[TABLE_SIZE];
+                              ^
+stable.h:33:3: error: unknown type name ‘bool’
+   bool isdef;
    ^
-In file included from stable.h:5:0,
-                 from stable.c:8:
-str.h:11:5: error: conflicting types for ‘strInit’
- int strInit(string *s);
-     ^
-In file included from stable.c:6:0:
-str.h:11:5: note: previous declaration of ‘strInit’ was here
- int strInit(string *s);
-     ^
-In file included from stable.h:5:0,
-                 from stable.c:8:
-str.h:12:6: error: conflicting types for ‘strFree’
- void strFree(string *s);
-      ^
-In file included from stable.c:6:0:
-str.h:12:6: note: previous declaration of ‘strFree’ was here
- void strFree(string *s);
-      ^
-In file included from stable.h:5:0,
-                 from stable.c:8:
-str.h:14:6: error: conflicting types for ‘strClear’
- void strClear(string *s);
-      ^
-In file included from stable.c:6:0:
-str.h:14:6: note: previous declaration of ‘strClear’ was here
- void strClear(string *s);
-      ^
-In file included from stable.h:5:0,
-                 from stable.c:8:
-str.h:15:5: error: conflicting types for ‘strAddChar’
- int strAddChar(string *s1, char c);
-     ^
-In file included from stable.c:6:0:
-str.h:15:5: note: previous declaration of ‘strAddChar’ was here
- int strAddChar(string *s1, char c);
-     ^
-In file included from stable.h:5:0,
-                 from stable.c:8:
-str.h:16:5: error: conflicting types for ‘strCopyString’
- int strCopyString(string *s1, string *s2);
-     ^
-In file included from stable.c:6:0:
-str.h:16:5: note: previous declaration of ‘strCopyString’ was here
- int strCopyString(string *s1, string *s2);
-     ^
-In file included from stable.h:5:0,
-                 from stable.c:8:
-str.h:17:5: error: conflicting types for ‘strCmpString’
- int strCmpString(string *s1, string *s2);
-     ^
-In file included from stable.c:6:0:
-str.h:17:5: note: previous declaration of ‘strCmpString’ was here
- int strCmpString(string *s1, string *s2);
-     ^
-In file included from stable.h:5:0,
-                 from stable.c:8:
-str.h:18:5: error: conflicting types for ‘strCmpConstStr’
- int strCmpConstStr(string *s1, char *s2);
-     ^
-In file included from stable.c:6:0:
-str.h:18:5: note: previous declaration of ‘strCmpConstStr’ was here
- int strCmpConstStr(string *s1, char *s2);
-     ^
-In file included from stable.h:5:0,
-                 from stable.c:8:
-str.h:19:5: error: conflicting types for ‘strDelLastChar’
- int strDelLastChar(string *s1);
-     ^
-In file included from stable.c:6:0:
-str.h:19:5: note: previous declaration of ‘strDelLastChar’ was here
- int strDelLastChar(string *s1);
-     ^
-In file included from stable.h:5:0,
-                 from stable.c:8:
-str.h:21:7: error: conflicting types for ‘strGetStr’
- char *strGetStr(string *s);
-       ^
-In file included from stable.c:6:0:
-str.h:21:7: note: previous declaration of ‘strGetStr’ was here
- char *strGetStr(string *s);
-       ^
-In file included from stable.h:5:0,
-                 from stable.c:8:
-str.h:22:5: error: conflicting types for ‘strGetLength’
- int strGetLength(string *s);
-     ^
-In file included from stable.c:6:0:
-str.h:22:5: note: previous declaration of ‘strGetLength’ was here
- int strGetLength(string *s);
-     ^
-In file included from stable.h:7:0,
-                 from stable.c:8:
-instlist.h:14:2: error: conflicting types for ‘Tinst’
- }Tinst;
-  ^
-In file included from stable.c:7:0:
-instlist.h:14:2: note: previous declaration of ‘Tinst’ was here
- }Tinst;
-  ^
-In file included from stable.h:7:0,
-                 from stable.c:8:
-instlist.h:16:16: error: redefinition of ‘struct listItem’
- typedef struct listItem{
-                ^
-In file included from stable.c:7:0:
-instlist.h:16:16: note: originally defined here
- typedef struct listItem{
-                ^
-In file included from stable.h:7:0,
-                 from stable.c:8:
-instlist.h:19:2: error: conflicting types for ‘TlistItem’
- }TlistItem;
-  ^
-In file included from stable.c:7:0:
-instlist.h:19:2: note: previous declaration of ‘TlistItem’ was here
- }TlistItem;
-  ^
-In file included from stable.h:7:0,
-                 from stable.c:8:
-instlist.h:25:2: error: conflicting types for ‘TinstList’
- }TinstList;
-  ^
-In file included from stable.c:7:0:
-instlist.h:25:2: note: previous declaration of ‘TinstList’ was here
- }TinstList;
-  ^
-In file included from stable.h:7:0,
-                 from stable.c:8:
-instlist.h:27:5: error: conflicting types for ‘ListInit’
- int ListInit(TinstList *L);
-     ^
-In file included from stable.c:7:0:
-instlist.h:27:5: note: previous declaration of ‘ListInit’ was here
- int ListInit(TinstList *L);
-     ^
-In file included from stable.h:7:0,
-                 from stable.c:8:
-instlist.h:28:5: error: conflicting types for ‘ListDispose’
- int ListDispose(TinstList *L);
-     ^
-In file included from stable.c:7:0:
-instlist.h:28:5: note: previous declaration of ‘ListDispose’ was here
- int ListDispose(TinstList *L);
-     ^
-In file included from stable.h:7:0,
-                 from stable.c:8:
-instlist.h:29:5: error: conflicting types for ‘ListInsert’
- int ListInsert(TinstList *L, Tinst *I);
-     ^
-In file included from stable.c:7:0:
-instlist.h:29:5: note: previous declaration of ‘ListInsert’ was here
- int ListInsert(TinstList *L, Tinst *I);
-     ^
-In file included from stable.h:7:0,
-                 from stable.c:8:
-instlist.h:30:5: error: conflicting types for ‘ListSucc’
- int ListSucc(TinstList *L);
-     ^
-In file included from stable.c:7:0:
-instlist.h:30:5: note: previous declaration of ‘ListSucc’ was here
- int ListSucc(TinstList *L);
-     ^
-In file included from stable.h:7:0,
-                 from stable.c:8:
-instlist.h:31:5: error: conflicting types for ‘ListGoto’
- int ListGoto(TinstList *L, string *dest);
-     ^
-In file included from stable.c:7:0:
-instlist.h:31:5: note: previous declaration of ‘ListGoto’ was here
- int ListGoto(TinstList *L, string *dest);
-     ^
-In file included from stable.h:7:0,
-                 from stable.c:8:
-instlist.h:32:8: error: conflicting types for ‘ListGetInst’
- Tinst *ListGetInst(TinstList *L);
-        ^
-In file included from stable.c:7:0:
-instlist.h:32:8: note: previous declaration of ‘ListGetInst’ was here
- Tinst *ListGetInst(TinstList *L);
-        ^
-In file included from stable.h:7:0,
-                 from stable.c:8:
-instlist.h:33:8: error: conflicting types for ‘ListGetLastInst’
- Tinst *ListGetLastInst(TinstList *L);
-        ^
-In file included from stable.c:7:0:
-instlist.h:33:8: note: previous declaration of ‘ListGetLastInst’ was here
- Tinst *ListGetLastInst(TinstList *L);
-        ^
-In file included from stable.h:7:0,
-                 from stable.c:8:
-instlist.h:34:5: error: conflicting types for ‘ListActLast’
- int ListActLast(TinstList *L);
-     ^
-In file included from stable.c:7:0:
-instlist.h:34:5: note: previous declaration of ‘ListActLast’ was here
- int ListActLast(TinstList *L);
-     ^
-In file included from stable.h:7:0,
-                 from stable.c:8:
-instlist.h:35:5: error: conflicting types for ‘ListActFirst’
- int ListActFirst(TinstList *L);
-     ^
-In file included from stable.c:7:0:
-instlist.h:35:5: note: previous declaration of ‘ListActFirst’ was here
- int ListActFirst(TinstList *L);
-     ^
-In file included from stable.h:7:0,
-                 from stable.c:8:
-instlist.h:36:5: error: conflicting types for ‘ListConect’
- int ListConect(TinstList *L1, TinstList *L2); //vlozi L2 do L1 za L1->act
-     ^
-In file included from stable.c:7:0:
-instlist.h:36:5: note: previous declaration of ‘ListConect’ was here
- int ListConect(TinstList *L1, TinstList *L2); //vlozi L2 do L1 za L1->act
-     ^
-In file included from stable.h:9:0,
-                 from stable.c:8:
-varframe.h:9:3: error: unknown type name ‘localTS’
-   localTS *proms;  //ukazatel na kopii lokalni tabulky
+stable.h:35:12: warning: type defaults to ‘int’ in declaration of ‘LTable’
+   localTS *LTable;
+            ^
+stable.h:36:3: error: unknown type name ‘TinstList’
+   TinstList *LInstr;
    ^
-varframe.h:39:27: error: unknown type name ‘globalTS’
- struct Frame *FrameCreate(globalTS *GTS, string *funcName);
+stable.h:59:27: warning: type defaults to ‘int’ in declaration of ‘T’
+ int GtableInit (globalTS *T);
                            ^
-varframe.h:42:1: error: unknown type name ‘tLData’
- tLData *VariableSearch(Tstackframe *S, string *varName);
- ^
-varframe.h:45:55: error: unknown type name ‘Tvalue’
- int FrameInsertValue(Tstackframe *S, string *varName, Tvalue val);
-                                                       ^
-varframe.h:48:67: error: unknown type name ‘Tvalue’
- int FrameInsertVar(struct Frame *F, string *varName, int varType, Tvalue varVal);
-                                                                   ^
-In file included from stable.h:10:0,
-                 from stable.c:8:
-interpret.h:11:15: error: unknown type name ‘globalTS’
- int interpret(globalTS *GTS);  //hlavni funkce. prochazi seznam instrukci
-               ^
-interpret.h:16:10: error: unknown type name ‘tLData’
- int move(tLData *src1, tLData *dest);
-          ^
-interpret.h:16:24: error: unknown type name ‘tLData’
- int move(tLData *src1, tLData *dest);
-                        ^
-interpret.h:20:14: error: unknown type name ‘tLData’
- int addition(tLData *src1, tLData *src2, tLData *dest);
-              ^
-interpret.h:20:28: error: unknown type name ‘tLData’
- int addition(tLData *src1, tLData *src2, tLData *dest);
-                            ^
-interpret.h:20:42: error: unknown type name ‘tLData’
- int addition(tLData *src1, tLData *src2, tLData *dest);
-                                          ^
-interpret.h:24:18: error: unknown type name ‘tLData’
- int substraction(tLData *src1, tLData *src2, tLData *dest);
-                  ^
-interpret.h:24:32: error: unknown type name ‘tLData’
- int substraction(tLData *src1, tLData *src2, tLData *dest);
-                                ^
-interpret.h:24:46: error: unknown type name ‘tLData’
- int substraction(tLData *src1, tLData *src2, tLData *dest);
-                                              ^
-interpret.h:28:20: error: unknown type name ‘tLData’
- int multiplication(tLData *src1, tLData *src2, tLData *dest);
-                    ^
-interpret.h:28:34: error: unknown type name ‘tLData’
- int multiplication(tLData *src1, tLData *src2, tLData *dest);
-                                  ^
-interpret.h:28:48: error: unknown type name ‘tLData’
- int multiplication(tLData *src1, tLData *src2, tLData *dest);
-                                                ^
-interpret.h:32:14: error: unknown type name ‘tLData’
- int division(tLData *src1, tLData *src2, tLData *dest);
-              ^
-interpret.h:32:28: error: unknown type name ‘tLData’
- int division(tLData *src1, tLData *src2, tLData *dest);
-                            ^
-interpret.h:32:42: error: unknown type name ‘tLData’
- int division(tLData *src1, tLData *src2, tLData *dest);
-                                          ^
-interpret.h:36:11: error: unknown type name ‘tLData’
- int equal(tLData *src1, tLData *src2, tLData *dest);
-           ^
-interpret.h:36:25: error: unknown type name ‘tLData’
- int equal(tLData *src1, tLData *src2, tLData *dest);
-                         ^
-interpret.h:36:39: error: unknown type name ‘tLData’
- int equal(tLData *src1, tLData *src2, tLData *dest);
-                                       ^
-interpret.h:40:13: error: unknown type name ‘tLData’
- int smaller(tLData *src1, tLData *src2, tLData *dest);
-             ^
-interpret.h:40:27: error: unknown type name ‘tLData’
- int smaller(tLData *src1, tLData *src2, tLData *dest);
+stable.h:60:27: warning: type defaults to ‘int’ in declaration of ‘T’
+ int GtableFree (globalTS *T);
                            ^
-interpret.h:40:41: error: unknown type name ‘tLData’
- int smaller(tLData *src1, tLData *src2, tLData *dest);
-                                         ^
-interpret.h:44:12: error: unknown type name ‘tLData’
- int bigger(tLData *src1, tLData *src2, tLData *dest);
-            ^
-interpret.h:44:26: error: unknown type name ‘tLData’
- int bigger(tLData *src1, tLData *src2, tLData *dest);
-                          ^
-interpret.h:44:40: error: unknown type name ‘tLData’
- int bigger(tLData *src1, tLData *src2, tLData *dest);
-                                        ^
-interpret.h:48:18: error: unknown type name ‘tLData’
- int equalsmaller(tLData *src1, tLData *src2, tLData *dest);
-                  ^
-interpret.h:48:32: error: unknown type name ‘tLData’
- int equalsmaller(tLData *src1, tLData *src2, tLData *dest);
-                                ^
-interpret.h:48:46: error: unknown type name ‘tLData’
- int equalsmaller(tLData *src1, tLData *src2, tLData *dest);
-                                              ^
-interpret.h:52:17: error: unknown type name ‘tLData’
- int equalbigger(tLData *src1, tLData *src2, tLData *dest);
-                 ^
-interpret.h:52:31: error: unknown type name ‘tLData’
- int equalbigger(tLData *src1, tLData *src2, tLData *dest);
-                               ^
-interpret.h:52:45: error: unknown type name ‘tLData’
- int equalbigger(tLData *src1, tLData *src2, tLData *dest);
-                                             ^
-interpret.h:56:14: error: unknown type name ‘tLData’
- int notequal(tLData *src1, tLData *src2, tLData *dest);
-              ^
-interpret.h:56:28: error: unknown type name ‘tLData’
- int notequal(tLData *src1, tLData *src2, tLData *dest);
-                            ^
-interpret.h:56:42: error: unknown type name ‘tLData’
- int notequal(tLData *src1, tLData *src2, tLData *dest);
-                                          ^
-interpret.h:60:14: error: unknown type name ‘tLData’
- int negation(tLData *src1, tLData *dest);
-              ^
-interpret.h:60:28: error: unknown type name ‘tLData’
- int negation(tLData *src1, tLData *dest);
-                            ^
-interpret.h:71:12: error: unknown type name ‘tLData’
- int jumpif(tLData *src1, string *dest, TinstList *LOI);
-            ^
-interpret.h:75:10: error: unknown type name ‘tLData’
- int read(tLData *dest);
-          ^
-interpret.h:79:13: error: unknown type name ‘tLData’
- int readint(tLData *dest);
-             ^
-interpret.h:84:16: error: unknown type name ‘tLData’
- int readdouble(tLData *dest);
-                ^
-interpret.h:88:16: error: unknown type name ‘tLData’
- int readstring(tLData *dest);
-                ^
-interpret.h:92:11: error: unknown type name ‘tLData’
- int write(tLData *src1);
-           ^
-interpret.h:96:12: error: unknown type name ‘tLData’
- int sortme(tLData *src1, tLData *dest);
-            ^
-interpret.h:96:26: error: unknown type name ‘tLData’
- int sortme(tLData *src1, tLData *dest);
-                          ^
-interpret.h:101:12: error: unknown type name ‘tLData’
- int findme(tLData *src1, tLData *src2, tLData *dest);
-            ^
-interpret.h:101:26: error: unknown type name ‘tLData’
- int findme(tLData *src1, tLData *src2, tLData *dest);
-                          ^
-interpret.h:101:40: error: unknown type name ‘tLData’
- int findme(tLData *src1, tLData *src2, tLData *dest);
-                                        ^
-interpret.h:106:18: error: unknown type name ‘tLData’
- int lengthstring(tLData *src1, tLData *dest);
-                  ^
-interpret.h:106:32: error: unknown type name ‘tLData’
- int lengthstring(tLData *src1, tLData *dest);
-                                ^
-interpret.h:111:17: error: unknown type name ‘tLData’
- int concatenate(tLData *src1, tLData *src2, tLData *dest);
-                 ^
-interpret.h:111:31: error: unknown type name ‘tLData’
- int concatenate(tLData *src1, tLData *src2, tLData *dest);
-                               ^
-interpret.h:111:45: error: unknown type name ‘tLData’
- int concatenate(tLData *src1, tLData *src2, tLData *dest);
-                                             ^
-interpret.h:116:15: error: unknown type name ‘tLData’
- int substring(tLData *src1, tLData *src2, tLData *src3, tLData *dest);
-               ^
-interpret.h:116:29: error: unknown type name ‘tLData’
- int substring(tLData *src1, tLData *src2, tLData *src3, tLData *dest);
+stable.h:67:29: warning: type defaults to ‘int’ in declaration of ‘T’
+ int GtableInsert (globalTS *T, string *key, int funcType);
                              ^
-interpret.h:116:43: error: unknown type name ‘tLData’
- int substring(tLData *src1, tLData *src2, tLData *src3, tLData *dest);
-                                           ^
-interpret.h:116:57: error: unknown type name ‘tLData’
- int substring(tLData *src1, tLData *src2, tLData *src3, tLData *dest);
-                                                         ^
-interpret.h:120:31: error: unknown type name ‘globalTS’
- int precall(string *funcName, globalTS *GTS, struct Frame *newF);
-                               ^
-interpret.h:125:14: error: unknown type name ‘tGData’
- int parametr(tGData *source1, tLData *source2, struct Frame *newF, int cnt);
-              ^
-interpret.h:125:31: error: unknown type name ‘tLData’
- int parametr(tGData *source1, tLData *source2, struct Frame *newF, int cnt);
-                               ^
-interpret.h:130:10: error: unknown type name ‘tGData’
- int call(tGData *source1, struct Frame *newF, TinstList *LOI, Tstackframe *S);
-          ^
-interpret.h:135:9: error: unknown type name ‘tLData’
- int ret(tLData *source1, Tstackframe *S);
-         ^
-In file included from stable.h:11:0,
-                 from stable.c:8:
-parser.h:24:11: error: unknown type name ‘globalTS’
- int parse(globalTS *ST);
-           ^
-parser.h:26:13: error: unknown type name ‘globalTS’
- int program(globalTS *global_table);
-             ^
-parser.h:28:15: error: unknown type name ‘globalTS’
- int func_dclr(globalTS *global_table);
-               ^
-parser.h:34:12: error: unknown type name ‘globalTS’
- int select(globalTS *global_table, string *id);
-            ^
-parser.h:36:10: error: unknown type name ‘globalTS’
- int body(globalTS *global_table, string *id);
-          ^
-parser.h:38:11: error: unknown type name ‘globalTS’
- int stmnt(globalTS *global_table, string *id);
-           ^
-parser.h:40:9: error: unknown type name ‘globalTS’
- int _if(globalTS *global_table, string *id);
-         ^
-parser.h:42:10: error: unknown type name ‘globalTS’
- int _cin(globalTS *global_table, string *id);
-          ^
-parser.h:44:11: error: unknown type name ‘globalTS’
- int _id_n(globalTS *global_table, string *id);
-           ^
-parser.h:46:11: error: unknown type name ‘globalTS’
- int _cout(globalTS *global_table, string *id);
-           ^
-parser.h:48:12: error: unknown type name ‘globalTS’
- int term_n(globalTS *global_table, string *id);
-            ^
-parser.h:50:10: error: unknown type name ‘globalTS’
- int _for(globalTS *global_table, string *id);
-          ^
-parser.h:52:13: error: unknown type name ‘globalTS’
- int _return(globalTS *global_table, string *id);
-             ^
-parser.h:54:11: error: unknown type name ‘globalTS’
- int _prom(globalTS *global_table, string *id);
-           ^
-parser.h:56:15: error: unknown type name ‘globalTS’
- int callf_dec(globalTS *global_table, string *id);
-               ^
-parser.h:62:13: error: unknown type name ‘globalTS’
- int _i_prom(globalTS *global_table, string *id);
-             ^
-parser.h:88:40: error: unknown type name ‘globalTS’
- int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id);
-                                        ^
-parser.h:90:15: error: unknown type name ‘globalTS’
- int comp_expr(globalTS *global_table, string *id);
-               ^
-make: *** [stable.o] Error 1
+stable.h:69:33: warning: type defaults to ‘int’ in declaration of ‘T’
+ tGData* GtableSearch (globalTS *T, string *key);
+                                 ^
+stable.h:70:34: warning: type defaults to ‘int’ in declaration of ‘T’
+ int GtableInsertParam (globalTS *T, string *funcID, string *parID, int parType);
+                                  ^
+stable.h:71:32: warning: type defaults to ‘int’ in declaration of ‘T’
+ int GtableInsertVar (globalTS *T, string *funcID, string *varID, int varType);
+                                ^
+stable.h:72:35: warning: type defaults to ‘int’ in declaration of ‘T’
+ int GtableInsertVarVal (globalTS *T, string *funcID, string *varID, Tvalue v);
+                                   ^
+stable.h:73:34: warning: type defaults to ‘int’ in declaration of ‘T’
+ int GtableInsertInstr (globalTS *T, string *funcID, Tinst *instrukce);
+                                  ^
+stable.h:73:53: error: unknown type name ‘Tinst’
+ int GtableInsertInstr (globalTS *T, string *funcID, Tinst *instrukce);
+                                                     ^
+stable.h:80:26: warning: type defaults to ‘int’ in declaration of ‘T’
+ int LtableInit (localTS *T);
+                          ^
+stable.h:81:26: warning: type defaults to ‘int’ in declaration of ‘T’
+ int LtableFree (localTS *T);
+                          ^
+stable.h:85:28: warning: type defaults to ‘int’ in declaration of ‘T’
+ int LtableInsert (localTS *T, string *key, int varType);
+                            ^
+stable.h:87:32: warning: type defaults to ‘int’ in declaration of ‘T’
+ tLData* LtableSearch (localTS *T, string *key);
+                                ^
+stable.h:88:33: warning: type defaults to ‘int’ in declaration of ‘T’
+ int LtableInsertValue (localTS *T, string *key, Tvalue v);
+                                 ^
+3ac.c: In function ‘genInstr’:
+3ac.c:26:5: warning: function returns address of local variable [-Wreturn-local-addr]
+     return &TItem;
+     ^
+make: *** [3ac.o] Error 1
+
