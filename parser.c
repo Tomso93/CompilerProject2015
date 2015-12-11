@@ -764,7 +764,7 @@ int _for(globalTS *global_table, string *id){
     strInit(&Label_1); //inicializace
     GenNewVariable(&Label_1);  // vygenerovani promenne
     LtableInsert(global_table->data->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
-    LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
+    //LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
    
     // instrukce pro label
     Tinst *instrukce = genInstr(ILABEL, &Label_1, NULL, NULL);
@@ -775,17 +775,17 @@ int _for(globalTS *global_table, string *id){
 	if (result !=SYNTAX_OK) return SYNTAX_ERROR;
     
     // najde promennou ve ktere je vyhodnocena podminka
-    tData *LastVar = ReadNameVar(global_table->data->LInstr);
-    Tinst *instrukce = genInstr(INOT, LastVar, NULL, LastVar);
+    string *LastVar = ReadNameVar(global_table->data->LInstr);
+    instrukce = genInstr(INOT, LastVar, NULL, LastVar);
     GtableInsertInstr(global_table, id, instrukce);
     
     string Label_2; //label, pro navrat
     strInit(&Label_2); //inicializace
     GenNewVariable(&Label_2);  // vygenerovani promenne
-    tLTableItem *NewSymbol_2 = LtableInsert(global_table->data->LTable, &Label_2, TOK_STRING);
-    LtableInsertValue(global_table->data->LTable, &Label_2, Label_2);
+    LtableInsert(global_table->data->LTable, &Label_2, TOK_STRING);
+    //LtableInsertValue(global_table->data->LTable, &Label_2, Label_2);
     
-    instrukce = genInstr(IIFGOTO, LastVar, NULL, &NewSymbol_2->data);
+    instrukce = genInstr(IIFGOTO, LastVar, NULL, &Label_2);
     GtableInsertInstr(global_table, id, instrukce);
      
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -811,10 +811,10 @@ int _for(globalTS *global_table, string *id){
 	result= body(global_table, id);
 
     // instrukce skoku
-    instrukce = genInstr(IGOTO, NULL, NULL, &NewSymbol->data);
+    instrukce = genInstr(IGOTO, NULL, NULL, &Label_1);
     GtableInsertInstr(global_table, id, instrukce);
     //instrukce label pro skonceni cyklu
-    instrukce = genInstr(ILABEL, &NewSymbol->data, NULL, NULL);
+    instrukce = genInstr(ILABEL, &Label_2, NULL, NULL);
     GtableInsertInstr(global_table, id, instrukce);
     
 	if(result !=SYNTAX_OK) return result;
@@ -840,7 +840,7 @@ int term_n(globalTS *global_table, string *id){
 			if (result != SYNTAX_OK) return result;
 			
 			//generovani instukce
-			Tinst *instrukce = genInstr(IWRITE, NULL, NULL, token);
+			Tinst *instrukce = genInstr(IWRITE, NULL, NULL, &attr);
 			GtableInsertInstr(global_table, id, instrukce);
 			
 			//mozna jich je jeste vic, radeji si ho zavolam znovu
@@ -864,7 +864,7 @@ int _cout(globalTS *global_table, string *id){
 	if(token !=SYNTAX_OK) return result;
 	
 	// instrukce pro zapis, pokud jich je vice generuji se v term_n()
-    	Tinst *instrukce = genInstr(IWRITE, NULL, NULL, token);
+    	Tinst *instrukce = genInstr(IWRITE, NULL, NULL, &attr);
    	GtableInsertInstr(global_table, id, instrukce);
 	
 	//zavolam scanner a jdu zjistit, jestli termu neni vic a jestli jsou ok
@@ -890,7 +890,7 @@ int _id_n(globalTS *global_table, string *id){
 			//if(!(tableSearch(local_table, &attr))) return SEMANTIC_ERROR;
 			
 			// vygeneruju instrukci
-			Tinst *instrukce = genInstr(IREAD, NULL, NULL, token);
+			Tinst *instrukce = genInstr(IREAD, NULL, NULL, &attr);
 			GtableInsertInstr(global_table, id, instrukce);
 			
 			//a zavolam si ji znova
@@ -913,7 +913,7 @@ int _cin(globalTS *global_table, string *id){
 	//if(!(tableSearch(local_table, &attr))) return SEMANTIC_ERROR;
 	
 	// generuji prvni instrukci, ostatni se generujou v _id_n()
-	Tinst *instrukce = genInstr(IREAD, NULL, NULL, token);
+	Tinst *instrukce = genInstr(IREAD, NULL, NULL, &attr);
 	GtableInsertInstr(global_table, id, instrukce);
 	
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -944,18 +944,18 @@ int _if(globalTS *global_table, string *id){
 	if (token !=TOK_RIGHT_BRACKET) return SYNTAX_ERROR;
 
     //generovani pomocne promenne
-    tData *LastVar = ReadNameVar(global_table->data->LInstr); // funkce na cteni nazvu posledni instrukce 
+    string *LastVar = ReadNameVar(global_table->data->LInstr); // funkce na cteni nazvu posledni instrukce 
     Tinst *instrukce = genInstr(INOT, LastVar, NULL, LastVar); // negace podminky
     GtableInsertInstr(global_table, id, instrukce);
     
     string Label_1; //novy label, skok na vetev else
     strInit(&Label_1); //inicializace
     GenNewVariable(&Label_1);  // vygenerovani promenne
-    tLTableItem *NewSymbol  = LtableInsert(global_table->data->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
-    LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
+    LtableInsert(global_table->data->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+    //LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
     
     //generovani skoku na ELSE vetev
-    instrukce = genInstr(IIFGOTO, LastVar, NULL, &NewSymbol->data);
+    instrukce = genInstr(IIFGOTO, LastVar, NULL, &Label_1);
     GtableInsertInstr(global_table, id, instrukce);
 	//telo pokud je v if pravda
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -965,13 +965,13 @@ int _if(globalTS *global_table, string *id){
     string Label_2;  // label dva, skok az za else, podminka v IF byla pravda
     strInit(&Label_2);
     GenNewVariable(&Label_2);
-    tLTableItem *NewSymbol_2 = LtableInsert(global_table->data->LTable, &Label_2, TOK_STRING);
-    LtableInsertValue(global_table->data->LTable, &Label_2, Label_2);
+    LtableInsert(global_table->data->LTable, &Label_2, TOK_STRING);
+    //LtableInsertValue(global_table->data->LTable, &Label_2, Label_2);
     
     // skok za ELSE
-    instrukce = genInstr(IGOTO, NULL, NULL, &NewSymbol_2->data);
+    instrukce = genInstr(IGOTO, NULL, NULL, &Label_2);
     GtableInsertInstr(global_table, id, instrukce);
-    instrukce = genInstr(ILABEL, &NewSymbol->data, NULL, NULL); // musime vlozit label za telo IFu
+    instrukce = genInstr(ILABEL, &Label_1, NULL, NULL); // musime vlozit label za telo IFu
     GtableInsertInstr(global_table, id, instrukce);
     
 	if(result !=SYNTAX_OK) return result;
@@ -985,7 +985,7 @@ int _if(globalTS *global_table, string *id){
 	result= body(global_table, id);
 
     // instrukce pro label_2, sem se skoci jestlize podminka IF byla pravda
-    instrukce = genInstr(ILABEL,(void *) &Label_2, NULL, NULL);
+    instrukce = genInstr(ILABEL, &Label_2, NULL, NULL);
     GtableInsertInstr(global_table, id, instrukce);
 	if(result !=SYNTAX_OK) return result;
 	// konstrukce if je v poradku muze opustit s pozitvni odpovedi
@@ -1103,7 +1103,7 @@ int param_n(globalTS *global_table, string *id){
 			
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			if (token != TOK_ID) return SYNTAX_ERROR;
-			string *idParam = attr;
+			string *idParam = &attr;
 			
 			GtableInsertParam(global_table, id, idParam, InternalType);
 			// zavolam si zpet funkci, zda nema dalsi parametry
@@ -1136,7 +1136,7 @@ int param(globalTS *global_table, string *id){
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			if (token != TOK_ID) return SYNTAX_ERROR;
 			// ulozeni identifikatoru pro parametr
-			string *idParam = attr;
+			string *idParam = &attr;
 			//vlozeni parametru do GTS
 			GtableInsertParam(global_table, id, idParam, InternalType);
 			//zjistim, zda neni v zavorce vice parametru
@@ -1163,7 +1163,7 @@ int func_dclr(globalTS *global_table){
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token != TOK_ID) return SYNTAX_ERROR;
 	
-	string *id = attr;
+	string *id = &attr;
 	GtableInsert(global_table, id, InternalType);
 ///
 	
@@ -1202,7 +1202,7 @@ int program(globalTS *global_table){
 	}
 	
 	//generuji konec programu
-	string *id = attr;
+	string *id = &attr;
 	Tinst *instrukce = genInstr(IEND,NULL,NULL,NULL);
 	GtableInsertInstr(global_table, id, instrukce);
 	return SYNTAX_OK;
