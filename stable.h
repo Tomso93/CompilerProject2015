@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include "define.h"
 
 //-----------lokalni tabulka symbolu------------------------------
 
