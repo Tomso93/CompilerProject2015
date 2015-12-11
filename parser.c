@@ -15,6 +15,7 @@
 #include "stable.h"		// tabulka symbolu
 #include "instlist.h"	// seznam instukci
 #include "3ac.h"		// genInstr, GenNewVariable
+#include "parser.h"
 
 
 int token; //Globalni promennna pro pradavani tokenu 

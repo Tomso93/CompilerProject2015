@@ -1,0 +1,214 @@
+In file included from main.c:5:0:
+stable.h:15:3: error: unknown type name ‘bool’
+   bool isinit;
+   ^
+stable.h:33:3: error: unknown type name ‘bool’
+   bool isdef;
+   ^
+stable.h:36:3: error: unknown type name ‘TinstList’
+   TinstList *LInstr;
+   ^
+stable.h:73:53: error: unknown type name ‘Tinst’
+ int GtableInsertInstr (globalTS *T, string *funcID, Tinst *instrukce);
+                                                     ^
+In file included from main.c:9:0:
+interpret.h:11:15: error: unknown type name ‘glabal’
+ int interpret(glabal *GTS);  //hlavni funkce. prochazi seznam instrukci
+               ^
+interpret.h:16:10: error: unknown type name ‘tData’
+ int move(tData *src1, tData *dest);
+          ^
+interpret.h:16:23: error: unknown type name ‘tData’
+ int move(tData *src1, tData *dest);
+                       ^
+interpret.h:20:14: error: unknown type name ‘tData’
+ int addition(tData *src1, tData *src2, tData *dest);
+              ^
+interpret.h:20:27: error: unknown type name ‘tData’
+ int addition(tData *src1, tData *src2, tData *dest);
+                           ^
+interpret.h:20:40: error: unknown type name ‘tData’
+ int addition(tData *src1, tData *src2, tData *dest);
+                                        ^
+interpret.h:24:18: error: unknown type name ‘tData’
+ int substraction(tData *src1, tData *src2, tData *dest);
+                  ^
+interpret.h:24:31: error: unknown type name ‘tData’
+ int substraction(tData *src1, tData *src2, tData *dest);
+                               ^
+interpret.h:24:44: error: unknown type name ‘tData’
+ int substraction(tData *src1, tData *src2, tData *dest);
+                                            ^
+interpret.h:28:20: error: unknown type name ‘tData’
+ int multiplication(tData *src1, tData *src2, tData *dest);
+                    ^
+interpret.h:28:33: error: unknown type name ‘tData’
+ int multiplication(tData *src1, tData *src2, tData *dest);
+                                 ^
+interpret.h:28:46: error: unknown type name ‘tData’
+ int multiplication(tData *src1, tData *src2, tData *dest);
+                                              ^
+interpret.h:32:14: error: unknown type name ‘tData’
+ int division(tData *src1, tData *src2, tData *dest);
+              ^
+interpret.h:32:27: error: unknown type name ‘tData’
+ int division(tData *src1, tData *src2, tData *dest);
+                           ^
+interpret.h:32:40: error: unknown type name ‘tData’
+ int division(tData *src1, tData *src2, tData *dest);
+                                        ^
+interpret.h:36:11: error: unknown type name ‘tData’
+ int equal(tData *src1, tData *src2, tData *dest);
+           ^
+interpret.h:36:24: error: unknown type name ‘tData’
+ int equal(tData *src1, tData *src2, tData *dest);
+                        ^
+interpret.h:36:37: error: unknown type name ‘tData’
+ int equal(tData *src1, tData *src2, tData *dest);
+                                     ^
+interpret.h:40:13: error: unknown type name ‘tData’
+ int smaller(tData *src1, tData *src2, tData *dest);
+             ^
+interpret.h:40:26: error: unknown type name ‘tData’
+ int smaller(tData *src1, tData *src2, tData *dest);
+                          ^
+interpret.h:40:39: error: unknown type name ‘tData’
+ int smaller(tData *src1, tData *src2, tData *dest);
+                                       ^
+interpret.h:44:12: error: unknown type name ‘tData’
+ int bigger(tData *src1, tData *src2, tData *dest);
+            ^
+interpret.h:44:25: error: unknown type name ‘tData’
+ int bigger(tData *src1, tData *src2, tData *dest);
+                         ^
+interpret.h:44:38: error: unknown type name ‘tData’
+ int bigger(tData *src1, tData *src2, tData *dest);
+                                      ^
+interpret.h:48:18: error: unknown type name ‘tData’
+ int equalsmaller(tData *src1, tData *src2, tData *dest);
+                  ^
+interpret.h:48:31: error: unknown type name ‘tData’
+ int equalsmaller(tData *src1, tData *src2, tData *dest);
+                               ^
+interpret.h:48:44: error: unknown type name ‘tData’
+ int equalsmaller(tData *src1, tData *src2, tData *dest);
+                                            ^
+interpret.h:52:17: error: unknown type name ‘tData’
+ int equalbigger(tData *src1, tData *src2, tData *dest);
+                 ^
+interpret.h:52:30: error: unknown type name ‘tData’
+ int equalbigger(tData *src1, tData *src2, tData *dest);
+                              ^
+interpret.h:52:43: error: unknown type name ‘tData’
+ int equalbigger(tData *src1, tData *src2, tData *dest);
+                                           ^
+interpret.h:56:14: error: unknown type name ‘tData’
+ int notequal(tData *src1, tData *src2, tData *dest);
+              ^
+interpret.h:56:27: error: unknown type name ‘tData’
+ int notequal(tData *src1, tData *src2, tData *dest);
+                           ^
+interpret.h:56:40: error: unknown type name ‘tData’
+ int notequal(tData *src1, tData *src2, tData *dest);
+                                        ^
+interpret.h:60:14: error: unknown type name ‘tData’
+ int negation(tData *src1, tData *dest);
+              ^
+interpret.h:60:27: error: unknown type name ‘tData’
+ int negation(tData *src1, tData *dest);
+                           ^
+interpret.h:65:10: error: unknown type name ‘tData’
+ int jump(tData *dest, TinstList *LOI);
+          ^
+interpret.h:71:12: error: unknown type name ‘tData’
+ int jumpif(tData *src1, tData *dest, TinstList *LOI);
+            ^
+interpret.h:71:25: error: unknown type name ‘tData’
+ int jumpif(tData *src1, tData *dest, TinstList *LOI);
+                         ^
+interpret.h:75:10: error: unknown type name ‘tData’
+ int read(tData *dest);
+          ^
+interpret.h:79:13: error: unknown type name ‘tData’
+ int readint(tData *dest);
+             ^
+interpret.h:84:16: error: unknown type name ‘tData’
+ int readdouble(tData *dest);
+                ^
+interpret.h:88:16: error: unknown type name ‘tData’
+ int readstring(tData *dest);
+                ^
+interpret.h:92:11: error: unknown type name ‘tData’
+ int write(tData *src1);
+           ^
+interpret.h:96:12: error: unknown type name ‘tData’
+ int sortme(tData *src1, tData *dest);
+            ^
+interpret.h:96:25: error: unknown type name ‘tData’
+ int sortme(tData *src1, tData *dest);
+                         ^
+interpret.h:101:12: error: unknown type name ‘tData’
+ int findme(tData *src1, tData *src2, tData *dest);
+            ^
+interpret.h:101:25: error: unknown type name ‘tData’
+ int findme(tData *src1, tData *src2, tData *dest);
+                         ^
+interpret.h:101:38: error: unknown type name ‘tData’
+ int findme(tData *src1, tData *src2, tData *dest);
+                                      ^
+interpret.h:106:18: error: unknown type name ‘tData’
+ int lengthstring(tData *src1, tData *dest);
+                  ^
+interpret.h:106:31: error: unknown type name ‘tData’
+ int lengthstring(tData *src1, tData *dest);
+                               ^
+interpret.h:111:17: error: unknown type name ‘tData’
+ int concatenate(tData *src1, tData *src2, tData *dest);
+                 ^
+interpret.h:111:30: error: unknown type name ‘tData’
+ int concatenate(tData *src1, tData *src2, tData *dest);
+                              ^
+interpret.h:111:43: error: unknown type name ‘tData’
+ int concatenate(tData *src1, tData *src2, tData *dest);
+                                           ^
+interpret.h:116:15: error: unknown type name ‘tData’
+ int substring(tData *src1, tData *src2, tData *src3, tData *dest);
+               ^
+interpret.h:116:28: error: unknown type name ‘tData’
+ int substring(tData *src1, tData *src2, tData *src3, tData *dest);
+                            ^
+interpret.h:116:41: error: unknown type name ‘tData’
+ int substring(tData *src1, tData *src2, tData *src3, tData *dest);
+                                         ^
+interpret.h:116:54: error: unknown type name ‘tData’
+ int substring(tData *src1, tData *src2, tData *src3, tData *dest);
+                                                      ^
+interpret.h:120:53: warning: ‘struct Frame’ declared inside parameter list
+ int precall(string *funcName, globalTS *GTS, struct Frame *newF);
+                                                     ^
+interpret.h:120:53: warning: its scope is only this definition or declaration, which is probably not what you want
+interpret.h:125:55: warning: ‘struct Frame’ declared inside parameter list
+ int parametr(tGData *source1, tLData *source2, struct Frame *newF, int cnt);
+                                                       ^
+interpret.h:130:63: error: unknown type name ‘Tstackframe’
+ int call(tGData *source1, struct Frame *newF, TinstList *LOI, Tstackframe *S);
+                                                               ^
+interpret.h:135:26: error: unknown type name ‘Tstackframe’
+ int ret(tLData *source1, Tstackframe *S);
+                          ^
+In file included from main.c:10:0:
+parser.h:24:11: error: unknown type name ‘tSymbolTable’
+ int parse(tSymbolTable *ST, TinstList *instrList);
+           ^
+main.c: In function ‘main’:
+main.c:19:5: error: unknown type name ‘tSymbolTable’
+     tSymbolTable symtab;
+     ^
+main.c:24:5: warning: implicit declaration of function ‘tableInit’ [-Wimplicit-function-declaration]
+     tableInit(&symtab);
+     ^
+main.c:33:13: warning: implicit declaration of function ‘parse’ [-Wimplicit-function-declaration]
+             result = parse(&symtab, &instlist);
+             ^
+main.c:39:13: warning: implicit declaration of function ‘interpret’ [-Wimplicit-function-declaration]
+             result = interpret(&instlist);

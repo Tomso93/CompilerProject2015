@@ -5,7 +5,7 @@
 *	Cast: Parser .c +.h
 *	Verze: 1.4
 */
-
+#define MAX 20
 
 
 // Strunktura zasobniku pro vkladani terminalu na zasobnik
