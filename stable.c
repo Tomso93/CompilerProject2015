@@ -252,7 +252,7 @@ int GtableInsertParam (globalTS *T, string *funcID, string *parID, int parType){
   return success;
 }
 
-int GtableInsertInstr (globalTS *T, string *funcID, Tinst instrukce){
+int GtableInsertInstr (globalTS *T, string *funcID, Tinst *instrukce){
   int success;
   tGData *act;
   act = gtableSearch (T, funcID);
