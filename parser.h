@@ -14,7 +14,7 @@ typedef struct {
 	char prom_val[MAX]; // type promenne
 	int top;			// vrchol
 	char t_n[MAX];		// T , N 
-	double *val[MAX];	// hodnota 
+	string *val[MAX];	// hodnota 
 } Tstack;
 
 
