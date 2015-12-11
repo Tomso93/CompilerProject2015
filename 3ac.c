@@ -8,14 +8,17 @@
 /* ========================================================================== */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
-#include <malloc.h>
 #include "define.h"
 #include "str.h"
+#include "errors.h"
 #include "instlist.h"
 #include "stable.h"
-#include "instlist.h"
-#include "3ac.h"
+#include "lex.h"
+#include "varframe.h"
+#include "interpret.h"
+#include "parser.h"
 
 int cnt = 1; // counter pro poÄŤĂ­tĂˇnĂ­ hodnot generovanĂ˝ch promÄ›nnĂ˝ch
 
