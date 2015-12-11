@@ -942,11 +942,11 @@ int _if(globalTS *global_table, string *id){
     string Label_1; //novy label, skok na vetev else
     strInit(&Label_1); //inicializace
     GenNewVariable(&Label_1);  // vygenerovani promenne
-    //tTableItem* prom  = tableInsert(local_table, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
-    //tableInsertValue (local_table, &Label_1, Label_1);
+    tLTableItem *NewSymbol  = LtableInsert(global_table->data->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+    LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
     
     //generovani skoku na ELSE vetev
-    Tinst *instrukce = genInstr(IIFGOTO, LastVar, NULL, &prom->data);
+    Tinst *instrukce = genInstr(IIFGOTO, LastVar, NULL, &NewSymbol->data);
     GtableInsertInstr(global_table, id, instrukce);
 	//telo pokud je v if pravda
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -956,13 +956,13 @@ int _if(globalTS *global_table, string *id){
     string Label_2;  // label dva, skok az za else, podminka v IF byla pravda
     strInit(&Label_2);
     GenNewVariable(&Label_2);
-    //tTableItem* prom2 = tableInsert(local_table, &Label_2, TOK_STRING);
-    //tableInsertValue(local_table, &Label_2, Label_2);
+    tLTableItem *NewSymbol_2 = LtableInsert(global_table->data->LTable, &Label_2, TOK_STRING);
+    LtableInsertValue(global_table->data->LTable, &Label_2, Label_2);
     
     // skok za ELSE
-    instrukce = genInstr(IGOTO, NULL, NULL, &prom2->data);
+    instrukce = genInstr(IGOTO, NULL, NULL, &NewSymbol_2->data);
     GtableInsertInstr(global_table, id, instrukce);
-    instrukce = genInstr(ILABEL, &prom->data, NULL, NULL); // musime vlozit label za telo IFu
+    instrukce = genInstr(ILABEL, &NewSymbol->data, NULL, NULL); // musime vlozit label za telo IFu
     GtableInsertInstr(global_table, id, instrukce);
     
 	if(result !=SYNTAX_OK) return result;
