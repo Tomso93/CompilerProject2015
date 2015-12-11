@@ -21,45 +21,45 @@ typedef struct {
 
 // Rekurzivni sestup, deklr
 // Vstup parseru
-int parse(tSymbolTable *ST);
+int parse(globalTS *ST);
 
-int program(tSymbolTable *global_table);
+int program(globalTS *global_table);
 
-int func_dclr(tSymbolTable *global_table);
+int func_dclr(globalTS *global_table);
 
 int param();
 
 int param_n();
 
-int select(tSymbolTable *global_table, string *id);
+int select(globalTS *global_table, string *id);
 
-int body(tSymbolTable *global_table, string *id);
+int body(globalTS *global_table, string *id);
 
-int stmnt(tSymbolTable *global_table, string *id);
+int stmnt(globalTS *global_table, string *id);
 
-int _if(tSymbolTable *global_table, string *id);
+int _if(globalTS *global_table, string *id);
 
-int _cin(tSymbolTable *global_table, string *id);
+int _cin(globalTS *global_table, string *id);
 
-int _id_n(tSymbolTable *global_table, string *id);
+int _id_n(globalTS *global_table, string *id);
 
-int _cout(tSymbolTable *global_table, string *id);
+int _cout(globalTS *global_table, string *id);
 
-int term_n(tSymbolTable *global_table, string *id);
+int term_n(globalTS *global_table, string *id);
 
-int _for(tSymbolTable *global_table, string *id);
+int _for(globalTS *global_table, string *id);
 
-int _return(tSymbolTable *global_table, string *id);
+int _return(globalTS *global_table, string *id);
 
-int _prom(tSymbolTable *global_table, string *id);
+int _prom(globalTS *global_table, string *id);
 
-int callf_dec(tSymbolTable *global_table, string *id);
+int callf_dec(globalTS *global_table, string *id);
 
 int list_par();
 
 int list_par_n();
 
-int _i_prom(tSymbolTable *global_table, string *id);
+int _i_prom(globalTS *global_table, string *id);
 
 int type();
 
@@ -85,6 +85,6 @@ void DelI(Tstack* St, int n);
 
 int FindT(Tstack* St);
 
-int SReduction_expr(Tstack* St, int i, TinstList *instrList);
+int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id);
 
-int comp_expr(TinstList *instrList);
+int comp_expr(globalTS *global_table, string *id);
