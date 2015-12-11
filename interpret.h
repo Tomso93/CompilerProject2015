@@ -8,112 +8,112 @@
 // to do 
 //int substring();		//najde podretezec
 
-int interpret(glabal *GTS); 	//hlavni funkce. prochazi seznam instrukci
+int interpret(globalTS *GTS); 	//hlavni funkce. prochazi seznam instrukci
        				//a vola prislusne funkce
 
 //IMOV
 //dest = src1
-int move(tData *src1, tData *dest);			   
+int move(tLData *src1, tLData *dest);			   
 
 //IADD
 //dest = src1 + src2
-int addition(tData *src1, tData *src2, tData *dest);	  
+int addition(tLData *src1, tLData *src2, tLData *dest);	  
 
 //ISUB
 //dest = src1 - src2
-int substraction(tData *src1, tData *src2, tData *dest);
+int substraction(tLData *src1, tLData *src2, tLData *dest);
 
 //IMUL
 //dest = src1 * src2
-int multiplication(tData *src1, tData *src2, tData *dest); 
+int multiplication(tLData *src1, tLData *src2, tLData *dest); 
 
 //IDIV
 //dest = src1 / src2
-int division(tData *src1, tData *src2, tData *dest);
+int division(tLData *src1, tLData *src2, tLData *dest);
 
 //IEQUAL
 //dest = (src1 == src2)
-int equal(tData *src1, tData *src2, tData *dest);
+int equal(tLData *src1, tLData *src2, tLData *dest);
 
 //ISMALL
 //dest = (src1 < src2)
-int smaller(tData *src1, tData *src2, tData *dest);
+int smaller(tLData *src1, tLData *src2, tLData *dest);
 
 //IBIG
 //dest = (src1 > src2)
-int bigger(tData *src1, tData *src2, tData *dest);
+int bigger(tLData *src1, tLData *src2, tLData *dest);
 
 //IEQSM
 //dest = (src1 <= src2)
-int equalsmaller(tData *src1, tData *src2, tData *dest);
+int equalsmaller(tLData *src1, tLData *src2, tLData *dest);
 
 //IEQBG
 //dest = (src1 >= src2)
-int equalbigger(tData *src1, tData *src2, tData *dest);
+int equalbigger(tLData *src1, tLData *src2, tLData *dest);
 
 //INOTEQ
 //dest = (src1 != src2)
-int notequal(tData *src1, tData *src2, tData *dest);
+int notequal(tLData *src1, tLData *src2, tLData *dest);
 
 //INOT
 //dest = !(src1)
-int negation(tData *src1, tData *dest);	
+int negation(tLData *src1, tLData *dest);	
 
 //IGOTO
 //jdi na instrukci ilabel pro kterou plati:
 //igoto dest == ilabel src1
-int jump(tData *dest, TinstList *LOI);			  
+int jump(string *dest, TinstList *LOI);			  
 
 //IIFGOTO
 //kdyz plati src1
 //jdi na instrukci ilabel pro kterou plati
 //iifgoto dest == ilabel src1
-int jumpif(tData *src1, tData *dest, TinstList *LOI);	  
+int jumpif(tLData *src1, string *dest, TinstList *LOI);	  
 
 //IREAD
 //ze stdin cte do dest
-int read(tData *dest);		
+int read(tLData *dest);		
 
 //IREADI
 //ze stdin nacte int do dest
-int readint(tData *dest);		
+int readint(tLData *dest);		
 
 
 //IREADD
 //ze stdin nacte double do dest
-int readdouble(tData *dest);		
+int readdouble(tLData *dest);		
 
 //IREADS
 //ze stdin nacte string do dest
-int readstring(tData *dest);		
+int readstring(tLData *dest);		
 
 //IWRITE
 //zapise src1 na stdout
-int write(tData *src1);			
+int write(tLData *src1);			
 
 //ISORT
 //dest = sort(src1) funkce v ial.c
-int sortme(tData *src1, tData *dest);	
+int sortme(tLData *src1, tLData *dest);	
 
 //IFIND
 //dest = find(src1, src2)
 //vestavena funkce
-int findme(tData *src1, tData *src2, tData *dest);  
+int findme(tLData *src1, tLData *src2, tLData *dest);  
 
 //ILENGTH
 //dest = length(src1) 
 //vestavena funkce
-int lengthstring(tData *src1, tData *dest);	
+int lengthstring(tLData *src1, tLData *dest);	
 
 //ICAT
 //dest=concat(src1,src2)
 //vestavena funkce
-int concatenate(tData *src1, tData *src2, tData *dest);
+int concatenate(tLData *src1, tLData *src2, tLData *dest);
 
 //ISUBSTR
 //dest=substr(src1, src2, src3)
 //vestavena funkce
-int substring(tData *src1, tData *src2, tData *src3, tData *dest);
+int substring(tLData *src1, tLData *src2, tLData *src3, tLData *dest);
 
 //IPRECALL
 //vytvori novy ramec promennych z lokalni tabulky symbolu funkce
