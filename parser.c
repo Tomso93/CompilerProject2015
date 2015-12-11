@@ -236,12 +236,12 @@ string TopT(Tstack* St) {
 int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 	// pokusi se aplikovat pravidlo a zredukovat vyraz
 	char E1;
-	double * value1;
-	double * value3;
+	string * value1;
+	string * value3;
 	if (error != ERR) {
 		E1 = St->prom_val[i];
 		value1 = St->val[i];
-		value3 = malloc(sizeof(double));
+		value3 = malloc(sizeof(string));
 		if (value3 == NULL)
 			return INTERN_ERROR;
 	}
@@ -268,7 +268,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			E1 = St->prom_val[i + 1];
 			value1 = St->val[i + 1];
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(IMOV, )value1, NULL, value3);
+			Tinst *instrukce = genInstr(IMOV, value1, NULL, value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
@@ -284,7 +284,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 		if (error != ERR) {
 			char E2 = St->prom_val[i + 2];
-			double *value2 = St->val[i + 2];
+			string *value2 = St->val[i + 2];
 
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
@@ -330,7 +330,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 		if (error != ERR) {
 			char E2 = St->prom_val[i + 2];
-			double *value2 = St->val[i + 2];
+			string *value2 = St->val[i + 2];
 
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
@@ -353,7 +353,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 		if (error != ERR) {
 			char E2 = St->prom_val[i + 2];
-			double *value2 = St->val[i + 2];
+			string *value2 = St->val[i + 2];
 
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
@@ -376,7 +376,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 		if (error != ERR) {
 			char E2 = St->prom_val[i + 2];
-			double *value2 = St->val[i + 2];
+			string *value2 = St->val[i + 2];
 
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
@@ -398,7 +398,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 		if (error != ERR) {
 			char E2 = St->prom_val[i + 2];
-			double *value2 = St->val[i + 2];
+			string *value2 = St->val[i + 2];
 
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
@@ -421,7 +421,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 		if (error != ERR) {
 			char E2 = St->prom_val[i + 2];
-			double *value2 = St->val[i + 2];
+			string *value2 = St->val[i + 2];
 
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
@@ -443,7 +443,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 		if (error != ERR) {
 			char E2 = St->prom_val[i + 2];
-			double *value2 = St->val[i + 2];
+			string *value2 = St->val[i + 2];
 
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
@@ -465,7 +465,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 		if (error != ERR) {
 			char E2 = St->prom_val[i + 2];
-			double *value2 = St->val[i + 2];
+			string *value2 = St->val[i + 2];
 
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
@@ -488,7 +488,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 		if (error != ERR) {
 			char E2 = St->prom_val[i + 2];
-			double *value2 = St->val[i + 2];
+			string *value2 = St->val[i + 2];
 
 			//seman
 				if (E1 != E2) return SEMANTIC_ERROR;
