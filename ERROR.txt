@@ -1,9 +1,3 @@
-
-In file included from parser.c:17:0:
-3ac.h:4:1: error: unknown type name ‘tData’
- tData *ReadNameVar(TinstList *list);
- ^
-parser.c: In function ‘comp_expr’:
 parser.c:535:19: error: invalid type argument of ‘->’ (have ‘Tstack’)
     strAddChar(&(St->pom[FindT(St)]), '<');
                    ^
@@ -30,198 +24,26 @@ parser.c: In function ‘_for’:
 parser.c:766:30: error: request for member ‘data’ in something not a structure or union
      LtableInsert(global_table->data->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
                               ^
-parser.c:767:35: error: request for member ‘data’ in something not a structure or union
-     LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
-                                   ^
-parser.c:767:5: error: incompatible type for argument 3 of ‘LtableInsertValue’
-     LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
-     ^
-In file included from parser.c:16:0:
-stable.h:88:5: note: expected ‘Tvalue’ but argument is of type ‘string’
- int LtableInsertValue (localTS *T, string *key, Tvalue v);
-     ^
-parser.c:778:5: error: unknown type name ‘tData’
-     tData *LastVar = ReadNameVar(global_table->data->LInstr);
-     ^
-parser.c:778:46: error: request for member ‘data’ in something not a structure or union
-     tData *LastVar = ReadNameVar(global_table->data->LInstr);
-                                              ^
-parser.c:779:12: error: redefinition of ‘instrukce’
-     Tinst *instrukce = genInstr(INOT, LastVar, NULL, LastVar);
-            ^
-parser.c:770:12: note: previous definition of ‘instrukce’ was here
-     Tinst *instrukce = genInstr(ILABEL, &Label_1, NULL, NULL);
-            ^
-parser.c:779:39: warning: passing argument 2 of ‘genInstr’ from incompatible pointer type
-     Tinst *instrukce = genInstr(INOT, LastVar, NULL, LastVar);
-                                       ^
-In file included from parser.c:17:0:
-3ac.h:2:8: note: expected ‘struct string *’ but argument is of type ‘int *’
- Tinst *genInstr(int InstType, string *src1, string *src2, string *dest);
-        ^
-parser.c:779:54: warning: passing argument 4 of ‘genInstr’ from incompatible pointer type
-     Tinst *instrukce = genInstr(INOT, LastVar, NULL, LastVar);
-                                                      ^
-In file included from parser.c:17:0:
-3ac.h:2:8: note: expected ‘struct string *’ but argument is of type ‘int *’
- Tinst *genInstr(int InstType, string *src1, string *src2, string *dest);
-        ^
-parser.c:785:57: error: request for member ‘data’ in something not a structure or union
-     tLTableItem *NewSymbol_2 = LtableInsert(global_table->data->LTable, &Label_2, TOK_STRING);
-                                                         ^
-parser.c:786:35: error: request for member ‘data’ in something not a structure or union
-     LtableInsertValue(global_table->data->LTable, &Label_2, Label_2);
-                                   ^
-parser.c:786:5: error: incompatible type for argument 3 of ‘LtableInsertValue’
-     LtableInsertValue(global_table->data->LTable, &Label_2, Label_2);
-     ^
-In file included from parser.c:16:0:
-stable.h:88:5: note: expected ‘Tvalue’ but argument is of type ‘string’
- int LtableInsertValue (localTS *T, string *key, Tvalue v);
-     ^
-parser.c:788:35: warning: passing argument 2 of ‘genInstr’ from incompatible pointer type
-     instrukce = genInstr(IIFGOTO, LastVar, NULL, &NewSymbol_2->data);
-                                   ^
-In file included from parser.c:17:0:
-3ac.h:2:8: note: expected ‘struct string *’ but argument is of type ‘int *’
- Tinst *genInstr(int InstType, string *src1, string *src2, string *dest);
-        ^
-parser.c:788:50: warning: passing argument 4 of ‘genInstr’ from incompatible pointer type
-     instrukce = genInstr(IIFGOTO, LastVar, NULL, &NewSymbol_2->data);
-                                                  ^
-In file included from parser.c:17:0:
-3ac.h:2:8: note: expected ‘struct string *’ but argument is of type ‘struct tLData *’
- Tinst *genInstr(int InstType, string *src1, string *src2, string *dest);
-        ^
-parser.c:814:46: error: ‘NewSymbol’ undeclared (first use in this function)
-     instrukce = genInstr(IGOTO, NULL, NULL, &NewSymbol->data);
-                                              ^
-parser.c:814:46: note: each undeclared identifier is reported only once for each function it appears in
-parser.c: In function ‘term_n’:
-parser.c:843:52: warning: passing argument 4 of ‘genInstr’ makes pointer from integer without a cast
-    Tinst *instrukce = genInstr(IWRITE, NULL, NULL, token);
-                                                    ^
-In file included from parser.c:17:0:
-3ac.h:2:8: note: expected ‘struct string *’ but argument is of type ‘int’
- Tinst *genInstr(int InstType, string *src1, string *src2, string *dest);
-        ^
-parser.c: In function ‘_cout’:
-parser.c:867:54: warning: passing argument 4 of ‘genInstr’ makes pointer from integer without a cast
-      Tinst *instrukce = genInstr(IWRITE, NULL, NULL, token);
-                                                      ^
-In file included from parser.c:17:0:
-3ac.h:2:8: note: expected ‘struct string *’ but argument is of type ‘int’
- Tinst *genInstr(int InstType, string *src1, string *src2, string *dest);
-        ^
-parser.c: In function ‘_id_n’:
-parser.c:893:51: warning: passing argument 4 of ‘genInstr’ makes pointer from integer without a cast
-    Tinst *instrukce = genInstr(IREAD, NULL, NULL, token);
-                                                   ^
-In file included from parser.c:17:0:
-3ac.h:2:8: note: expected ‘struct string *’ but argument is of type ‘int’
- Tinst *genInstr(int InstType, string *src1, string *src2, string *dest);
-        ^
-parser.c: In function ‘_cin’:
-parser.c:916:49: warning: passing argument 4 of ‘genInstr’ makes pointer from integer without a cast
-  Tinst *instrukce = genInstr(IREAD, NULL, NULL, token);
-                                                 ^
-In file included from parser.c:17:0:
-3ac.h:2:8: note: expected ‘struct string *’ but argument is of type ‘int’
- Tinst *genInstr(int InstType, string *src1, string *src2, string *dest);
-        ^
+parser.c:778:47: error: request for member ‘data’ in something not a structure or union
+     string *LastVar = ReadNameVar(global_table->data->LInstr);
+                                               ^
+parser.c:785:30: error: request for member ‘data’ in something not a structure or union
+     LtableInsert(global_table->data->LTable, &Label_2, TOK_STRING);
+                              ^
 parser.c: In function ‘_if’:
-parser.c:947:5: error: unknown type name ‘tData’
-     tData *LastVar = ReadNameVar(global_table->data->LInstr); // funkce na cteni nazvu posledni instrukce
-     ^
-parser.c:947:46: error: request for member ‘data’ in something not a structure or union
-     tData *LastVar = ReadNameVar(global_table->data->LInstr); // funkce na cteni nazvu posledni instrukce
-                                              ^
-parser.c:948:39: warning: passing argument 2 of ‘genInstr’ from incompatible pointer type
-     Tinst *instrukce = genInstr(INOT, LastVar, NULL, LastVar); // negace podminky
-                                       ^
-In file included from parser.c:17:0:
-3ac.h:2:8: note: expected ‘struct string *’ but argument is of type ‘int *’
- Tinst *genInstr(int InstType, string *src1, string *src2, string *dest);
-        ^
-parser.c:948:54: warning: passing argument 4 of ‘genInstr’ from incompatible pointer type
-     Tinst *instrukce = genInstr(INOT, LastVar, NULL, LastVar); // negace podminky
-                                                      ^
-In file included from parser.c:17:0:
-3ac.h:2:8: note: expected ‘struct string *’ but argument is of type ‘int *’
- Tinst *genInstr(int InstType, string *src1, string *src2, string *dest);
-        ^
-parser.c:954:56: error: request for member ‘data’ in something not a structure or union
-     tLTableItem *NewSymbol  = LtableInsert(global_table->data->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
-                                                        ^
-parser.c:955:35: error: request for member ‘data’ in something not a structure or union
-     LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
-                                   ^
-parser.c:955:5: error: incompatible type for argument 3 of ‘LtableInsertValue’
-     LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
-     ^
-In file included from parser.c:16:0:
-stable.h:88:5: note: expected ‘Tvalue’ but argument is of type ‘string’
- int LtableInsertValue (localTS *T, string *key, Tvalue v);
-     ^
-parser.c:958:35: warning: passing argument 2 of ‘genInstr’ from incompatible pointer type
-     instrukce = genInstr(IIFGOTO, LastVar, NULL, &NewSymbol->data);
-                                   ^
-In file included from parser.c:17:0:
-3ac.h:2:8: note: expected ‘struct string *’ but argument is of type ‘int *’
- Tinst *genInstr(int InstType, string *src1, string *src2, string *dest);
-        ^
-parser.c:958:50: warning: passing argument 4 of ‘genInstr’ from incompatible pointer type
-     instrukce = genInstr(IIFGOTO, LastVar, NULL, &NewSymbol->data);
-                                                  ^
-In file included from parser.c:17:0:
-3ac.h:2:8: note: expected ‘struct string *’ but argument is of type ‘struct tLData *’
- Tinst *genInstr(int InstType, string *src1, string *src2, string *dest);
-        ^
-parser.c:968:57: error: request for member ‘data’ in something not a structure or union
-     tLTableItem *NewSymbol_2 = LtableInsert(global_table->data->LTable, &Label_2, TOK_STRING);
-                                                         ^
-parser.c:969:35: error: request for member ‘data’ in something not a structure or union
-     LtableInsertValue(global_table->data->LTable, &Label_2, Label_2);
-                                   ^
-parser.c:969:5: error: incompatible type for argument 3 of ‘LtableInsertValue’
-     LtableInsertValue(global_table->data->LTable, &Label_2, Label_2);
-     ^
-In file included from parser.c:16:0:
-stable.h:88:5: note: expected ‘Tvalue’ but argument is of type ‘string’
- int LtableInsertValue (localTS *T, string *key, Tvalue v);
-     ^
-parser.c:972:45: warning: passing argument 4 of ‘genInstr’ from incompatible pointer type
-     instrukce = genInstr(IGOTO, NULL, NULL, &NewSymbol_2->data);
-                                             ^
-In file included from parser.c:17:0:
-3ac.h:2:8: note: expected ‘struct string *’ but argument is of type ‘struct tLData *’
- Tinst *genInstr(int InstType, string *src1, string *src2, string *dest);
-        ^
-parser.c:974:34: warning: passing argument 2 of ‘genInstr’ from incompatible pointer type
-     instrukce = genInstr(ILABEL, &NewSymbol->data, NULL, NULL); // musime vlozit label za telo IFu
-                                  ^
-In file included from parser.c:17:0:
-3ac.h:2:8: note: expected ‘struct string *’ but argument is of type ‘struct tLData *’
- Tinst *genInstr(int InstType, string *src1, string *src2, string *dest);
-        ^
-parser.c: In function ‘param_n’:
-parser.c:1106:22: error: incompatible types when initializing type ‘struct string *’ using type ‘string’
-    string *idParam = attr;
-                      ^
+parser.c:947:47: error: request for member ‘data’ in something not a structure or union
+     string *LastVar = ReadNameVar(global_table->data->LInstr); // funkce na cteni nazvu posledni instrukce
+                                               ^
+parser.c:954:30: error: request for member ‘data’ in something not a structure or union
+     LtableInsert(global_table->data->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+                              ^
+parser.c:968:30: error: request for member ‘data’ in something not a structure or union
+     LtableInsert(global_table->data->LTable, &Label_2, TOK_STRING);
+                              ^
 parser.c: In function ‘param’:
 parser.c:1134:4: error: a label can only be part of a statement and a declaration is not a statement
     int InternalType = token; // ulozeni typu parametru, pro pozdejsi vlozeni do TS
     ^
-parser.c:1139:22: error: incompatible types when initializing type ‘struct string *’ using type ‘string’
-    string *idParam = attr;
-                      ^
-parser.c: In function ‘func_dclr’:
-parser.c:1166:15: error: incompatible types when initializing type ‘struct string *’ using type ‘string’
-  string *id = attr;
-               ^
-parser.c: In function ‘program’:
-parser.c:1205:15: error: incompatible types when initializing type ‘struct string *’ using type ‘string’
-  string *id = attr;
-               ^
 make: *** [parser.o] Error 1
+
 
