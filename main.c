@@ -18,10 +18,8 @@ int main(int argc, char *argv[]){
     strInit(&attr);
     
     tSymbolTable symtab;
-    TinstList instlist;
     int result;
      
-    ListInit(&instlist);
     tableInit(&symtab);
 
     if(argc >= 2){
@@ -31,22 +29,25 @@ int main(int argc, char *argv[]){
                 return 99;
         } else {
             // volání parseru
-            result = parse(&symtab, &instlist);
+            result = parse(&symtab);
             if (result != SUCCESS){
                 printerror(result);
-                return result;
                 fclose(f);
+                return result;
             }
-            result = interpret(&instlist);
+            result = interpret(&symtab);
             if (result != SUCCESS){
                 printerror(result);
+                fclose(f);
                 return result;
             }
         }
 
     } else {
         fprintf(stderr, "Zadej soubor!");
+        fclose(f);
         return 99;
     }
+    fclose(f);
     return 0;
 }
