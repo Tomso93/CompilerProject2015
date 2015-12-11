@@ -1,6 +1,6 @@
-// definice jednotlivych typu
 
-//lokalni tabulka symbolu -----------------------------------
+
+//-----------lokalni tabulka symbolu------------------------------
 
 typedef union {
   int i;
@@ -12,56 +12,79 @@ typedef struct
 {
   int varType;  // typ dane promenne
   Tvalue varValue;
-} tData;
+  bool isinit;
+} tLData;
 
-typedef struct tableItem
+typedef struct LtableItem
 {
   string key;                  // klic, podle ktereho se bude vyhledavat = nazev identifikatoru
-  tData data;                  // data, ktera jsou ke klici pridruzena
-  struct tableItem *nextItem;  // ukazatel na dalsi prvek tabulky symbolu
-} tTableItem;
+  tLData data;                  // data, ktera jsou ke klici pridruzena
+  struct LtableItem *nextItem;  // ukazatel na dalsi prvek tabulky symbolu
+} tLTableItem;
+
+typedef tLTableItem *localTS[TABLE_SIZE];
+
+
+//----------globalni tabulka symbolu-----------------------------------
 
 typedef struct
 {
-  struct tableItem *first;
-} tSymbolTable;
+  int funcType;
+  bool isdef;
+  string *params[TABLE_SIZE];
+  localTS *LTable;
+  TinstList *LInstr;
+} tGData;
 
-void tableInit(tSymbolTable *T);
-tTableItem* tableInsert(tSymbolTable *T, string *key, int varType);
-tData* tableSearch(tSymbolTable *T, string *key);
-tData* tableRead ( tSymbolTable *T, string *key );
-void tableItemDelete ( tSymbolTable *T, string *key );
-void tableFree(tSymbolTable *T);
-
-int tableInsertValue (tSymbolTable *T, string *key, Tvalue v);
-
-//zasobnik lokalnich tabulek -------------------------------------
-/*
-typedef struct{
-  tSymbolTable *ltable;
-  tSymbolTable *ntable;
-}ltstack
-
-typedef struct
-{
-  int type;
-  Tvalue retValue;
-  tSymbolTable *param;
-  ltstack *ltables;
-} GtData;
-
-
-// globalni tabulka symbolu -------------------------------------
 typedef struct GtableItem
 {
-  string key;                  // klic, podle ktereho se bude vyhledavat = nazev identifikatoru
-  GtData data;                  // data, ktera jsou ke klici pridruzena
+  string key;  // klic, podle ktereho se bude vyhledavat = nazev identifikatoru
+  tGData data;                  // data, ktera jsou ke klici pridruzena
   struct GtableItem *nextItem;  // ukazatel na dalsi prvek tabulky symbolu
-} GtTableItem;
+} tGTableItem;
 
-typedef struct
-{
-  struct GtableItem *first;
-} GtSymbolTable;
+typedef tGTableItem *globalTS[TABLE_SIZE];
 
-*/
+
+//------------------hashovaci funkce-------------------------------------
+//vraci index do tabulky symbolu
+int hash(string *key);
+
+//-----------------funkce pro praci s tabukou smybolu------------------------
+//funkce vraci int: 0 = uspech, 1-99 = neuspech (cislo chyby)
+//funkce vraci ukazatel: platny ukazatel = uspech, NULL = neuspech 
+
+
+//----------------------globalni------------------------------------------
+int GtableInit (globalTS *T);
+int GtableFree (globalTS *T);
+
+//vlozi funkci bez parametru, promennych a instrukci. (isdef == false)
+//Pro vlozeni parametru pouzij funkci GtableInsertParam. 
+//Pro vlozeni promenne pouzij funkci GtableInsertVar.
+//Pro vlozeni hodnoty do promenne pouzij funkci GtableInsertVarVal.
+//Pro vlozeni instrukce pouzij funkci GtableinsertInstr. 
+int GtableInsert (globalTS *T, string *key, int funcType); 
+
+tGData* GtableSearch (globalTS *T, string *key);
+int GtableInsertParam (globalTS *T, string *funcID, string *parID, int parType);
+int GtableInsertVar (globalTS *T, string *funcID, string *varID, int varType);
+int GtableInsertVarVal (globalTS *T, string *funcID, string *varID, Tvalue v);
+int GtableInsertInstr (globalTS *T, string *funcID, Tinst *instrukce);
+//int GtableItemDelete (globalTS *T, string *key); jestli bude potreba, dodelam
+//tGData* GtableRead (globalTS *T, string key); jestli bude potreba, dodelam
+
+
+
+//-----------------lokalni---------------------------------------
+int LtableInit (localTS *T);
+int LtableFree (localTS *T);
+
+//vlozi promennou bez hodnoty (isinit = false).
+//Pro nasledne vlozeni hodnoty pouzij LtableInsertValue.
+int LtableInsert (localTS *T, string *key, int varType); 
+
+tLData* LtableSearch (localTS *T, string *key);
+int LtableInsertValue (localTS *T, string *key, Tvalue v);
+//int LtableItemDelete (localTS *T, string *key); jestli bude potreba, dodelam
+//tLData* LtableRead (localTS *T, string key); jestli bude potreba, dodelam

@@ -132,7 +132,7 @@
 #define ISUBSTR1 927	//src1=vstupni string, src2=NULL, dest=vystupni string
 #define ISUBSTR2 928    //src1=prvni int, src2=druhy int, dest=NULL
 #define IPRECALL 929	//provede operace nezbytne pred volanim funkce
-#define IPAR	 930	//ulozi parametr
+#define IPAR	 930	//ulozi hodnotu parametru
 #define ICALL	 931	//zavola funkci
 #define IRET	 932	//vrati se z funkce
 
@@ -143,9 +143,12 @@
 #define STR_SUCCESS 0
 #define TRUE -1
 
+#define TABLE_SIZE 20
+
 #define SYNTAX_OK 0
 #define SEM_ERROR SEMANTIC_ERROR
 // Vedlejsi potreby parseru
 #define MAX_SIZE 20 
 #define OTHER 871
 #define ERR	  872
+

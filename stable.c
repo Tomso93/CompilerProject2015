@@ -1,166 +1,265 @@
-#include <stdio.h>
+
+
+#include <stdbool.h>
 #include <malloc.h>
 #include "define.h"
 #include "str.h"
+#include "instlist.h"
 #include "stable.h"
 
-void tableInit(tSymbolTable *T)
-// inicializace tabulky
-{
-  T->first = NULL;
+int hash(string *key){
+  int delka = strGetLength(key);
+  int vysledek = 0; 
+  for (int i = 0; i < delka; i++){
+    vysledek = vysledek + (int)((*key)[i]);
+  }
+  vysledek = vysledek % TABLE_SIZE;
+  return vysledek;
 }
 
-tTableItem* tableInsert(tSymbolTable *T, string *key, int varType)
-// funkce vlozi do tabulky symbolu novy identifikator
-{
+//-----lokalni tabulka symbolu-------------------------------------------------
 
-  tTableItem *ptr;
-  int found;
-  ptr = T->first;
-  found = 0;
-  // overeni existence polozky s danym klicem v tabulce
-  while ((ptr != NULL) && (!found))
-  {
-    found = (strCmpString(&(ptr->key), key) == 0);
-    if (!found) ptr = ptr->nextItem;
+int LtableInit(localTS *T){
+  for (int i = 0; i < TABLE_SIZE; i++){
+    T[i] = NULL;
   }
-  if (found)
-  {
-     return ptr;
+  return SUCCESS;
+}
+
+
+int LtableFree (localTS *T){
+//  int success;
+  tLTableItem *act;
+  for (int i = 0; i < TABLE_SIZE; i++){
+    act = T[i];
+    while (act != NULL){
+      strFree(&(act->key));
+      if (act->data.varType == TOK_STRING){
+        strFree(&(act->data.varValue.s));
+      }
+      T[i] = act->nextItem;
+      free(act);
+      act = T[i];
+    }
   }
-  else
-  {
-    // vlozeni nove polozky
-    tTableItem *newItem;
-    newItem = (tTableItem*) malloc(sizeof(tTableItem));
-    strInit(&(newItem->key));
-    strCopyString(&(newItem->key), key);
-    newItem->data.varType = varType;
-    newItem->nextItem = T->first;
-    T->first = newItem;
+  return SUCCESS;
+}
+
+
+int LtableInsert (localTS *T, string *key, int varType){
+  int hashed = hash(key);
+  tLTableItem *act;
+  tLTableItem *newItem;
+  newItem = malloc(sizeof(tLTableItem));
+  if (newItem == NULL){
+    return INTERN_ERROR;
+  }
+  
+  strInit(&(newItem->key));
+  strCopyString(&(newItem->key), key);
+  newItem->data.varType = varType;
+  newItem->isinit = false;
+  newItem->nextItem = T[hashed];
+  T[hashed] = newItem;
+}
+
+
+tLData *LtableSearch (localTS *T, string *key){
+  int i;
+  int hashed = hash(key);
+  bool found = false;
+  tLTableItem *act = T[hashed];
+  while (found != true && act != NULL){
+    if (i = strcmpString(key, &(act->key)) == 0){
+      found = true;
+    }else{
+      act = act->nextItem;
+    }
+  }
+
+  if (found){
+    return &(act->data);
+  }else{
     return NULL;
   }
 }
 
-tData *tableSearch(tSymbolTable *T, string *key)
-// pokud se dana polozka s klicem key v tabulce symbolu nachazi,
-// funkce vrati ukazatel na data teto polozky, jinak vrati NULL
-{
-  tTableItem *ptr;
-  int found;
-  ptr = T->first;
-  found = 0;
-  while ((ptr != NULL) && (!found))
-  {
-    found = (strCmpString(&(ptr->key), key) == 0);
-    if (!found) ptr = ptr->nextItem;
+
+int LtableInsertValue (localTS *T, string *key, Tvalue v){
+  tLData *act;
+  act = LtableSearch (T, key);
+  if (act == NULL){
+    return INTERN_ERROR;
   }
-  if (found)
-     return &(ptr->data);
-  else
-     return NULL;
+  switch(act->varType){
+
+    case TOK_INT:
+      act->varValue.i = v.i;
+    break;
+
+    case TOK_DOUBLE:
+      act->varValue.d = v.d;
+    break;
+
+    case TOK_STRING:
+      strInit(&(act->varValue.s));
+      strCopyString(&(act->varValue.s), &(v.s));
+    break;
+
+    case TOK_AUTO:
+      return CONVERT_ERROR;
+    break;
+  }
+  act->isinit = true;
+  return SUCCESS;
 }
 
-tData* tableRead ( tSymbolTable *T, string *key) {
-// funkce hleda polozku s danym klicem, pokud se nachazi v tabulce symbolu,
-// funkce vrati ukazatel na data teto polozky a danou polozku smaze
-// a navaze predchozi a nasledujici polozky na sebe
-// jinak vraci NULL
 
-  tTableItem *ptr;
-  tTableItem *preptr;
-  int found;
-  ptr = T->first;
-  preptr = NULL;
-  found = 0;
+//-----globalni tabulka symbolu------------------------------------------------
 
-  while ((ptr != NULL) && (!found))
-  {
-    found = (strCmpString(&(ptr->key), key) == 0);
-    if (!found){
-        preptr = ptr;
-        ptr = ptr->nextItem;
+int GtableInit (globalTS *T){
+  for (int i = 0; i < TABLE_SIZE; i++){
+    T[i] = NULL;
+  }
+  return SUCCESS;
+}
+
+
+int GtableFree (globalTS *T){
+  tGTableItem *act;
+  for (int i = 0; i < TABLE_SIZE; i++){
+    act = T[i];
+    while (act != NULL){
+      strFree(&(act->key));
+
+      for (int j = 0; j < TABLE_SIZE; j++){
+        if (act->data.params[j] != NULL){
+          strFree(act->data.params[j]);
+        }
+      } 
+      LtableFree(act->data.LTable);
+      ListDispose(act->data.LInstr);
+      T[i] = act->nextItem;
+      free(act);
+      act = T[i];
     }
   }
-  if (found){
-     preptr->nextItem = ptr->nextItem;
-     free(&ptr->key);
-     return &(ptr->data);
-  }else
-     return NULL;
+  return SUCCESS;
 }
 
-void tableItemDelete ( tSymbolTable *T, string *key) {
-// funkce hleda polozku s danym klicem, pokud se nachazi v tabulce symbolu,
-// funkce danou polozku smazea navaze predchozi a nasledujici polozky na sebe
 
-  tTableItem *ptr;
-  tTableItem *preptr;
-  int found;
-  ptr = T->first;
-  preptr = NULL;
-  found = 0;
+int GtableInsert (globalTS *T, string *key, int funcType){
+  localTS LTS;
+  TinstList LIL;
+  
+  int success;
+  int hashed = hash(key);
+  tGTableItem *act;
+  tGTableItem *newItem;
+  newItem = malloc(sizeof(tGTableItem));
+  if (newItem == NULL){
+    return INTERN_ERROR;
+  }
+  success = LtableInit(&LTS);
+  if (success != SUCCESS){
+    return INTERN_ERROR;
+  }
+  success = ListInit(&LIL);
+  if (success != SUCCESS){
+    return INTERN_ERROR;
+  }
 
-  while ((ptr != NULL) && (!found))
-  {
-    found = (strCmpString(&(ptr->key), key) == 0);
-    if (!found){
-        preptr = ptr;
-        ptr = ptr->nextItem;
+  strInit(&(newItem->key));
+  strCopyString(&(newItem->key), key);
+  newItem->data.funcType = funcType;
+  newItem->isdef = false;
+  newItem->LTable = LTS;
+  newItem->LInstr = LIL;
+  for (int i = 0; i < TABLE_SIZE; i++){
+    newItem->params[i] = NULL;
+  } 
+  newItem->nextItem = T[hashed];
+  T[hashed] = newItem;
+  return SUCCESS;
+}
+
+
+tGData* GtableSearch (globalTS *T, string *key){
+  int i;
+  int hashed = hash(key);
+  bool found = false;
+  tGTableItem *act = T[hashed];
+  while (found != true && act != NULL){
+    if (i = strcmpString(key, &(act->key)) == 0){
+      found = true;
+    }else{
+      act = act->nextItem;
     }
   }
+
   if (found){
-     preptr->nextItem = ptr->nextItem;
-     free(&ptr->key);
-     if (ptr->data.varType == TOK_STRING){
-     	 strFree(&ptr->data.varValue.s);
-     }
-  }
-}
-
-void tableFree(tSymbolTable *T)
-// funkce dealokuje tabulku symbolu
-{
-  tTableItem *ptr;
-  while (T->first != NULL)
-  {
-     ptr = T->first;
-     T->first = T->first->nextItem;
-     // uvolneni dat a klice
-     if (ptr->data.varType == TOK_STRING){
-       strFree(&ptr->data.varValue.s);
-     }
-     strFree(&ptr->key);
-     // nakonec uvolnime celou polozku
-     free(ptr);
-  }
-}
-
-
-int tableInsertValue (tSymbolTable *T, string *key, Tvalue v){
-//funkce pro vlozeni hodnoty "v" promenne s klicem "key" do tabulky symbolu "T"
-//vraci 0 pri uspechu a 1 pri neuspechu
-  tData *pom;
-  pom = tableSearch(T,key);
-
-  if (pom == NULL){
-    return 0;
-
-  }else if (pom->varType == TOK_INT){
-    pom->varValue.i = v.i;
-    return 1;
-
-  }else if (pom->varType == TOK_DOUBLE){
-    pom->varValue.d = v.d;
-    return 1;
-
-  }else if (pom->varType == TOK_STRING){
-    strInit(&(pom->varValue.s));
-    strCopyString(&(pom->varValue.s), &(v.s));
-    return 1;
-
+    return &(act->data);
   }else{
-    return 0;
+    return NULL;
   }
-  return 0;
+}
+
+
+int GtableInsertVar (globalTS *T, string *funcID, string *varID, int varType){
+  int success;
+  tGData *act;
+  act = gtableSearch (T, funcID);
+  if (act == NULL){
+    return INTERN_ERROR;
+  }
+  success = LtableInsert (act->LTable, varID, varType);
+  act->isdef = true;
+  return success;
+}
+
+
+int GtableInsertVarVal (globalTS *T, string *funcID, string *varID, Tvalue v){
+  int success;
+  tGData *act;
+  act = gtableSearch (T, funcID);
+  if (act == NULL){
+    return INTERN_ERROR;
+  }
+  success = LtableInsertValue (act->LTable, varID, v);
+  act->isdef = true;
+  return success;
+}
+
+
+int GtableInsertParam (globalTS *T, string *funcID, string *parID, int parType){
+  int success;
+  int i;
+  tGData *act;
+  act = gtableSearch (T, funcID);
+  if (act == NULL){
+    return INTERN_ERROR;
+  }
+  success = LtableInsert (act->LTable, parID, parType);
+  if (success != SUCCESS){
+    return success;
+  }
+  i = 0;
+  while (act->params[i] != NULL){
+    i++;
+  }
+  act->params[i] = parID;
+  act->isdef = true;
+  return success;
+}
+
+int GtableInsertInstr (globalTS *T, string *funcID, Tinst *instrukce){
+  int success;
+  tGData *act;
+  act = gtableSearch (T, funcID);
+  if (act == NULL){
+    return INTERN_ERROR;
+  }
+  success = ListInsert(act->LInstr, instrukce);
+  act->isdef = true;
+  return success;
 }

@@ -20,12 +20,14 @@ int StackInit(Tstackframe *S){
   return SUCCESS;
 }
 
+
 int StackPush(Tstackframe *S, struct Frame *F){
   F->down = S->top;
   S->top = F;
   S->act = F;
   return SUCCESS;
 }
+
 
 struct Frame *StackPop(Tstackframe *F){
   struct Frame *pom;
@@ -39,9 +41,10 @@ struct Frame *StackPop(Tstackframe *F){
   return pom;
 }
 
+
 int FrameDelete(struct Frame *F){
   struct FrameItem *pom;
-  int success == 0;
+  int success == SUCCESS;
 
   F->down = NULL;
   success = LtableFree (F->proms);
@@ -50,8 +53,8 @@ int FrameDelete(struct Frame *F){
 }
 
 
-struct Frame *FrameCreate(globalTS *GTS, string funcName){
-  int success = 0;
+struct Frame *FrameCreate(globalTS *GTS, string *funcName){
+  int success = SUCCESS;
   struct Frame *newF;
   tGData *func;
 
@@ -66,16 +69,22 @@ struct Frame *FrameCreate(globalTS *GTS, string funcName){
   int i;
 
   success = LtableInit(&LTS);
-  if (success != 0){
+  if (success != SUCCESS){
     return NULL;
   }
 
-  for(i = 0; i < 20; i++){
-    prom = func->LTable[i]; 
+  for(i = 0; i < TABLE_SIZE; i++){
+    prom = (*(func->LTable))[i]; 
     while(prom != NULL){
       success = LtableInsert (&LTS, &prom->key, prom->data.varType);
       if (success != 0){
         return NULL;
+      }
+      if (prom->isinit){
+        success = LtableInsertValue (&LTS, &prom->key, prom->data.varValue);
+        if (success != SUCCESS){
+          return NULL;
+        }
       }
       prom = prom->nextItem;
     }
@@ -96,7 +105,7 @@ struct Frame *FrameCreate(globalTS *GTS, string funcName){
 }
 
 
-tLData *VariableSearch(TstackFrame *S, string varName){
+tLData *VariableSearch(TstackFrame *S, string *varName){
   tLData *result;
   S->act = S->top;
 
@@ -114,23 +123,25 @@ tLData *VariableSearch(TstackFrame *S, string varName){
   return NULL;
 }
 
-int FrameInsertValue(TstackFrame *S, string varName, Tvalue val){
+
+int FrameInsertValue(TstackFrame *S, string *varName, Tvalue val){
   tLData *pom;
 
   pom = VariableSearch(S, varName);
   if (pom == NULL) {
     return DEFINE_ERROR;
   }else{
-    if (pom -> varType == TOK_INT){
+    if (pom->varType == TOK_INT){
       pom->varValue.i = val.i;
-    }else if (pom -> varType == TOK_DOUBLE){
+    }else if (pom->varType == TOK_DOUBLE){
       pom->varValue.d = val.d;
-    }else if (pom -> varType == TOK_STRING){
-      strCopyString(&pom->varValue.s = &val.s);
+    }else if (pom->varType == TOK_STRING){
+      strCopyString(&pom->varValue.s, &val.s);
+    }else if (pom->varType == TOK_AUTO){
+      return CONVERT_ERROR;
     }else{
       return TYPE_ERROR;
     }
-    pom->varValue = val;
     pom->isinit = true;
   }
   return SUCCESS;
@@ -155,11 +166,11 @@ int StackDispose (TstackFrame *S){
   return SUCCESS;
 }
 
-int FrameInsertVar(struct Frame *F, string varName, int varType, Tvalue varVal){
+int FrameInsertVar(struct Frame *F, string *varName, int varType, Tvalue varVal){
   int success;
-  success = LtableInsert (F->proms, &varName, varType);
+  success = LtableInsert (F->proms, varName, varType);
   if (success == SUCCESS){
-    success = LtableInsertValue (F->proms, &varName, varVal);    
+    success = LtableInsertValue (F->proms, varName, varVal);    
   }
 
   return success;

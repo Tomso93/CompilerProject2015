@@ -32,7 +32,7 @@ int ListDispose (TinstList *L) {
   return SUCCESS;
 }
 
-int ListInsert (TinstList *L, Tinst I) {
+int ListInsert (TinstList *L, Tinst *I) {
 
   struct listItem *new;
 
@@ -40,7 +40,7 @@ int ListInsert (TinstList *L, Tinst I) {
   if (new == NULL){
     return INTERN_ERROR;
   }else{
-    new->inst = I;
+    new->inst = &I;               //tady by mohl byt problem. 
     new->nextInst = NULL;
     if (L->first == NULL){
       L->first = new;
