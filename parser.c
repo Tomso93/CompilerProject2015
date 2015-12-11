@@ -850,7 +850,7 @@ int _cout(TinstList *instrList){
 }
 
 //-----------ID_N->-->>--id--ID_N--||--eps------------------------------------
-int _id_n(TinstList *instrList){
+int _id_n(){
 
 	switch (token){
 		case TOK_SEMICOLON:
@@ -860,14 +860,15 @@ int _id_n(TinstList *instrList){
 		case TOK_DOUBLE_ARROW_RIGHT:
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			if (token !=TOK_ID) return SYNTAX_ERROR;
-			if(!(tableSearch(local_table, &attr))) return SEMANTIC_ERROR;
+			//if(!(tableSearch(local_table, &attr))) return SEMANTIC_ERROR;
 			
 			// vygeneruju instrukci
-			genInstr(IREAD, NULL, NULL, token, instrList);
+			Tinst *instrukce = genInstr(IREAD, NULL, NULL, token);
+			GtableInsertInstr(global_table, id, instrukce);
 			
 			//a zavolam si ji znova
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-			return _id_n(instrList);
+			return _id_n(global_table, id);
 			break;
 
 	}
@@ -875,22 +876,23 @@ int _id_n(TinstList *instrList){
 }
 
 //-----------CIN->cin-->>--id--ID_N--;
-int _cin(TinstList *instrList){
+int _cin(tSymbolTable *global_table, string *id){
 	int result;
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_DOUBLE_ARROW_RIGHT) return SYNTAX_ERROR;
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_ID) return SYNTAX_ERROR;
-	if(!(tableSearch(local_table, &attr))) return SEMANTIC_ERROR;
+	//if(!(tableSearch(local_table, &attr))) return SEMANTIC_ERROR;
 	
 	// generuji prvni instrukci, ostatni se generujou v _id_n()
-	genInstr(IREAD, NULL, NULL, token, instrList);
+	Tinst *intrukce = genInstr(IREAD, NULL, NULL, token);
+	GtableInsertInstr(global_table, id, instrukce);
 	
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	
 	//podivu se, jestli tam neni vic identifikatoru
-	result= _id_n(instrList);
+	result= _id_n(global_table, id);
 	if(result !=SYNTAX_OK) return result;
 
 	// cin je dobre po syn. strance
