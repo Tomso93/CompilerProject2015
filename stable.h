@@ -9,7 +9,7 @@
 #include "lex.h"
 #include "varframe.h"
 #include "interpret.h"
-#include "parser.h
+#include "parser.h"
 
 //-----------lokalni tabulka symbolu------------------------------
 
