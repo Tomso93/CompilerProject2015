@@ -21,45 +21,45 @@ typedef struct {
 
 // Rekurzivni sestup, deklr
 // Vstup parseru
-int parse(tSymbolTable *ST, TinstList *instrList);
+int parse(tSymbolTable *ST);
 
-int program(TinstList *instrList);
+int program(tSymbolTable *global_table);
 
-int func_dclr(TinstList *instrList);
+int func_dclr(tSymbolTable *global_table);
 
 int param();
 
 int param_n();
 
-int select(TinstList *instrList);
+int select(tSymbolTable *global_table, string *id);
 
-int body(TinstList *instrList);
+int body(tSymbolTable *global_table, string *id);
 
-int stmnt(TinstList *instrList);
+int stmnt(tSymbolTable *global_table, string *id);
 
-int _if(TinstList *instrList);
+int _if(tSymbolTable *global_table, string *id);
 
-int _cin(TinstList *instrList);
+int _cin(tSymbolTable *global_table, string *id);
 
-int _id_n(TinstList *instrList);
+int _id_n(tSymbolTable *global_table, string *id);
 
-int _cout(TinstList *instrList);
+int _cout(tSymbolTable *global_table, string *id);
 
-int term_n(TinstList *instrList);
+int term_n(tSymbolTable *global_table, string *id);
 
-int _for(TinstList *instrList);
+int _for(tSymbolTable *global_table, string *id);
 
-int _return(TinstList *instrList);
+int _return(tSymbolTable *global_table, string *id);
 
-int _prom(TinstList *instrList);
+int _prom(tSymbolTable *global_table, string *id);
 
-int callf_dec(TinstList *instrList);
+int callf_dec(tSymbolTable *global_table, string *id);
 
 int list_par();
 
 int list_par_n();
 
-int _i_prom(TinstList *instrList);
+int _i_prom(tSymbolTable *global_table, string *id);
 
 int type();
 
