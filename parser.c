@@ -763,11 +763,11 @@ int _for(globalTS *global_table, string *id){
     string Label_1; //label, pro navrat
     strInit(&Label_1); //inicializace
     GenNewVariable(&Label_1);  // vygenerovani promenne
-    tLTableItem *NewSymbol  = LtableInsert(global_table->data->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+    LtableInsert(global_table->data->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
     LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
    
     // instrukce pro label
-    Tinst *instrukce = genInstr(ILABEL, &NewSymbol->data, NULL, NULL);
+    Tinst *instrukce = genInstr(ILABEL, &Label_1, NULL, NULL);
     GtableInsertInstr(global_table, id, instrukce);
     
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
