@@ -18,6 +18,7 @@
 #include "varframe.h"
 #include "interpret.h"
 #include "parser.h"
+#include "3ac.h"
 
 
 int token; //Globalni promennna pro pradavani tokenu 
