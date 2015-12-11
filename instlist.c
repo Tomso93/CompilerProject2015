@@ -5,12 +5,18 @@
  *	
  */
 
-#include <stdbool.h>
 #include <stdio.h>
-#include <malloc.h>
+#include <stdlib.h>
+#include <stdbool.h>
 #include "define.h"
 #include "str.h"
+#include "errors.h"
 #include "instlist.h"
+#include "stable.h"
+#include "lex.h"
+#include "varframe.h"
+#include "interpret.h"
+#include "parser.h"
 
 
 int ListInit (TinstList *L){
