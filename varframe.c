@@ -85,7 +85,7 @@ struct Frame *FrameCreate(globalTS *GTS, string *funcName){
       if (success != 0){
         return NULL;
       }
-      if (prom->isinit){
+      if (prom->data->isinit){
         success = LtableInsertValue (&LTS, &prom->key, prom->data.varValue);
         if (success != SUCCESS){
           return NULL;
@@ -106,7 +106,7 @@ struct Frame *FrameCreate(globalTS *GTS, string *funcName){
   newF->down = NULL;
   newF->proms = &LTS;
 
-  return new;
+  return newF;
 }
 
 
