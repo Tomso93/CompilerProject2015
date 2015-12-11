@@ -583,7 +583,7 @@ int type(){
 }
 
 //-----I_PROM->--=--EXPR--||--eps
-int _i_prom(TinstList *instrList){
+int _i_prom(tSymbolTable *global_table, string *id){
 	int result;
 
 	switch(token){
@@ -594,7 +594,7 @@ int _i_prom(TinstList *instrList){
 		case TOK_EQUALS:
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			
-			result= comp_expr(instrList);
+			result= comp_expr(global_table, id);
 			if(result !=SYNTAX_OK) return result;
 
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -650,7 +650,7 @@ int list_par(){
 	return SYNTAX_ERROR;		
 }
 //-----CALLF_DEC->--id--(--LIST_PAR--)--||->EXPR---------------------------------
-int callf_dec(TinstList *instrList){
+int callf_dec(tSymbolTable *global_table){
 	int result;
 
 	switch(token){
@@ -667,7 +667,7 @@ int callf_dec(TinstList *instrList){
 			break;
 
 		 default:
-		 	result= comp_expr(instrList);
+		 	result= comp_expr(global_table, id);
 		 	if(result !=SYNTAX_OK) return result;
 
 		 	return SYNTAX_OK;
@@ -677,7 +677,7 @@ int callf_dec(TinstList *instrList){
 }
 
 //-----PROM->--id--=--CALL_DEF--;||->TYPE--id--I_PROM--;-------------------------
-int _prom(TinstList *instrList){
+int _prom(tSymbolTable *global_table, string *id){
 	int result;
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	
@@ -685,7 +685,7 @@ int _prom(TinstList *instrList){
 		case TOK_EQUALS:
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			
-			result= callf_dec(instrList);
+			result= callf_dec(global_table, id);
 			if(result !=SYNTAX_OK)return result;
 			
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -696,7 +696,7 @@ int _prom(TinstList *instrList){
 		
 		case TOK_ID:
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-			result= _i_prom(instrList);
+			result= _i_prom(global_table, id);
 
 			if(result !=SYNTAX_OK) return result;
 
@@ -707,11 +707,11 @@ int _prom(TinstList *instrList){
 }
 
 //-----RETURN->--return--EXPR--;------------------------------------------------
-int _return(TinstList *instrList){
+int _return(tSymbolTable *global_table, string *id){
 	int result;
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 
-	result= comp_expr(instrList);
+	result= comp_expr(global_table, id);
 	if (result !=SYNTAX_OK) return result;
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
