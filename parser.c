@@ -12,8 +12,8 @@
 #include "define.h"		// instrukce, tokeny, err
 #include "str.h"		// retezce
 #include "lex.h"		// getNextToken()
+#include "instlist.h"		// seznam instukci
 #include "stable.h"		// tabulka symbolu
-#include "instlist.h"	// seznam instukci
 #include "3ac.h"		// genInstr, GenNewVariable
 #include "parser.h"
 
