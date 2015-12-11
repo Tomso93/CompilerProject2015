@@ -248,11 +248,12 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 	//----------------------------- E-> id------------------------------------------	
 	if (strCmpConstStr(&(St->pom[i]), "id") == 0) {
 
-		if (error != ERR)
+		if (error != ERR){
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(IMOV, (void *)value1, NULL, (void *)value3);
+			Tinst *instrukce = genInstr(IMOV, value1, NULL, value3);
 			GtableInsertInstr(global_table, id, instrukce);
-		DelI(St, 1);
+		}
+			DelI(St, 1);
 
 		PushE(St, E1, value3);
 		return SYNTAX_OK;
@@ -267,7 +268,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			E1 = St->prom_val[i + 1];
 			value1 = St->val[i + 1];
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(IMOV, (void *)value1, NULL, (void *)value3);
+			Tinst *instrukce = genInstr(IMOV, )value1, NULL, value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
@@ -287,7 +288,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(IMUL, (void *)value1, (void *)value2, (void *)value3);
+			Tinst *instrukce = genInstr(IMUL, value1, value2, value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
@@ -311,7 +312,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(IDIV, (void *)value1, (void *)value2, (void *)value3);
+			Tinst *instrukce = genInstr(IDIV,value1, value2, value3);
 			GtableInsertInstr(global_table, id ,instrukce);
 		}
 
@@ -334,7 +335,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(IADD, (void *)value1, (void *)value2, (void *)value3);
+			Tinst *instrukce = genInstr(IADD, value1, value2,value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
@@ -357,7 +358,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(ISUB, (void *)value1, (void *)value2, (void *)value3);
+			Tinst *instrukce = genInstr(ISUB,value1, value2, value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
@@ -380,7 +381,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(IBIG, (void *)value1, (void *)value2, (void *)value3);
+			Tinst *instrukce = genInstr(IBIG, value1, value2, value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
@@ -402,7 +403,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(IEQBG, (void *)value1, (void *)value2, (void *)value3);
+			Tinst *instrukce = genInstr(IEQBG, value1, value2, value3);
 			GtableInsertInstr(global_table, id, instrukce);
 
 		}
@@ -425,7 +426,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(ISMALL, (void *)value1, (void *)value2, (void *)value3);
+			Tinst *instrukce = genInstr(ISMALL,value1, value2, value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
@@ -447,7 +448,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(IEQSM, (void *)value1, (void *)value2, (void *)value3);
+			Tinst *instrukce = genInstr(IEQSM, value1,value2, value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
@@ -469,7 +470,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(IEQUAL, (void *)value1, (void *)value2, (void *)value3);
+			Tinst *instrukce = genInstr(IEQUAL, value1,value2, value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
@@ -492,7 +493,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			//seman
 				if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(INOTEQ, (void *)value1, (void *)value2, (void *)value3);
+			Tinst *instrukce = genInstr(INOTEQ, value1, value2, value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
