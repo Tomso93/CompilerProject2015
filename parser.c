@@ -1051,10 +1051,10 @@ int select(TinstList *instrList){
 }
 
 //-----------PARAM_N->-,-TYPE--ID--PARAM_N-----------------------------------
-int param_n(){
+int param_n(string id){
 	int result;
 	
-	//pozadam o dalsi token a musi byt } nebo ,
+	//pozadam o dalsi token a musi byt ) nebo ,
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 
 	switch (token){
@@ -1067,10 +1067,13 @@ int param_n(){
 			//musi nasledovat TYPE a id
 			result = type();
 			if (result != SYNTAX_OK) return SYNTAX_ERROR;
-
+			int InternalType = token;
 			
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			if (token != TOK_ID) return SYNTAX_ERROR;
+			string idParam = attr;
+			
+			GtableInsertParam(global_table, id, idParam, InternalType);
 			// zavolam si zpet funkci, zda nema dalsi parametry
 			return param_n();
 			
@@ -1080,11 +1083,13 @@ int param_n(){
 }
 
 //-----------PARAM->TYPE--id--PARAM_N----------------------------------------
-int param(){
+int param(string id){
 	int result;
 	
 	//pozdaval jsem o dalsi token a ocekavam () nebo type
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+	
+	
 	
 	switch (token){
 		case TOK_RIGHT_BRACKET:
@@ -1094,12 +1099,16 @@ int param(){
 		case TOK_AUTO:
 		case TOK_STRING:
 		case TOK_DOUBLE:
+			int InternalType = token; // ulozeni typu parametru, pro pozdejsi vlozeni do TS
 			//po Type nasleduje ID
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			if (token != TOK_ID) return SYNTAX_ERROR;
-			
+			// ulozeni identifikatoru pro parametr
+			string idParam = attr;
+			//vlozeni parametru do GTS
+			GtableInsertParam(global_table, id, idParam, InternalType);
 			//zjistim, zda neni v zavorce vice parametru
-			result=param_n();
+			result=param_n(id);
 			if (result !=SYNTAX_OK) return result;
 
 			return SYNTAX_OK;
@@ -1116,19 +1125,22 @@ int func_dclr(TinstList *instrList){
 	result= type();
 	if (result != SYNTAX_OK) return SYNTAX_ERROR;
 ///	
+	int InternalType = token; 
 	
 	// dalsi token ID
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token != TOK_ID) return SYNTAX_ERROR;
-
-
+	
+	string id = attr;
+	GtableInsert(global_table, id, InternalType);
 ///
 	
 	// po ID nasleduje (
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token != TOK_LEFT_BRACKET) return SYNTAX_ERROR;
 	// TYPE ID(PARAM)
-	result=param();
+	result=param(id);
+	
 	if (result !=SYNTAX_OK) return result;
 	// uvnitr zavorky je vse ok, frcim dal
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -1137,6 +1149,8 @@ int func_dclr(TinstList *instrList){
 	if (result !=SYNTAX_OK) return result;
 	//!!!!!!! nevim, jestli muzu ukoncit uspesne, protoze pokud prijde pouze dekalarace
 	// a nenasleduje zadna fuknce, neni to prece validni
+	
+	
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	// mela bz prijit rekurze, ale nevim jestli bude fungovat
 	return SYNTAX_OK;
@@ -1168,7 +1182,6 @@ int parse(tSymbolTable *ST, TinstList *instrList){
   local_table = ST;
   list = instrList;
   strInit(&attr);
-	
 
 	if((token = getNextToken(&attr))== LEX_ERROR) return LEX_ERROR;
 	
