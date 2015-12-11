@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "define.h"
 #include "str.h"
-#include "stable.h"
-#include "instlist.h"
-#include "lex.h"
 #include "errors.h"
+#include "instlist.h"
+#include "stable.h"
+#include "lex.h"
 #include "interpret.h"
 #include "parser.h"
 
