@@ -775,7 +775,7 @@ int _for(globalTS *global_table, string *id){
     
     // najde promennou ve ktere je vyhodnocena podminka
     tData *LastVar = ReadNameVar(global_table->data->LInstr);
-    instrukce = genInstr(INOT, LastVar, NULL, LastVar);
+    Tinst *instrukce = genInstr(INOT, LastVar, NULL, LastVar);
     GtableInsertInstr(global_table, id, instrukce);
     
     string Label_2; //label, pro navrat
@@ -784,7 +784,7 @@ int _for(globalTS *global_table, string *id){
     tLTableItem *NewSymbol_2 = LtableInsert(global_table->data->LTable, &Label_2, TOK_STRING);
     LtableInsertValue(global_table->data->LTable, &Label_2, Label_2);
     
-    intrukce = genInstr(IIFGOTO, LastVar, NULL, &NewSymbol_22->data);
+    instrukce = genInstr(IIFGOTO, LastVar, NULL, &NewSymbol_2->data);
     GtableInsertInstr(global_table, id, instrukce);
      
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -912,7 +912,7 @@ int _cin(globalTS *global_table, string *id){
 	//if(!(tableSearch(local_table, &attr))) return SEMANTIC_ERROR;
 	
 	// generuji prvni instrukci, ostatni se generujou v _id_n()
-	Tinst *intrukce = genInstr(IREAD, NULL, NULL, token);
+	Tinst *instrukce = genInstr(IREAD, NULL, NULL, token);
 	GtableInsertInstr(global_table, id, instrukce);
 	
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -954,12 +954,12 @@ int _if(globalTS *global_table, string *id){
     LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
     
     //generovani skoku na ELSE vetev
-    Tinst *instrukce = genInstr(IIFGOTO, LastVar, NULL, &NewSymbol->data);
+    instrukce = genInstr(IIFGOTO, LastVar, NULL, &NewSymbol->data);
     GtableInsertInstr(global_table, id, instrukce);
 	//telo pokud je v if pravda
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_LEFT_BRACE) return SYNTAX_ERROR;
-	result= body(global_table);
+	result= body(global_table, id);
 
     string Label_2;  // label dva, skok az za else, podminka v IF byla pravda
     strInit(&Label_2);
@@ -1139,7 +1139,7 @@ int param(globalTS *global_table, string *id){
 			//vlozeni parametru do GTS
 			GtableInsertParam(global_table, id, idParam, InternalType);
 			//zjistim, zda neni v zavorce vice parametru
-			result=param_n(id);
+			result=param_n(global_table, id);
 			if (result !=SYNTAX_OK) return result;
 
 			return SYNTAX_OK;
