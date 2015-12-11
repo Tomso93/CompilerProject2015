@@ -70,7 +70,7 @@ tGData* GtableSearch (globalTS *T, string *key);
 int GtableInsertParam (globalTS *T, string *funcID, string *parID, int parType);
 int GtableInsertVar (globalTS *T, string *funcID, string *varID, int varType);
 int GtableInsertVarVal (globalTS *T, string *funcID, string *varID, Tvalue v);
-int GtableInsertInstr (globalTS *T, string *funcID, Tinst instrukce);
+int GtableInsertInstr (globalTS *T, string *funcID, Tinst *instrukce);
 //int GtableItemDelete (globalTS *T, string *key); jestli bude potreba, dodelam
 //tGData* GtableRead (globalTS *T, string key); jestli bude potreba, dodelam
 
