@@ -8,9 +8,10 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <malloc.h>
+#include "define.h"
 #include "str.h"
 #include "instlist.h"
-#include "define.h"
+
 
 int ListInit (TinstList *L){
   L->first = NULL;
