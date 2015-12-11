@@ -1051,7 +1051,7 @@ int select(TinstList *instrList){
 }
 
 //-----------PARAM_N->-,-TYPE--ID--PARAM_N-----------------------------------
-int param_n(string id){
+int param_n(string *id){
 	int result;
 	
 	//pozadam o dalsi token a musi byt ) nebo ,
@@ -1071,11 +1071,11 @@ int param_n(string id){
 			
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			if (token != TOK_ID) return SYNTAX_ERROR;
-			string idParam = attr;
+			string *idParam = attr;
 			
 			GtableInsertParam(global_table, id, idParam, InternalType);
 			// zavolam si zpet funkci, zda nema dalsi parametry
-			return param_n();
+			return param_n(id);
 			
 			break;
 	}
@@ -1083,7 +1083,7 @@ int param_n(string id){
 }
 
 //-----------PARAM->TYPE--id--PARAM_N----------------------------------------
-int param(string id){
+int param(string *id){
 	int result;
 	
 	//pozdaval jsem o dalsi token a ocekavam () nebo type
@@ -1104,7 +1104,7 @@ int param(string id){
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			if (token != TOK_ID) return SYNTAX_ERROR;
 			// ulozeni identifikatoru pro parametr
-			string idParam = attr;
+			string *idParam = attr;
 			//vlozeni parametru do GTS
 			GtableInsertParam(global_table, id, idParam, InternalType);
 			//zjistim, zda neni v zavorce vice parametru
@@ -1131,7 +1131,7 @@ int func_dclr(TinstList *instrList){
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token != TOK_ID) return SYNTAX_ERROR;
 	
-	string id = attr;
+	string *id = attr;
 	GtableInsert(global_table, id, InternalType);
 ///
 	
