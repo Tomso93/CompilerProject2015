@@ -13,6 +13,7 @@
 #include "ial.h" //funkce find a sort a hashovaci tabulka
 #include "instlist.h" //seznamem instrukci
 #include "stable.h" //tabulka symbolu
+#include "varframe.h" //ramec promennych
 #include "errors.h" 
 #include "interpret.h"
 
@@ -26,6 +27,7 @@ int interpret (globalTS *GTS){
   tLData *source1;
   tLData *source2;
   tLData *source3;
+  tGData *source4;
   int counter;
 
   //vytvori seznam instrukci  
@@ -33,26 +35,26 @@ int interpret (globalTS *GTS){
   ListInit(&LOI);
 
   //vytvori zasobnik ramcu
-  TstackFrame SF;
+  Tstackframe SF;
   StackInit(&SF);
 
   //vytvori promenou string start = "main/0"
   string start;
   strInit(&start);
-  int strAddChar(&start, 'm');
-  int strAddChar(&start, 'a');
-  int strAddChar(&start, 'i');
-  int strAddChar(&start, 'n');
+  strAddChar(&start, 'm');
+  strAddChar(&start, 'a');
+  strAddChar(&start, 'i');
+  strAddChar(&start, 'n');
 
   //vyhleda funkci main v globalni tabulce symbolu
-  func = GtableSearch(GTS, &start)
+  func = GtableSearch(GTS, &start);
   if (func == NULL){
     return SEMANTIC_ERROR;
   }
   
   //vytvori ramec promennych z lokalni tabulky mainu
-  newF = FrameCreate(GTS, *start);
-  if (newf == NULL){
+  newF = FrameCreate(GTS, &start);
+  if (newF == NULL){
     return INTERN_ERROR;
   }
 
@@ -63,7 +65,7 @@ int interpret (globalTS *GTS){
   }
 
   //vlozi seznam instrukci mainu do seznamu instrukci
-  success = ListConect(&LOI, func->Linstr); 
+  success = ListConect(&LOI, func->LInstr); 
   if (success != SUCCESS){
     return INTERN_ERROR;
   }
@@ -168,12 +170,12 @@ int interpret (globalTS *GTS){
       break;
 
       case IGOTO:
-        success = jump(instr->dest, LOI);
+        success = jump(instr->dest, &LOI);
       break;
 
       case IIFGOTO:
         source1 = VariableSearch(&SF, instr->src1);
-        success = jumpif(source1, instr->dest, LOI);
+        success = jumpif(source1, instr->dest, &LOI);
       break;
 
       case IREADI:
@@ -231,10 +233,10 @@ int interpret (globalTS *GTS){
         source1 = VariableSearch(&SF, instr->src1);
         destination = VariableSearch(&SF, instr->dest);
         //nacte dalsi instrukci (ocekava ISUBSTR2)
-        ListSucc(LOI);
-        instr = ListGetInst(LOI);
+        ListSucc(&LOI);
+        instr = ListGetInst(&LOI);
         if (instr == NULL){
-          ListDispose(LOI);
+          ListDispose(&LOI);
           return INTERN_ERROR;
         }
         //pokud byla ISUBSTR2 provede funkci. jinak chyba.
@@ -253,15 +255,15 @@ int interpret (globalTS *GTS){
       break;
 
       case IPAR:
-        source1 = VariableSearch(GTS, instr->src1);
+        source4 = GtableSearch(GTS, instr->src1);
         source2 = VariableSearch(&SF, instr->src2);
-        success = parametr(source1, source2, newF, counter);
+        success = parametr(source4, source2, newF, counter);
         counter++;
       break;
 
       case ICALL:
-        source1 = VariableSearch(GTS, instr->src1);
-        success = call(source1, newF, &LOI, &SF);
+        source4 = GtableSearch(GTS, instr->src1);
+        success = call(source4, newF, &LOI, &SF);
       break;
 
       case IRET:
@@ -301,7 +303,7 @@ int interpret (globalTS *GTS){
 
 //-------------------IMOV------------------------------------------------------
 
-int move(tData *src1, tData *dest){
+int move(tLData *src1, tLData *dest){
   
   if (!src1->isinit){
     return UNINIT_ERROR;
@@ -374,7 +376,7 @@ int move(tData *src1, tData *dest){
 
 //-------------------IADD------------------------------------------------------
 
-int addition(tData *src1, tData *src2, tData *dest){
+int addition(tLData *src1, tLData *src2, tLData *dest){
 
   if (!src1->isinit || !src2->isinit){
     return UNINIT_ERROR;
@@ -463,7 +465,7 @@ int addition(tData *src1, tData *src2, tData *dest){
 }
 
 //-------------------ISUB------------------------------------------------------
-int substraction(tData *src1, tData *src2, tData *dest){
+int substraction(tLData *src1, tLData *src2, tLData *dest){
   
   if (!src1->isinit || !src2->isinit){
     return UNINIT_ERROR;
@@ -551,7 +553,7 @@ int substraction(tData *src1, tData *src2, tData *dest){
 }
 
 //-------------------IMUL------------------------------------------------------
-int multiplication(tData *src1, tData *src2, tData *dest){
+int multiplication(tLData *src1, tLData *src2, tLData *dest){
 
   if (!src1->isinit || !src2->isinit){
     return UNINIT_ERROR;
@@ -639,7 +641,7 @@ int multiplication(tData *src1, tData *src2, tData *dest){
 }
 
 //-------------------IDIV------------------------------------------------------
-int division(tData *src1, tData *src2, tData *dest){
+int division(tLData *src1, tLData *src2, tLData *dest){
 
   if (!src1->isinit || !src2->isinit){
     return UNINIT_ERROR;
@@ -734,7 +736,7 @@ int division(tData *src1, tData *src2, tData *dest){
 }
 
 //-------------------IEQUAL----------------------------------------------------
-int equal(tData *src1, tData *src2, tData *dest){
+int equal(tLData *src1, tLData *src2, tLData *dest){
 
   if (!src1->isinit || !src2->isinit){
     return UNINIT_ERROR;
@@ -843,7 +845,7 @@ int equal(tData *src1, tData *src2, tData *dest){
 }
 
 //-------------------ISMALL----------------------------------------------------
-int smaller(tData *src1, tData *src2, tData *dest){
+int smaller(tLData *src1, tLData *src2, tLData *dest){
 
   if (!src1->isinit || !src2->isinit){
     return UNINIT_ERROR;
@@ -952,7 +954,7 @@ int smaller(tData *src1, tData *src2, tData *dest){
 }
 
 //-------------------IBIG------------------------------------------------------
-int bigger(tData *src1, tData *src2, tData *dest){
+int bigger(tLData *src1, tLData *src2, tLData *dest){
 
   if (!src1->isinit || !src2->isinit){
     return UNINIT_ERROR;
@@ -1061,7 +1063,7 @@ int bigger(tData *src1, tData *src2, tData *dest){
 }
 
 //-------------------IEQSM-----------------------------------------------------
-int equalsmaller(tData *src1, tData *src2, tData *dest){
+int equalsmaller(tLData *src1, tLData *src2, tLData *dest){
 
   if (!src1->isinit || !src2->isinit){
     return UNINIT_ERROR;
@@ -1170,7 +1172,7 @@ int equalsmaller(tData *src1, tData *src2, tData *dest){
 }
 
 //-------------------IEQBG-----------------------------------------------------
-int equalbigger(tData *src1, tData *src2, tData *dest){
+int equalbigger(tLData *src1, tLData *src2, tLData *dest){
 
   if (!src1->isinit || !src2->isinit){
     return UNINIT_ERROR;
@@ -1279,7 +1281,7 @@ int equalbigger(tData *src1, tData *src2, tData *dest){
 }
 
 //-------------------INOTEQ----------------------------------------------------
-int notequal(tData *src1, tData *src2, tData *dest){
+int notequal(tLData *src1, tLData *src2, tLData *dest){
 
   if (!src1->isinit || !src2->isinit){
     return UNINIT_ERROR;
@@ -1388,7 +1390,7 @@ int notequal(tData *src1, tData *src2, tData *dest){
 }
 
 //-------------------INOT------------------------------------------------------
-int negation(tData *src1, tData *dest){
+int negation(tLData *src1, tLData *dest){
 
   if (!src1->isinit){
     return UNINIT_ERROR;
@@ -1443,7 +1445,7 @@ int jump(string *dest, TinstList *LOI){
 }
 
 //-------------------IIFGOTO---------------------------------------------------
-int jumpif(tData *src1, string *dest, TinstList *LOI){
+int jumpif(tLData *src1, string *dest, TinstList *LOI){
   if (!src1->isinit){
     return UNINIT_ERROR;
 
@@ -1456,7 +1458,7 @@ int jumpif(tData *src1, string *dest, TinstList *LOI){
 }
 
 //-------------------IREADI----------------------------------------------------
-int readint(tData *dest){ 
+int readint(tLData *dest){ 
   if (dest->varType != TOK_INT){
     return TYPE_ERROR;
   }else if (scanf("%d", &(dest->varValue.i)) != 1){
@@ -1467,7 +1469,7 @@ int readint(tData *dest){
 }
 
 //-------------------IREADD----------------------------------------------------
-int readdouble(tData *dest){ 
+int readdouble(tLData *dest){ 
   if (dest->varType != TOK_DOUBLE){
     return TYPE_ERROR;
   }else if (scanf("%lg", &(dest->varValue.d)) != 1){
@@ -1478,7 +1480,7 @@ int readdouble(tData *dest){
 }
 
 //-------------------IREADS----------------------------------------------------
-int readstring(tData *dest){
+int readstring(tLData *dest){
   char c;
  
   if (dest->varType != TOK_STRING){
@@ -1510,7 +1512,7 @@ int readstring(tData *dest){
 }
 
 //-------------------IREAD----------------------------------------------------
-int read(tData *dest){ 
+int read(tLData *dest){ 
   if (dest->varType == TOK_INT){
     return readint(dest);
 
@@ -1529,7 +1531,7 @@ int read(tData *dest){
 }
 
 //-------------------IWRITE----------------------------------------------------
-int write(tData *src1){ 
+int write(tLData *src1){ 
   if (!src1->isinit){
     return UNINIT_ERROR;
 
@@ -1562,7 +1564,7 @@ int write(tData *src1){
 }
 
 //-------------------ISORT-----------------------------------------------------
-int sortme(tData *src1, tData *dest){
+int sortme(tLData *src1, tLData *dest){
 
   if (!src1->isinit){
     return UNINIT_ERROR;
@@ -1590,7 +1592,7 @@ int sortme(tData *src1, tData *dest){
 }
 
 //-------------------IFIND-----------------------------------------------------
-int findme(tData *src1, tData *src2, tData *dest){
+int findme(tLData *src1, tLData *src2, tLData *dest){
 
   if (!src1->isinit || !src2->isinit){
     return UNINIT_ERROR;
@@ -1619,7 +1621,7 @@ int findme(tData *src1, tData *src2, tData *dest){
 }
 
 //-------------------ILENGTH---------------------------------------------------
-int lengthstring(tData *src1, tData *dest){
+int lengthstring(tLData *src1, tLData *dest){
 
   if (!src1->isinit){
     return UNINIT_ERROR;
@@ -1650,7 +1652,7 @@ int lengthstring(tData *src1, tData *dest){
 }
 
 //-------------------ICAT------------------------------------------------------
-int concatenate(tData *src1, tData *src2, tData *dest){
+int concatenate(tLData *src1, tLData *src2, tLData *dest){
 
   if (!src1->isinit || !src2->isinit){
     return UNINIT_ERROR;
@@ -1677,7 +1679,7 @@ int concatenate(tData *src1, tData *src2, tData *dest){
 }
 
 //-------------------ISUBSTR---------------------------------------------------
-int substring(tData *src1, tData *src2, tData *src3, tData *dest){
+int substring(tLData *src1, tLData *src2, tLData *src3, tLData *dest){
 
   if (!src1->isinit || !src2->isinit || !src3->isinit){
     return UNINIT_ERROR;
@@ -1794,11 +1796,11 @@ int parametr(tGData *source1, tLData *source2, struct Frame *newF, int cnt){
   //
 
   
-  if (searched->data.varType != source2->varType){
+  if (searched->varType != source2->varType){
     return TYPE_ERROR;
   }
 
-  int LtableInsertValue (newF->proms, param, source2->varValue);
+  success = LtableInsertValue (newF->proms, param, source2->varValue);
 
   return success;
 }
@@ -1823,6 +1825,7 @@ int call(tGData *source1, struct Frame *newF, TinstList *LOI, Tstackframe *S){
 
 //-------------------IRET------------------------------------------------------
 int ret(tLData *source1, Tstackframe *S){
+  int success;
   struct Frame *oldF;
   tLData *RET;
 
@@ -1838,12 +1841,12 @@ int ret(tLData *source1, Tstackframe *S){
 
   oldF = PopFrame(S);
 
-  RET = VariableSearch(S, R);
-  if (RET = NULL){
-    success = FrameInsertVar(S->top, R, source1->varType, source1->varValue); 
+  RET = VariableSearch(S, &R);
+  if (RET == NULL){
+    success = FrameInsertVar(S->top, &R, source1->varType, source1->varValue); 
   }else{
-    RET->varType = source->varTape;
-    success = FrameInsertValue(S, R, source1->varValue);
+    RET->varType = source1->varType;
+    success = FrameInsertValue(S, &R, source1->varValue);
   }
   
   FrameDelete(oldF);
