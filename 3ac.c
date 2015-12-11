@@ -20,9 +20,9 @@ Tinst *genInstr(int InstType, string src1, string src2, string dest)
 {
     Tinst TItem;
     TItem.itype = InstType;
-    TItem.src1 = src1;
-    TItem.src2 = src2;
-    TItem.dest = dest;
+    TItem.src1 = &src1;
+    TItem.src2 = &src2;
+    TItem.dest = &dest;
     return &TItem;
 }
 
