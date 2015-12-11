@@ -1,4 +1,4 @@
-
+#include <stdbool.h>
 
 //-----------lokalni tabulka symbolu------------------------------
 
