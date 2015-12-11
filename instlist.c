@@ -41,7 +41,7 @@ int ListInsert (TinstList *L, Tinst *I) {
   if (new == NULL){
     return INTERN_ERROR;
   }else{
-    new->inst = &I;               //tady by mohl byt problem. 
+    new->inst = *I;               //tady by mohl byt problem. 
     new->nextInst = NULL;
     if (L->first == NULL){
       L->first = new;
@@ -116,7 +116,7 @@ int ListConect(TinstList *L1, TinstList *L2){
     L2->last->nextInst = L1->act->nextInst;
     L1->act->nextInst = L2->first;
     if (L1->act == L1->last){
-      L1->last = L2->Last;
+      L1->last = L2->last;
     }
     return SUCCESS;
   }
