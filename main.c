@@ -7,6 +7,7 @@
 #include "instlist.h"
 #include "stable.h"
 #include "lex.h"
+#include "varframe.h"
 #include "interpret.h"
 #include "parser.h"
 
@@ -17,10 +18,10 @@ int main(int argc, char *argv[]){
     FILE * f;
     strInit(&attr);
     
-    tSymbolTable symtab;
+    globalTS symtab;
     int result;
      
-    tableInit(&symtab);
+    GtableInit(&symtab);
 
     if(argc >= 2){
         f = fopen (argv[1],"rt");
@@ -28,7 +29,7 @@ int main(int argc, char *argv[]){
                 fprintf(stderr, "Soubor se nepodarilo otevrit!");
                 return 99;
         } else {
-            // volání parseru
+            // volani parseru
             result = parse(&symtab);
             if (result != SUCCESS){
                 printerror(result);
