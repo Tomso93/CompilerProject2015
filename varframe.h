@@ -36,13 +36,13 @@ int PushFrame(Tstackframe *S, struct Frame *F);
 int FrameDelete(struct Frame *F);
 
 //vytvori ramec (ale neda ho na zasobnik)	
-struct Frame *FrameCreate(globalTS *GTS, string funcName);
+struct Frame *FrameCreate(globalTS *GTS, string *funcName);
 
 //vyhleda promennou v zasobniku (nejhloubeji v zakladnim ramci)
-tLData *VariableSearch(TstackFrame *S, string varName);
+tLData *VariableSearch(TstackFrame *S, string *varName);
 
 //vlozi hodnotu do promenne
-int FrameInsertValue(TstackFrame *S, string varName, Tvalue val);
+int FrameInsertValue(TstackFrame *S, string *varName, Tvalue val);
 
 //vlozi promennou do ramce
-int FrameInsertVar(struct Frame *F, string varName, int varType, Tvalue varVal);
+int FrameInsertVar(struct Frame *F, string *varName, int varType, Tvalue varVal);
