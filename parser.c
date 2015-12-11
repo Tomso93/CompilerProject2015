@@ -753,13 +753,11 @@ int _for(globalTS *global_table, string *id){
     string Label_1; //label, pro navrat
     strInit(&Label_1); //inicializace
     GenNewVariable(&Label_1);  // vygenerovani promenne
-    //tTableItem* prom = tableInsert(local_table, &Label_1, TOK_STRING);
-    //tableInsertValue(local_table, &Label_1, Label_1)
-   // tData *newVariableInfo;
-   // newVariableInfo = tableSearch(local_table, &Label_1);
-   // strFree(&Label_1);
+    tLTableItem *NewSymbol  = LtableInsert(global_table->data->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+    LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
+   
     // instrukce pro label
-    Tinst *instrukce = genInstr(ILABEL, &prom->data, NULL, NULL);
+    Tinst *instrukce = genInstr(ILABEL, &NewSymbol->data, NULL, NULL);
     GtableInsertInstr(global_table, id, instrukce);
     
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -767,16 +765,17 @@ int _for(globalTS *global_table, string *id){
 	if (result !=SYNTAX_OK) return SYNTAX_ERROR;
     
     // najde promennou ve ktere je vyhodnocena podminka
-    tData *LastVar //= ReadNameVar(inst);
+    tData *LastVar = ReadNameVar(global_table->data->LInstr);
     instrukce = genInstr(INOT, LastVar, NULL, LastVar);
     GtableInsertInstr(global_table, id, instrukce);
     
     string Label_2; //label, pro navrat
     strInit(&Label_2); //inicializace
     GenNewVariable(&Label_2);  // vygenerovani promenne
-    //tTableItem* prom2 = tableInsert(local_table, &Label_2, TOK_INT);
-    //tableInsertValue(local_table, &Label_2, Label_2)
-    intrukce = genInstr(IIFGOTO, LastVar, NULL, &prom2->data);
+    tLTableItem *NewSymbol_2 = LtableInsert(global_table->data->LTable, &Label_2, TOK_STRING);
+    LtableInsertValue(global_table->data->LTable, &Label_2, Label_2);
+    
+    intrukce = genInstr(IIFGOTO, LastVar, NULL, &NewSymbol_22->data);
     GtableInsertInstr(global_table, id, instrukce);
      
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -802,10 +801,10 @@ int _for(globalTS *global_table, string *id){
 	result= body(global_table, id);
 
     // instrukce skoku
-    instrukce = genInstr(IGOTO, NULL, NULL, &prom->data);
+    instrukce = genInstr(IGOTO, NULL, NULL, &NewSymbol->data);
     GtableInsertInstr(global_table, id, instrukce);
     //instrukce label pro skonceni cyklu
-    instrukce = genInstr(ILABEL, &prom->data, NULL, NULL);
+    instrukce = genInstr(ILABEL, &NewSymbol->data, NULL, NULL);
     GtableInsertInstr(global_table, id, instrukce);
     
 	if(result !=SYNTAX_OK) return result;
