@@ -1,8 +1,16 @@
 //jednoducha knihovna pro praci s nekonecne dlouhymi retezci
-#include <string.h>
-#include <malloc.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 #include "define.h"
 #include "str.h"
+#include "errors.h"
+#include "instlist.h"
+#include "stable.h"
+#include "lex.h"
+#include "varframe.h"
+#include "interpret.h"
+#include "parser.h"
 
 #define STR_LEN_INC 8
 // konstanta STR_LEN_INC udava, na kolik bytu provedeme pocatecni alokaci pameti
