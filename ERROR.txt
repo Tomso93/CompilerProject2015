@@ -248,5 +248,8 @@ parser.c:1166:15: error: incompatible types when initializing type ‘struct strin
                ^
 parser.c: In function ‘program’:
 parser.c:1205:15: error: incompatible types when initializing type ‘struct string *’ using type ‘string’
-  string *id = attr;
+  string *id = attr; 
+
+
+  KOKOTINAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 
