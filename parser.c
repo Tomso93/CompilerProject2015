@@ -1170,23 +1170,23 @@ int program(TinstList *instrList){
 	}
 	
 	//generuji konec programu
-	genInstr(IEND,NULL,NULL,NULL, instrList);
+	string *id = attr;
+	Tinst *instrukce = genInstr(IEND,NULL,NULL,NULL);
+	GtableInsertInstr(global_table, id, instrukce);
 	return SYNTAX_OK;
 	
 }
 //------------------START-POINT--------------------------------------------------
-int parse(tSymbolTable *ST, TinstList *instrList){
+int parse(tSymbolTable *ST){
 
   int result;
-  global_table = ST;
-  local_table = ST;
-  list = instrList;
+  tSymbolTable *global_table = ST;
   strInit(&attr);
 
 	if((token = getNextToken(&attr))== LEX_ERROR) return LEX_ERROR;
 	
 	else
-		result=program(list);	// volam prvni neterminal 
+		result=program(global_table);	// volam prvni neterminal 
 	
 	strFree(&attr);
 	return result;
