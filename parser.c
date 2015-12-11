@@ -1031,13 +1031,13 @@ int body(TinstList *instrList){
 
 }
 //-----------SELECT->BODY--||--;----bud-je-to-funkce-nebo-deklarace----------
-int select(TinstList *instrList){
+int select(tSymbolTable *global_table, string *id){
 	int result;
 	//ocekavam v token { nebo ;, podle toho poznam, zda se jedna o fce nebo dek.
 
 	switch (token){
 		case TOK_LEFT_BRACE:
-			result=body(instrList);
+			result=body(global_table, id);
 			if (result !=SYNTAX_OK) return result;
 			
 			return SYNTAX_OK;
@@ -1051,7 +1051,7 @@ int select(TinstList *instrList){
 }
 
 //-----------PARAM_N->-,-TYPE--ID--PARAM_N-----------------------------------
-int param_n(string *id){
+int param_n(tSymbolTable *global_table, string *id){
 	int result;
 	
 	//pozadam o dalsi token a musi byt ) nebo ,
@@ -1075,7 +1075,7 @@ int param_n(string *id){
 			
 			GtableInsertParam(global_table, id, idParam, InternalType);
 			// zavolam si zpet funkci, zda nema dalsi parametry
-			return param_n(id);
+			return param_n(global_table, id);
 			
 			break;
 	}
@@ -1083,7 +1083,7 @@ int param_n(string *id){
 }
 
 //-----------PARAM->TYPE--id--PARAM_N----------------------------------------
-int param(string *id){
+int param(tSymbolTable *global_table, string *id){
 	int result;
 	
 	//pozdaval jsem o dalsi token a ocekavam () nebo type
@@ -1117,7 +1117,7 @@ int param(string *id){
 	return SYNTAX_ERROR;
 }
 //-----------FUNC_DCLR->TYPE--id--(--PARAM--)--SELECT---FUNC_DCLR------------
-int func_dclr(TinstList *instrList){
+int func_dclr(tSymbolTable *global_table){
 	int result;
 	
 	
@@ -1139,12 +1139,12 @@ int func_dclr(TinstList *instrList){
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token != TOK_LEFT_BRACKET) return SYNTAX_ERROR;
 	// TYPE ID(PARAM)
-	result=param(id);
+	result=param(global_table, id);
 	
 	if (result !=SYNTAX_OK) return result;
 	// uvnitr zavorky je vse ok, frcim dal
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-	result=select(instrList);
+	result=select(global_table, id);
 
 	if (result !=SYNTAX_OK) return result;
 	//!!!!!!! nevim, jestli muzu ukoncit uspesne, protoze pokud prijde pouze dekalarace
@@ -1158,15 +1158,15 @@ int func_dclr(TinstList *instrList){
 }
 
 //------------PROGRAM->FUNC_DCLR---------------------------------------------
-int program(TinstList *instrList){
+int program(tSymbolTable *global_table){
 	int result;
-	result= func_dclr(instrList);
+	result= func_dclr(global_table);
 	if(result != SYNTAX_OK) return result;
 	//prosel jsem cely program a scanner uz nema co davat
 	while (token != TOK_END_OF_FILE) {
 		//cyklim, dokud mi nedojde konec souboru
 		
-		func_dclr(instrList);
+		func_dclr(global_table);
 	}
 	
 	//generuji konec programu
