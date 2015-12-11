@@ -34,7 +34,7 @@ int StackPush(Tstackframe *S, struct Frame *F){
 }
 
 
-struct Frame *StackPop(Tstackframe *F){
+struct Frame *StackPop(Tstackframe *S){
   struct Frame *pom;
 
   if (S->top == NULL){
