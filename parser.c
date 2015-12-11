@@ -561,7 +561,7 @@ int comp_expr(globalTS *global_table, string *id) {
 			break;
 
 		case TOK_EQUALS:
-			chba = Tpush(&St);
+			chba = TPush(&St);
 			if (chba != SUCCESS) return chba;
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			token = getNextToken(&attr);
