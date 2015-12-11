@@ -49,7 +49,7 @@ struct Frame *StackPop(Tstackframe *S){
 
 int FrameDelete(struct Frame *F){
   struct FrameItem *pom;
-  int success == SUCCESS;
+  int success = SUCCESS;
 
   F->down = NULL;
   success = LtableFree (F->proms);
