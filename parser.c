@@ -149,7 +149,11 @@ void InitialSt(Tstack* St) {
 	St->val[St->top] = NULL;
 	St->prom_val[St->top] = 'N';
 }
+//-------------------------------add-term-----------------------------------
+void GnTerm(Tstack *St, char x){
 
+	strAddChar(&(St->pom[FindT(St)]), x);
+} 
 //--------------------------------------------------------------------------
 void PushE(Tstack *St, char Type, void * data) {
 	//dam pravidlo na zasobnik
@@ -532,9 +536,9 @@ int comp_expr(globalTS *global_table, string *id) {
 
 		switch (vyber) {
 		case TOK_LESS_THAN:
-			strAddChar(&(St->pom[FindT(St)]), '<');
+			GnTerm(&St, '<');
+			TPush(&St);
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-			token = getNextToken(&attr);
 			break;
 
 		case TOK_GREATER_THAN:

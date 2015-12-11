@@ -1,30 +1,79 @@
-parser.c:548:47: error: request for member ‘data’ in something not a structure or union
-    chba = (TReduction(&St, i + 1, global_table.data->LInstr));
-
-
-parser.c: In function ‘_return’:
-parser.c:737:44: error: request for member ‘data’ in something not a structure or union
-  string *LastVar = ReadNameVar(global_table.data->LInstr); // funkce na cteni nazvu posledni instrukce
-                                            ^
-parser.c: In function ‘_for’:
-parser.c:766:30: error: request for member ‘data’ in something not a structure or union
-     LtableInsert(global_table.data->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+stable.h:15:3: error: unknown type name ‘bool’
+   bool isinit;
+   ^
+stable.h:25:30: error: ‘TABLE_SIZE’ undeclared here (not in a function)
+ typedef tLTableItem *localTS[TABLE_SIZE];
                               ^
-parser.c:778:47: error: request for member ‘data’ in something not a structure or union
-     string *LastVar = ReadNameVar(global_table.data->LInstr);
-                                               ^
-parser.c:785:30: error: request for member ‘data’ in something not a structure or union
-     LtableInsert(global_table.data->LTable, &Label_2, TOK_STRING);
-                              ^
-parser.c: In function ‘_if’:
-parser.c:947:47: error: request for member ‘data’ in something not a structure or union
-     string *LastVar = ReadNameVar(global_table->data->LInstr); // funkce na cteni nazvu posledni instrukce
-                                               ^
-parser.c:954:30: error: request for member ‘data’ in something not a structure or union
-     LtableInsert(global_table.data->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
-                              ^
-parser.c:968:30: error: request for member ‘data’ in something not a structure or union
-     LtableInsert(global_table.data->LTable, &Label_2, TOK_STRING);
+stable.h:33:3: error: unknown type name ‘bool’
+   bool isdef;
+   ^
+stable.h:35:12: warning: type defaults to ‘int’ in declaration of ‘LTable’
+   localTS *LTable;
+            ^
+stable.h:36:3: error: unknown type name ‘TinstList’
+   TinstList *LInstr;
+   ^
+stable.h:59:27: warning: type defaults to ‘int’ in declaration of ‘T’
+ int GtableInit (globalTS *T);
+                           ^
+stable.h:60:27: warning: type defaults to ‘int’ in declaration of ‘T’
+ int GtableFree (globalTS *T);
+                           ^
+stable.h:67:29: warning: type defaults to ‘int’ in declaration of ‘T’
+ int GtableInsert (globalTS *T, string *key, int funcType);
+                             ^
+stable.h:69:33: warning: type defaults to ‘int’ in declaration of ‘T’
+ tGData* GtableSearch (globalTS *T, string *key);
+                                 ^
+stable.h:70:34: warning: type defaults to ‘int’ in declaration of ‘T’
+ int GtableInsertParam (globalTS *T, string *funcID, string *parID, int parType);
+                                  ^
+stable.h:71:32: warning: type defaults to ‘int’ in declaration of ‘T’
+ int GtableInsertVar (globalTS *T, string *funcID, string *varID, int varType);
+                                ^
+stable.h:72:35: warning: type defaults to ‘int’ in declaration of ‘T’
+ int GtableInsertVarVal (globalTS *T, string *funcID, string *varID, Tvalue v);
+                                   ^
+stable.h:73:34: warning: type defaults to ‘int’ in declaration of ‘T’
+ int GtableInsertInstr (globalTS *T, string *funcID, Tinst *instrukce);
+                                  ^
+stable.h:73:53: error: unknown type name ‘Tinst’
+ int GtableInsertInstr (globalTS *T, string *funcID, Tinst *instrukce);
+                                                     ^
+stable.h:80:26: warning: type defaults to ‘int’ in declaration of ‘T’
+ int LtableInit (localTS *T);
+                          ^
+stable.h:81:26: warning: type defaults to ‘int’ in declaration of ‘T’
+ int LtableFree (localTS *T);
+                          ^
+stable.h:85:28: warning: type defaults to ‘int’ in declaration of ‘T’
+ int LtableInsert (localTS *T, string *key, int varType);
+                            ^
+stable.h:87:32: warning: type defaults to ‘int’ in declaration of ‘T’
+ tLData* LtableSearch (localTS *T, string *key);
+                                ^
+stable.h:88:33: warning: type defaults to ‘int’ in declaration of ‘T’
+ int LtableInsertValue (localTS *T, string *key, Tvalue v);
+                                 ^
+3ac.c:19:8: error: conflicting types for ‘genInstr’
+ Tinst *genInstr(int InstType, string src1, string src2, string dest)
+        ^
+In file included from 3ac.c:14:0:
+3ac.h:2:8: note: previous declaration of ‘genInstr’ was here
+ Tinst *genInstr(int InstType, string *src1, string *src2, string *dest);
+        ^
+3ac.c: In function ‘genInstr’:
+3ac.c:23:16: error: incompatible types when assigning to type ‘struct string *’ from type ‘string’
+     TItem.src1 = src1;
+                ^
+3ac.c:24:16: error: incompatible types when assigning to type ‘struct string *’ from type ‘string’
+     TItem.src2 = src2;
+                ^
+3ac.c:25:16: error: incompatible types when assigning to type ‘struct string *’ from type ‘string’
+     TItem.dest = dest;
+                ^
+3ac.c:26:5: warning: function returns address of local variable [-Wreturn-local-addr]
+     return &TItem;
 
 
 
