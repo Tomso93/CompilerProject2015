@@ -280,7 +280,8 @@ int SReduction_expr(Tstack* St, int i, tSymbolTable *global_table, string *id) {
 
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			genInstr(IMUL, (void *)value1, (void *)value2, (void *)value3, instrList);
+			Tinst *instrukce = genInstr(IMUL, (void *)value1, (void *)value2, (void *)value3);
+			GtableInsertInstr(global_table, id, instrukce);
 		}
 
 
@@ -303,7 +304,8 @@ int SReduction_expr(Tstack* St, int i, tSymbolTable *global_table, string *id) {
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			genInstr(IDIV, (void *)value1, (void *)value2, (void *)value3, instrList);
+			Tinst *instrukce = genInstr(IDIV, (void *)value1, (void *)value2, (void *)value3);
+			GtableInsertInstr(global_table, id ,instrukce);
 		}
 
 
@@ -325,7 +327,8 @@ int SReduction_expr(Tstack* St, int i, tSymbolTable *global_table, string *id) {
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			genInstr(IADD, (void *)value1, (void *)value2, (void *)value3, instrList);
+			Tinst *instrukce = genInstr(IADD, (void *)value1, (void *)value2, (void *)value3);
+			GtableInsertInstr(global_table, id, instrukce);
 		}
 
 
@@ -347,7 +350,8 @@ int SReduction_expr(Tstack* St, int i, tSymbolTable *global_table, string *id) {
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			genInstr(ISUB, (void *)value1, (void *)value2, (void *)value3, instrList);
+			Tinst *instrukce = genInstr(ISUB, (void *)value1, (void *)value2, (void *)value3);
+			GtableInsertInstr(global_table, id, instrukce);
 		}
 
 
@@ -369,8 +373,8 @@ int SReduction_expr(Tstack* St, int i, tSymbolTable *global_table, string *id) {
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			genInstr(IBIG, (void *)value1, (void *)value2, (void *)value3, instrList);
-
+			Tinst *instukce = genInstr(IBIG, (void *)value1, (void *)value2, (void *)value3);
+			GtableInsertInstr(global_table, id, instrukce);
 		}
 
 
@@ -391,8 +395,8 @@ int SReduction_expr(Tstack* St, int i, tSymbolTable *global_table, string *id) {
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			genInstr(IEQBG, (void *)value1, (void *)value2, (void *)value3, instrList);
-
+			Tinst *instrukce = genInstr(IEQBG, (void *)value1, (void *)value2, (void *)value3);
+			GtableInsertInstr(global_table, id, instrukce);
 
 		}
 
@@ -414,8 +418,8 @@ int SReduction_expr(Tstack* St, int i, tSymbolTable *global_table, string *id) {
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			genInstr(ISMALL, (void *)value1, (void *)value2, (void *)value3, instrList);
-
+			Tinst *instrukce = genInstr(ISMALL, (void *)value1, (void *)value2, (void *)value3);
+			GtableInsertInstr(global_table, id, instrukce);
 		}
 
 
@@ -436,7 +440,8 @@ int SReduction_expr(Tstack* St, int i, tSymbolTable *global_table, string *id) {
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			genInstr(IEQSM, (void *)value1, (void *)value2, (void *)value3, instrList);
+			Tinst *instrukce = genInstr(IEQSM, (void *)value1, (void *)value2, (void *)value3);
+			GtableInsertIntrs(global_table, id, instrukce);
 		}
 
 		DelI(St, 3);
@@ -457,7 +462,8 @@ int SReduction_expr(Tstack* St, int i, tSymbolTable *global_table, string *id) {
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			genInstr(IEQUAL, (void *)value1, (void *)value2, (void *)value3, instrList);
+			Tinst *instrukce = genInstr(IEQUAL, (void *)value1, (void *)value2, (void *)value3);
+			GtableInsertInstr(global_table, id, instrukce);
 		}
 
 
@@ -479,8 +485,8 @@ int SReduction_expr(Tstack* St, int i, tSymbolTable *global_table, string *id) {
 			seman
 				if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			genInstr(INOTEQ, (void *)value1, (void *)value2, (void *)value3, instrList);
-
+			Tinst *instrukce = genInstr(INOTEQ, (void *)value1, (void *)value2, (void *)value3);
+			gtableInsertInstr(global_table, id, instrukce);
 		}
 
 
