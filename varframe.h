@@ -7,16 +7,16 @@
 
 typedef struct Frame {
   localTS *proms;		//ukazatel na kopii lokalni tabulky
-  bool base			//flag zda je zakladnim ramcem
+  bool base;			//flag zda je zakladnim ramcem
   struct Frame *down;		//ukazatel na dalsi ramec v zasobniku
-}Tframe
+}Tframe;
 
 
 //deklarace zasobniku ramcu
 typedef struct {
   struct Frame *top;		//ukazatel na vrchol zasobniku
   struct Frame *act;		//ukazatel na ramec, se kterym se pracuje
-}Tstackframe
+}Tstackframe;
 
 
 
@@ -39,10 +39,10 @@ int FrameDelete(struct Frame *F);
 struct Frame *FrameCreate(globalTS *GTS, string *funcName);
 
 //vyhleda promennou v zasobniku (nejhloubeji v zakladnim ramci)
-tLData *VariableSearch(TstackFrame *S, string *varName);
+tLData *VariableSearch(Tstackframe *S, string *varName);
 
 //vlozi hodnotu do promenne
-int FrameInsertValue(TstackFrame *S, string *varName, Tvalue val);
+int FrameInsertValue(Tstackframe *S, string *varName, Tvalue val);
 
 //vlozi promennou do ramce
 int FrameInsertVar(struct Frame *F, string *varName, int varType, Tvalue varVal);
