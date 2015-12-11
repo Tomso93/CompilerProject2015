@@ -136,6 +136,7 @@ void SDipose(Tstack* St) {
 		St->top--;
 	}
 }
+
 //----------------------------INIT-Zasobniku--------------------------------
 void InitialSt(Tstack* St) {
 	string pom;
@@ -226,6 +227,11 @@ int FindT(Tstack* St) {
 	}
 	return St->top - i;
 }
+//----------------------------Vrchni---term---------------------------------
+string TopT(Tstack* St) {
+
+	return St->pom[FindT(St)];
+}
 //------------Redugujeme--:D---------------------------------------------------
 int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 	// pokusi se aplikovat pravidlo a zredukovat vyraz
@@ -266,13 +272,13 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 		}
 
 		DelI(St, 3);
-		PushE(S, E1, value3);
+		PushE(St, E1, value3);
 		return SYNTAX_OK;
 	}
 	//------------------------------E-> E*E------------------------------------------	
-	else if ((strCmpConstStr(&(St->a[i]), "E") == 0) &&
-		(strCmpConstStr(&(St->a[i + 1]), "*") == 0) &&
-		(strCmpConstStr(&(St->a[i + 2]), "E") == 0)) {
+	else if ((strCmpConstStr(&(St->pom[i]), "E") == 0) &&
+		(strCmpConstStr(&(St->pom[i + 1]), "*") == 0) &&
+		(strCmpConstStr(&(St->pom[i + 2]), "E") == 0)) {
 
 
 		if (error != ERR) {
@@ -294,8 +300,8 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 	}
 
 	//---------------------------E-> E/E---------------------------------------------	
-	else if ((strCmpConstStr(&(St->a[i + 1]), "/") == 0) &&
-		(strCmpConstStr(&(St->a[i + 2]), "E") == 0)) {
+	else if ((strCmpConstStr(&(St->pom[i + 1]), "/") == 0) &&
+		(strCmpConstStr(&(St->pom[i + 2]), "E") == 0)) {
 
 		// E-> E/E
 		if (error != ERR) {
@@ -317,8 +323,8 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 	}
 
 	//------------------------E-> E+E----------------------------------------------	
-	else if ((strCmpConstStr(&(St->a[i + 1]), "+") == 0) &&
-		(strCmpConstStr(&(St->a[i + 2]), "E") == 0)) {
+	else if ((strCmpConstStr(&(St->pom[i + 1]), "+") == 0) &&
+		(strCmpConstStr(&(St->pom[i + 2]), "E") == 0)) {
 
 
 		if (error != ERR) {
@@ -340,8 +346,8 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 	}
 
 	//-------------------------------E-> E-E---------------------------------------	
-	else if ((strCmpConstStr(&(St->a[i + 1]), "-") == 0) &&
-		(strCmpConstStr(&(St->a[i + 2]), "E") == 0)) {
+	else if ((strCmpConstStr(&(St->pom[i + 1]), "-") == 0) &&
+		(strCmpConstStr(&(St->pom[i + 2]), "E") == 0)) {
 
 
 		if (error != ERR) {
@@ -363,8 +369,8 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 	//---------------------------E-> E>E--------------------------------------------	
-	else if ((strCmpConstStr(&(St->a[i + 1]), ">") == 0) &&
-		(strCmpConstStr(&(St->a[i + 2]), "E") == 0)) {
+	else if ((strCmpConstStr(&(St->pom[i + 1]), ">") == 0) &&
+		(strCmpConstStr(&(St->pom[i + 2]), "E") == 0)) {
 
 
 		if (error != ERR) {
@@ -385,8 +391,8 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 	}
 
 	//----------------------------E-> E>=E--------------------------------------------	
-	else if ((strCmpConstStr(&(St->a[i + 1]), ">=") == 0) &&
-		(strCmpConstStr(&(St->a[i + 2]), "E") == 0)) {
+	else if ((strCmpConstStr(&(St->pom[i + 1]), ">=") == 0) &&
+		(strCmpConstStr(&(St->pom[i + 2]), "E") == 0)) {
 
 
 		if (error != ERR) {
@@ -408,8 +414,8 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 	}
 
 	//-----------------------E-> E<E-------------------------------------------------	
-	else if ((strCmpConstStr(&(St->a[i + 1]), "<") == 0) &&
-		(strCmpConstStr(&(St->a[i + 2]), "E") == 0)) {
+	else if ((strCmpConstStr(&(St->pom[i + 1]), "<") == 0) &&
+		(strCmpConstStr(&(St->pom[i + 2]), "E") == 0)) {
 
 
 		if (error != ERR) {
@@ -431,8 +437,8 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 	//------------------------E-> E<=E-----------------------------------------------	
-	else if ((strCmpConstStr(&(St->a[i + 1]), "<=") == 0) &&
-		(strCmpConstStr(&(St->a[i + 2]), "E") == 0)) {
+	else if ((strCmpConstStr(&(St->pom[i + 1]), "<=") == 0) &&
+		(strCmpConstStr(&(St->pom[i + 2]), "E") == 0)) {
 
 		if (error != ERR) {
 			char E2 = St->prom_val[i + 2];
@@ -452,8 +458,8 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 	//------------------------E-> E=E------------------------------------------------	
-	else if ((strCmpConstStr(&(St->a[i + 1]), "==") == 0) &&
-		(strCmpConstStr(&(St->a[i + 2]), "E") == 0)) {
+	else if ((strCmpConstStr(&(St->pom[i + 1]), "==") == 0) &&
+		(strCmpConstStr(&(St->pom[i + 2]), "E") == 0)) {
 
 
 		if (error != ERR) {
@@ -475,15 +481,15 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 	//--------------------------E-> E!=E---------------------------------------------	
-	else if ((strCmpConstStr(&(St->a[i + 1]), "!=") == 0) &&
-		(strCmpConstStr(&(St->a[i + 2]), "E") == 0)) {
+	else if ((strCmpConstStr(&(St->pom[i + 1]), "!=") == 0) &&
+		(strCmpConstStr(&(St->pom[i + 2]), "E") == 0)) {
 
 
 		if (error != ERR) {
 			char E2 = St->prom_val[i + 2];
 			double *value2 = St->val[i + 2];
 
-			seman
+			//seman
 				if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
 			Tinst *instrukce = genInstr(INOTEQ, (void *)value1, (void *)value2, (void *)value3);
@@ -510,8 +516,8 @@ int comp_expr(globalTS *global_table, string *id) {
 	string pom;
 
 	strInit(&pom);
-	StackInit(&st);
-	pom = TopT(&st);
+	InitialSt(&St);
+	pom = TopT(&St);
 
 	while (strCmpConstStr(&pom, "$") != 0 && (token != TOK_LEFT_BRACE || token != TOK_SEMICOLON)) {
 
@@ -525,8 +531,7 @@ int comp_expr(globalTS *global_table, string *id) {
 
 		switch (vyber) {
 		case TOK_LESS_THAN:
-			TAdd(&St, '<');
-			strAddChar(&(St->a[FindT(St)]), symbol);
+			strAddChar(&(St->pom[FindT(St)]), '<');
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			token = getNextToken(&attr);
 			break;
@@ -539,7 +544,7 @@ int comp_expr(globalTS *global_table, string *id) {
 			}
 
 			strDelLastChar(&(St.pom[i]));
-			chba = (TReduction(&St, i + 1, global_table->data->LInstr);
+			chba = (TReduction(&St, i + 1, global_table->data->LInstr));
 			if (chba != SYNTAX_OK)
 				SDipose(&St);
 			error = ERR;
@@ -548,20 +553,21 @@ int comp_expr(globalTS *global_table, string *id) {
 			break;
 
 		case TOK_EQUALS:
-			chba = Tpush(&stack);
+			chba = Tpush(&St);
 			if (chba != SUCCESS) return chba;
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			token = getNextToken(&attr);
 			break;
 
 		case OTHER:
-			SDipose(&stack);
+			SDipose(&St);
 			error = ERR;
 			return SYNTAX_ERROR;
 			break;
 		}
 
-		pom = St->pom[FinT(St)];	//prvni term.
+		
+		pom = TopT(&St);	//prvni term.
 	}
 
 
@@ -660,7 +666,7 @@ int list_par(){
 	return SYNTAX_ERROR;		
 }
 //-----CALLF_DEC->--id--(--LIST_PAR--)--||->EXPR---------------------------------
-int callf_dec(globalTS *global_table){
+int callf_dec(globalTS *global_table, string *id){
 	int result;
 
 	switch(token){

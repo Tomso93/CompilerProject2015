@@ -88,3 +88,5 @@ int FindT(Tstack* St);
 int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id);
 
 int comp_expr(globalTS *global_table, string *id);
+
+string TopT(Tstack* St);
