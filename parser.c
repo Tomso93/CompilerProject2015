@@ -722,7 +722,7 @@ int _return(TinstList *instrList){
 }
 
 //-----------FOR->for--(--TYPE--id--I_PROM--;--EXPR--;--id--=--EXPR)--BODY------
-int _for(TinstList *instrList){
+int _for(tSymbolTable *global_table, string *id){
 	int result; 
 	
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -737,47 +737,50 @@ int _for(TinstList *instrList){
 	if (token !=TOK_ID) return SYNTAX_ERROR;
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-	result= _i_prom(instrList);
+	result= _i_prom(global_table, id);
 	if (result !=SYNTAX_OK) return SYNTAX_ERROR;
 
     string Label_1; //label, pro navrat
     strInit(&Label_1); //inicializace
     GenNewVariable(&Label_1);  // vygenerovani promenne
-    tTableItem* prom = tableInsert(local_table, &Label_1, TOK_STRING);
-    tableInsertValue(local_table, &Label_1, Label_1)
+    //tTableItem* prom = tableInsert(local_table, &Label_1, TOK_STRING);
+    //tableInsertValue(local_table, &Label_1, Label_1)
    // tData *newVariableInfo;
    // newVariableInfo = tableSearch(local_table, &Label_1);
    // strFree(&Label_1);
     // instrukce pro label
-    genInstr(ILABEL, &prom->data, NULL, NULL, instrList);
+    Tinst *instrukce = genInstr(ILABEL, &prom->data, NULL, NULL);
+    GtableInsertInstr(global_table, id, instrukce);
     
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-	result= comp_expr(instrList);
+	result= comp_expr(global_table, id);
 	if (result !=SYNTAX_OK) return SYNTAX_ERROR;
     
     // najde promennou ve ktere je vyhodnocena podminka
-    tData *LastVar = ReadNameVar(instrList);
-    genInstr(INOT, LastVar, NULL, LastVar, instrList);
+    tData *LastVar //= ReadNameVar(inst);
+    instrukce = genInstr(INOT, LastVar, NULL, LastVar);
+    GtableInsertInstr(global_table, id, instrukce);
     
     string Label_2; //label, pro navrat
     strInit(&Label_2); //inicializace
     GenNewVariable(&Label_2);  // vygenerovani promenne
-    tTableItem* prom2 = tableInsert(local_table, &Label_2, TOK_INT);
-    tableInsertValue(local_table, &Label_2, Label_2)
-    genInstr(IIFGOTO, LastVar, NULL, &prom2->data, instrList);
+    //tTableItem* prom2 = tableInsert(local_table, &Label_2, TOK_INT);
+    //tableInsertValue(local_table, &Label_2, Label_2)
+    intrukce = genInstr(IIFGOTO, LastVar, NULL, &prom2->data);
+    GtableInsertInstr(global_table, id, instrukce);
      
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_SEMICOLON) return SYNTAX_ERROR;
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_ID) return SYNTAX_ERROR;
-	if(!(tableSearch(local_table, &attr))) return SEMANTIC_ERROR;
+	//if(!(tableSearch(local_table, &attr))) return SEMANTIC_ERROR;
 	
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_EQUALS) return SYNTAX_ERROR;
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-	result= comp_expr(instrList);
+	result= comp_expr(global_table, id);
 
 	if (result !=SYNTAX_OK) return SYNTAX_ERROR;
 
@@ -786,12 +789,15 @@ int _for(TinstList *instrList){
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_LEFT_BRACE) return SYNTAX_ERROR;
-	result= body(instrList);
+	result= body(global_table, id);
 
     // instrukce skoku
-    genInstr(IGOTO, NULL, NULL, &prom->data, instrList);
+    instrukce = genInstr(IGOTO, NULL, NULL, &prom->data);
+    GtableInsertInstr(global_table, id, instrukce);
     //instrukce label pro skonceni cyklu
-    genInstr(ILABEL, &prom->data, NULL, NULL, instrList);
+    instrukce = genInstr(ILABEL, &prom->data, NULL, NULL);
+    GtableInsertInstr(global_table, id, instrukce);
+    
 	if(result !=SYNTAX_OK) return result;
 
 
@@ -800,7 +806,7 @@ int _for(TinstList *instrList){
 }
 
 //-----------TERM_N->--<<--TERM--TERM_N--||eps--------------------------------
-int term_n(TinstList *instrList){
+int term_n(tSymbolTable *global_table, string *id){
 	int result;
 
 	switch (token) {
@@ -815,18 +821,19 @@ int term_n(TinstList *instrList){
 			if (result != SYNTAX_OK) return result;
 			
 			//generovani instukce
-			genInstr(IWRITE, NULL, NULL, token, instrList);
+			Tinst *instrukce = genInstr(IWRITE, NULL, NULL, token);
+			GtableInsertInstr(global_table, id, instrukce);
 			
 			//mozna jich je jeste vic, radeji si ho zavolam znovu
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-			return term_n(instrList);
+			return term_n(global_table, id);
 			break;
 	}
 	return SYNTAX_ERROR;
 }
 
 //-----------COUT->--cout--<<--TERM--TERM_N--;--------------------------------
-int _cout(TinstList *instrList){
+int _cout(tSymbolTable *global_table, string *id){
 	int result;
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -838,11 +845,12 @@ int _cout(TinstList *instrList){
 	if(token !=SYNTAX_OK) return result;
 	
 	// instrukce pro zapis, pokud jich je vice generuji se v term_n()
-    	genInstr(IWRITE, NULL, NULL, token, instrList);
+    	Tinst *instrukce = genInstr(IWRITE, NULL, NULL, token);
+   	GtableInsertInstr(global_table, id, instrukce);
 	
 	//zavolam scanner a jdu zjistit, jestli termu neni vic a jestli jsou ok
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-	result = term_n(instrList);
+	result = term_n(global_table, id);
 
 	if (result !=SYNTAX_OK) return result;
 	
@@ -850,7 +858,7 @@ int _cout(TinstList *instrList){
 }
 
 //-----------ID_N->-->>--id--ID_N--||--eps------------------------------------
-int _id_n(){
+int _id_n(tSymbolTable *global_table, string *id){
 
 	switch (token){
 		case TOK_SEMICOLON:
