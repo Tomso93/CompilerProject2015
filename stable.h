@@ -1,5 +1,5 @@
 
-
+#define TABLE_SIZE 20
 
 //-----------lokalni tabulka symbolu------------------------------
 
