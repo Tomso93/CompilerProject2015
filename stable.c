@@ -191,7 +191,7 @@ tGData* GtableSearch (globalTS *T, string *key){
   bool found = false;
   tGTableItem *act = (*T)[hashed];
   while (found != true && act != NULL){
-    if (i = strCmpString(key, &(act->key)) == 0){
+    if ((i = strCmpString(key, &(act->key))) == 0){
       found = true;
     }else{
       act = act->nextItem;
