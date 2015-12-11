@@ -10,8 +10,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "define.h"
-#include "instlist.h"
 #include "str.h"
+#include "instlist.h"
 #include "stable.h"
 #include "instlist.h"
 #include "3ac.h"
