@@ -1,49 +1,30 @@
-parser.c:535:19: error: invalid type argument of ‘->’ (have ‘Tstack’)
-    strAddChar(&(St->pom[FindT(St)]), '<');
-                   ^
-parser.c:535:25: error: incompatible type for argument 1 of ‘FindT’
-    strAddChar(&(St->pom[FindT(St)]), '<');
-                         ^
-parser.c:223:5: note: expected ‘struct Tstack *’ but argument is of type ‘Tstack’
- int FindT(Tstack* St) {
-     ^
-parser.c:548:4: warning: implicit declaration of function ‘TReduction’ [-Wimplicit-function-declaration]
-    chba = (TReduction(&St, i + 1, global_table->data->LInstr));
-    ^
 parser.c:548:47: error: request for member ‘data’ in something not a structure or union
-    chba = (TReduction(&St, i + 1, global_table->data->LInstr));
-                                               ^
-parser.c:557:4: warning: implicit declaration of function ‘Tpush’ [-Wimplicit-function-declaration]
-    chba = Tpush(&St);
-    ^
+    chba = (TReduction(&St, i + 1, global_table.data->LInstr));
+
+
 parser.c: In function ‘_return’:
 parser.c:737:44: error: request for member ‘data’ in something not a structure or union
-  string *LastVar = ReadNameVar(global_table->data->LInstr); // funkce na cteni nazvu posledni instrukce
+  string *LastVar = ReadNameVar(global_table.data->LInstr); // funkce na cteni nazvu posledni instrukce
                                             ^
 parser.c: In function ‘_for’:
 parser.c:766:30: error: request for member ‘data’ in something not a structure or union
-     LtableInsert(global_table->data->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+     LtableInsert(global_table.data->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
                               ^
 parser.c:778:47: error: request for member ‘data’ in something not a structure or union
-     string *LastVar = ReadNameVar(global_table->data->LInstr);
+     string *LastVar = ReadNameVar(global_table.data->LInstr);
                                                ^
 parser.c:785:30: error: request for member ‘data’ in something not a structure or union
-     LtableInsert(global_table->data->LTable, &Label_2, TOK_STRING);
+     LtableInsert(global_table.data->LTable, &Label_2, TOK_STRING);
                               ^
 parser.c: In function ‘_if’:
 parser.c:947:47: error: request for member ‘data’ in something not a structure or union
      string *LastVar = ReadNameVar(global_table->data->LInstr); // funkce na cteni nazvu posledni instrukce
                                                ^
 parser.c:954:30: error: request for member ‘data’ in something not a structure or union
-     LtableInsert(global_table->data->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+     LtableInsert(global_table.data->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
                               ^
 parser.c:968:30: error: request for member ‘data’ in something not a structure or union
-     LtableInsert(global_table->data->LTable, &Label_2, TOK_STRING);
-                              ^
-parser.c: In function ‘param’:
-parser.c:1134:4: error: a label can only be part of a statement and a declaration is not a statement
-    int InternalType = token; // ulozeni typu parametru, pro pozdejsi vlozeni do TS
-    ^
-make: *** [parser.o] Error 1
+     LtableInsert(global_table.data->LTable, &Label_2, TOK_STRING);
+
 
 
