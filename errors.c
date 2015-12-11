@@ -5,9 +5,18 @@
  *	
  */
 
-#include<stdio.h>
-#include"errors.h"
-#include"define.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include "define.h"
+#include "str.h"
+#include "errors.h"
+#include "instlist.h"
+#include "stable.h"
+#include "lex.h"
+#include "varframe.h"
+#include "interpret.h"
+#include "parser.h"
 
 void printerror(int errornumber){
   switch(errornumber){
