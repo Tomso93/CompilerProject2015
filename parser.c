@@ -551,7 +551,7 @@ int comp_expr(globalTS *global_table, string *id) {
 				return SYNTAX_ERROR;
 			}
 			strDelLastChar(&(St.pom[i]));
-			chba = (SReduction_expr(&St, i + 1, global_table));
+			chba = (SReduction_expr(&St, i + 1, global_table, id));
 			if (chba != SYNTAX_OK) {
 				SDipose(&St);
 				error = ERR;
