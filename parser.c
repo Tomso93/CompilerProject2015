@@ -268,7 +268,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			E1 = St->prom_val[i + 1];
 			value1 = St->val[i + 1];
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(IMOV, )value1, NULL, value3);
+			Tinst *instrukce = genInstr(IMOV, value1, NULL, value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
