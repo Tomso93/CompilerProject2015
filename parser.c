@@ -550,9 +550,8 @@ int comp_expr(globalTS *global_table, string *id) {
 				error = ERR;
 				return SYNTAX_ERROR;
 			}
-			tGData* prom = GtableSearch(global_table, id);
 			strDelLastChar(&(St.pom[i]));
-			chba = (SReduction_expr(&St, i + 1, prom->LInstr));
+			chba = (SReduction_expr(&St, i + 1, global_table));
 			if (chba != SYNTAX_OK) {
 				SDipose(&St);
 				error = ERR;
