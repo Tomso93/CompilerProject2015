@@ -11,7 +11,7 @@ int hash(string *key){
   int delka = strGetLength(key);
   int vysledek = 0; 
   for (int i = 0; i < delka; i++){
-    vysledek = vysledek + (int)((*key)[i]);
+    vysledek = vysledek + (int)key->str[i];
   }
   vysledek = vysledek % TABLE_SIZE;
   return vysledek;
@@ -21,7 +21,7 @@ int hash(string *key){
 
 int LtableInit(localTS *T){
   for (int i = 0; i < TABLE_SIZE; i++){
-    T[i] = NULL;
+    (*T)[i] = NULL;
   }
   return SUCCESS;
 }
@@ -31,15 +31,15 @@ int LtableFree (localTS *T){
 //  int success;
   tLTableItem *act;
   for (int i = 0; i < TABLE_SIZE; i++){
-    act = T[i];
+    act = (*T)[i];
     while (act != NULL){
       strFree(&(act->key));
       if (act->data.varType == TOK_STRING){
         strFree(&(act->data.varValue.s));
       }
-      T[i] = act->nextItem;
+      (*T)[i] = act->nextItem;
       free(act);
-      act = T[i];
+      act = (*T)[i];
     }
   }
   return SUCCESS;
@@ -48,7 +48,7 @@ int LtableFree (localTS *T){
 
 int LtableInsert (localTS *T, string *key, int varType){
   int hashed = hash(key);
-  tLTableItem *act;
+//  tLTableItem *act;
   tLTableItem *newItem;
   newItem = malloc(sizeof(tLTableItem));
   if (newItem == NULL){
@@ -58,9 +58,10 @@ int LtableInsert (localTS *T, string *key, int varType){
   strInit(&(newItem->key));
   strCopyString(&(newItem->key), key);
   newItem->data.varType = varType;
-  newItem->isinit = false;
-  newItem->nextItem = T[hashed];
-  T[hashed] = newItem;
+  newItem->data.isinit = false;
+  newItem->nextItem = (*T)[hashed];
+  (*T)[hashed] = newItem;
+  return SUCCESS;
 }
 
 
@@ -68,9 +69,9 @@ tLData *LtableSearch (localTS *T, string *key){
   int i;
   int hashed = hash(key);
   bool found = false;
-  tLTableItem *act = T[hashed];
+  tLTableItem *act = (*T)[hashed];
   while (found != true && act != NULL){
-    if (i = strcmpString(key, &(act->key)) == 0){
+    if ((i = strCmpString(key, &(act->key))) == 0){
       found = true;
     }else{
       act = act->nextItem;
@@ -119,7 +120,7 @@ int LtableInsertValue (localTS *T, string *key, Tvalue v){
 
 int GtableInit (globalTS *T){
   for (int i = 0; i < TABLE_SIZE; i++){
-    T[i] = NULL;
+    (*T)[i] = NULL;
   }
   return SUCCESS;
 }
@@ -128,7 +129,7 @@ int GtableInit (globalTS *T){
 int GtableFree (globalTS *T){
   tGTableItem *act;
   for (int i = 0; i < TABLE_SIZE; i++){
-    act = T[i];
+    act = (*T)[i];
     while (act != NULL){
       strFree(&(act->key));
 
@@ -139,9 +140,9 @@ int GtableFree (globalTS *T){
       } 
       LtableFree(act->data.LTable);
       ListDispose(act->data.LInstr);
-      T[i] = act->nextItem;
+      (*T)[i] = act->nextItem;
       free(act);
-      act = T[i];
+      act = (*T)[i];
     }
   }
   return SUCCESS;
@@ -154,7 +155,7 @@ int GtableInsert (globalTS *T, string *key, int funcType){
   
   int success;
   int hashed = hash(key);
-  tGTableItem *act;
+//  tGTableItem *act;
   tGTableItem *newItem;
   newItem = malloc(sizeof(tGTableItem));
   if (newItem == NULL){
@@ -172,14 +173,14 @@ int GtableInsert (globalTS *T, string *key, int funcType){
   strInit(&(newItem->key));
   strCopyString(&(newItem->key), key);
   newItem->data.funcType = funcType;
-  newItem->isdef = false;
-  newItem->LTable = LTS;
-  newItem->LInstr = LIL;
+  newItem->data.isdef = false;
+  newItem->data.LTable = &LTS;
+  newItem->data.LInstr = &LIL;
   for (int i = 0; i < TABLE_SIZE; i++){
-    newItem->params[i] = NULL;
+    newItem->data.params[i] = NULL;
   } 
-  newItem->nextItem = T[hashed];
-  T[hashed] = newItem;
+  newItem->nextItem = (*T)[hashed];
+  (*T)[hashed] = newItem;
   return SUCCESS;
 }
 
@@ -188,9 +189,9 @@ tGData* GtableSearch (globalTS *T, string *key){
   int i;
   int hashed = hash(key);
   bool found = false;
-  tGTableItem *act = T[hashed];
+  tGTableItem *act = (*T)[hashed];
   while (found != true && act != NULL){
-    if (i = strcmpString(key, &(act->key)) == 0){
+    if (i = strCmpString(key, &(act->key)) == 0){
       found = true;
     }else{
       act = act->nextItem;
@@ -208,7 +209,7 @@ tGData* GtableSearch (globalTS *T, string *key){
 int GtableInsertVar (globalTS *T, string *funcID, string *varID, int varType){
   int success;
   tGData *act;
-  act = gtableSearch (T, funcID);
+  act = GtableSearch (T, funcID);
   if (act == NULL){
     return INTERN_ERROR;
   }
@@ -221,7 +222,7 @@ int GtableInsertVar (globalTS *T, string *funcID, string *varID, int varType){
 int GtableInsertVarVal (globalTS *T, string *funcID, string *varID, Tvalue v){
   int success;
   tGData *act;
-  act = gtableSearch (T, funcID);
+  act = GtableSearch (T, funcID);
   if (act == NULL){
     return INTERN_ERROR;
   }
@@ -235,7 +236,7 @@ int GtableInsertParam (globalTS *T, string *funcID, string *parID, int parType){
   int success;
   int i;
   tGData *act;
-  act = gtableSearch (T, funcID);
+  act = GtableSearch (T, funcID);
   if (act == NULL){
     return INTERN_ERROR;
   }
@@ -255,7 +256,7 @@ int GtableInsertParam (globalTS *T, string *funcID, string *parID, int parType){
 int GtableInsertInstr (globalTS *T, string *funcID, Tinst *instrukce){
   int success;
   tGData *act;
-  act = gtableSearch (T, funcID);
+  act = GtableSearch (T, funcID);
   if (act == NULL){
     return INTERN_ERROR;
   }
