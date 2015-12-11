@@ -6,13 +6,18 @@
  */
 
 
-#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
 #include "define.h"
 #include "str.h"
-#include <stdbool.h>
+#include "errors.h"
 #include "instlist.h"
 #include "stable.h"
+#include "lex.h"
 #include "varframe.h"
+#include "interpret.h"
+#include "parser.h"
 
 int StackInit(Tstackframe *S){
   S->top = NULL;
