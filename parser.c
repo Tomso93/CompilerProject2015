@@ -734,7 +734,7 @@ int _return(globalTS *global_table, string *id){
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if(token !=TOK_SEMICOLON) return SYNTAX_ERROR;
 	tGData* prom = GtableSearch(global_table, id);
-	string *LastVar = ReadNameVar(prom->data->LInstr); // funkce na cteni nazvu posledni instrukce
+	string *LastVar = ReadNameVar(prom->LInstr); // funkce na cteni nazvu posledni instrukce
 	Tinst *instrukce = genInstr(IRET, LastVar, NULL, NULL);
     	GtableInsertInstr(global_table, id, instrukce);
 	//return je dobre zapsan, neni co resit
