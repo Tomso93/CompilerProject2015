@@ -70,7 +70,7 @@ struct Frame *FrameCreate(globalTS *GTS, string *funcName){
 
   //copy Ltables (LTable) do LTS
   localTS LTS;
-  struct LtableItem *prom;
+  struct tLData *prom;
   int i;
 
   success = LtableInit(&LTS);
@@ -85,7 +85,7 @@ struct Frame *FrameCreate(globalTS *GTS, string *funcName){
       if (success != 0){
         return NULL;
       }
-      if (prom->data->isinit){
+      if (prom->isinit){
         success = LtableInsertValue (&LTS, &prom->key, prom->data.varValue);
         if (success != SUCCESS){
           return NULL;
