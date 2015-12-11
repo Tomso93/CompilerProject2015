@@ -543,9 +543,9 @@ int comp_expr(globalTS *global_table, string *id) {
 				error = ERR;
 				return SYNTAX_ERROR;
 			}
-
+			tGData* prom = GtableSearch(global_table, id);
 			strDelLastChar(&(St.pom[i]));
-			chba = (TReduction(&St, i + 1, global_table.data->LInstr));
+			chba = (TReduction(&St, i + 1, prom->LInstr));
 			if (chba != SYNTAX_OK)
 				SDipose(&St);
 			error = ERR;
@@ -763,7 +763,8 @@ int _for(globalTS *global_table, string *id){
     string Label_1; //label, pro navrat
     strInit(&Label_1); //inicializace
     GenNewVariable(&Label_1);  // vygenerovani promenne
-    LtableInsert(global_table.data->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+    tGData* prom = GtableSearch(global_table, id);
+    LtableInsert(prom->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
     //LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
    
     // instrukce pro label
@@ -775,14 +776,16 @@ int _for(globalTS *global_table, string *id){
 	if (result !=SYNTAX_OK) return SYNTAX_ERROR;
     
     // najde promennou ve ktere je vyhodnocena podminka
-    string *LastVar = ReadNameVar(global_table.data->LInstr);
+    prom = GtableSearch(global_table, id);
+    string *LastVar = ReadNameVar(prom->LInstr);
     instrukce = genInstr(INOT, LastVar, NULL, LastVar);
     GtableInsertInstr(global_table, id, instrukce);
     
     string Label_2; //label, pro navrat
     strInit(&Label_2); //inicializace
     GenNewVariable(&Label_2);  // vygenerovani promenne
-    LtableInsert(global_table.data->LTable, &Label_2, TOK_STRING);
+    prom = GtableSearch(global_table, id);
+    LtableInsert(prom->LTable, &Label_2, TOK_STRING);
     //LtableInsertValue(global_table->data->LTable, &Label_2, Label_2);
     
     instrukce = genInstr(IIFGOTO, LastVar, NULL, &Label_2);
@@ -944,14 +947,16 @@ int _if(globalTS *global_table, string *id){
 	if (token !=TOK_RIGHT_BRACKET) return SYNTAX_ERROR;
 
     //generovani pomocne promenne
-    string *LastVar = ReadNameVar(global_table->data->LInstr); // funkce na cteni nazvu posledni instrukce 
+    tGData* prom = GtableSearch(global_table, id);
+    string *LastVar = ReadNameVar(prom->LInstr); // funkce na cteni nazvu posledni instrukce 
     Tinst *instrukce = genInstr(INOT, LastVar, NULL, LastVar); // negace podminky
     GtableInsertInstr(global_table, id, instrukce);
     
     string Label_1; //novy label, skok na vetev else
     strInit(&Label_1); //inicializace
     GenNewVariable(&Label_1);  // vygenerovani promenne
-    LtableInsert(global_table.data->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+    prom = GtableSearch(global_table, id);
+    LtableInsert(prom->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
     //LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
     
     //generovani skoku na ELSE vetev
@@ -965,7 +970,8 @@ int _if(globalTS *global_table, string *id){
     string Label_2;  // label dva, skok az za else, podminka v IF byla pravda
     strInit(&Label_2);
     GenNewVariable(&Label_2);
-    LtableInsert(global_table.data->LTable, &Label_2, TOK_STRING);
+    prom = GtableSearch(global_table, id);
+    LtableInsert(prom->LTable, &Label_2, TOK_STRING);
     //LtableInsertValue(global_table->data->LTable, &Label_2, Label_2);
     
     // skok za ELSE
