@@ -380,7 +380,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
-			Tinst *instukce = genInstr(IBIG, (void *)value1, (void *)value2, (void *)value3);
+			Tinst *instrukce = genInstr(IBIG, (void *)value1, (void *)value2, (void *)value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
@@ -448,7 +448,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
 			Tinst *instrukce = genInstr(IEQSM, (void *)value1, (void *)value2, (void *)value3);
-			GtableInsertIntrs(global_table, id, instrukce);
+			GtableInsertInstr(global_table, id, instrukce);
 		}
 
 		DelI(St, 3);
@@ -733,8 +733,8 @@ int _return(globalTS *global_table, string *id){
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if(token !=TOK_SEMICOLON) return SYNTAX_ERROR;
 	
-	tData *LastVar = ReadNameVar(global_table->data->LInstr); // funkce na cteni nazvu posledni instrukce
-	instrukce = genInstr(IRET, LastVar, NULL, NULL);
+	tLData *LastVar = ReadNameVar(global_table->data->LInstr); // funkce na cteni nazvu posledni instrukce
+	Tinst *instrukce = genInstr(IRET, LastVar, NULL, NULL);
     	GtableInsertInstr(global_table, id, instrukce);
 	//return je dobre zapsan, neni co resit
 	return SYNTAX_OK;
