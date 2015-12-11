@@ -160,7 +160,7 @@ void PushE(Tstack *St, char Type, void * data) {
 		// vlozi o vlozem informace
 		St->top++;
 		St->t_n[St->top] = 'N';
-		St->pom[St->top] = a;
+		St->pom[St->top] = pom;
 		St->val[St->top] = data;	//
 
 		if (data == NULL)
@@ -181,7 +181,7 @@ int FindBrc(Tstack *St) {
 		i++;
 
 		if (St->pom[(St->top - i)].length >1)
-			pom = St->pom[(St->top - i)].str[S->pom[(St->top - i)].length - 1];
+			pom = St->pom[(St->top - i)].str[St->pom[(St->top - i)].length - 1];
 		else pom = 0;
 	}
 
@@ -201,7 +201,7 @@ int TPush(Tstack *St) {
 		strCopyString(&pom, &attr);			// vlozim na zasobnik prichozi terminal
 
 		St->top++;
-		St->type[St->top] = 'T';
+		St->t_n[St->top] = 'T';
 		St->pom[St->top] = pom;
 	}
 
@@ -233,7 +233,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 	double * value1;
 	double * value3;
 	if (error != ERR) {
-		E1 = St->promVal[i];
+		E1 = St->prom_val[i];
 		value1 = St->val[i];
 		value3 = malloc(sizeof(double));
 		if (value3 == NULL)
@@ -252,9 +252,9 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 		return SYNTAX_OK;
 	}
 	//------------------------------E-> (E)------------------------------------------	
-	else if ((strCmpConstStr(&(St->a[i]), "(") == 0) &&
-		(strCmpConstStr(&(St->a[i + 1]), "E") == 0) &&
-		(strCmpConstStr(&(St->a[i + 2]), ")")) {
+	else if ((strCmpConstStr(&(St->pom[i]), "(") == 0) &&
+		(strCmpConstStr(&(St->pom[i + 1]), "E") == 0) &&
+		(strCmpConstStr(&(St->pom[i + 2]), ")") == 0)) {
 
 
 		if (error != ERR) {
