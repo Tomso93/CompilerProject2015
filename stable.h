@@ -5,7 +5,6 @@
 #include "str.h"
 #include "errors.h"
 #include "instlist.h"
-#include "stable.h"
 #include "lex.h"
 #include "varframe.h"
 #include "interpret.h"
