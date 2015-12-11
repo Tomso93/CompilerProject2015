@@ -1,6 +1,6 @@
 
 
-//lokalni tabulka symbolu
+//-----------lokalni tabulka symbolu------------------------------
 
 typedef union {
   int i;
@@ -25,7 +25,7 @@ typedef struct LtableItem
 typedef tLTableItem *localTS[TABLE_SIZE];
 
 
-//globalni tabulka symbolu
+//----------globalni tabulka symbolu-----------------------------------
 
 typedef struct
 {
@@ -46,16 +46,16 @@ typedef struct GtableItem
 typedef tGTableItem *globalTS[TABLE_SIZE];
 
 
-//hashovaci funkce
+//------------------hashovaci funkce-------------------------------------
 //vraci index do tabulky symbolu
 int hash(string *key);
 
-//funkce pro praci s tabukou smybolu
+//-----------------funkce pro praci s tabukou smybolu------------------------
 //funkce vraci int: 0 = uspech, 1-99 = neuspech (cislo chyby)
 //funkce vraci ukazatel: platny ukazatel = uspech, NULL = neuspech 
 
 
-//globalni
+//----------------------globalni------------------------------------------
 int GtableInit (globalTS *T);
 int GtableFree (globalTS *T);
 
@@ -76,7 +76,7 @@ int GtableInsertInstr (globalTS *T, string *funcID, Tinst instrukce);
 
 
 
-//lokalni
+//-----------------lokalni---------------------------------------
 int LtableInit (localTS *T);
 int LtableFree (localTS *T);
 
