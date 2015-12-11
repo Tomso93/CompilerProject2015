@@ -16,13 +16,13 @@
 int cnt = 1; // counter pro poÄŤĂ­tĂˇnĂ­ hodnot generovanĂ˝ch promÄ›nnĂ˝ch
 
 // Funkce na generovĂˇnĂ­ novĂ© instrukce, kterĂˇ je nĂˇslednÄ› vloĹľena do seznamu instrukcĂ­
-Tinst *genInstr(int InstType, string src1, string src2, string dest)
+Tinst *genInstr(int InstType, string *src1, string *src2, string *dest)
 {
     Tinst TItem;
     TItem.itype = InstType;
-    TItem.src1 = &src1;
-    TItem.src2 = &src2;
-    TItem.dest = &dest;
+    TItem.src1 = src1;
+    TItem.src2 = src2;
+    TItem.dest = dest;
     return &TItem;
 }
 
