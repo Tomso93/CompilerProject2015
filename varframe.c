@@ -70,7 +70,7 @@ struct Frame *FrameCreate(globalTS *GTS, string *funcName){
 
   //copy Ltables (LTable) do LTS
   localTS LTS;
-  struct tLData *prom;
+  struct tLTableItem *prom;
   int i;
 
   success = LtableInit(&LTS);
