@@ -51,7 +51,7 @@ int interpret (globalTS *GTS){
   }
   
   //vytvori ramec promennych z lokalni tabulky mainu
-  newF = FrameCreate(GTS, start);
+  newF = FrameCreate(GTS, *start);
   if (newf == NULL){
     return INTERN_ERROR;
   }
@@ -239,8 +239,8 @@ int interpret (globalTS *GTS){
         }
         //pokud byla ISUBSTR2 provede funkci. jinak chyba.
         if (instr->itype == ISUBSTR2){
-          source2 = VariableSearch(&SF, *instr->src1);
-          source3 = VariableSearch(&SF, *instr->src2);
+          source2 = VariableSearch(&SF, instr->src1);
+          source3 = VariableSearch(&SF, instr->src2);
           success = substring(source1, source2, source3, destination);
         }else{
           success = INTERN_ERROR;
@@ -253,19 +253,19 @@ int interpret (globalTS *GTS){
       break;
 
       case IPAR:
-        source1 = VariableSearch(GTS, *instr->src1);
-        source2 = VariableSearch(&SF, *instr->src2);
+        source1 = VariableSearch(GTS, instr->src1);
+        source2 = VariableSearch(&SF, instr->src2);
         success = parametr(source1, source2, newF, counter);
         counter++;
       break;
 
       case ICALL:
-        source1 = VariableSearch(GTS, *instr->src1);
+        source1 = VariableSearch(GTS, instr->src1);
         success = call(source1, newF, &LOI, &SF);
       break;
 
       case IRET:
-        source1 = VariableSearch(&SF, *instr->src1);        
+        source1 = VariableSearch(&SF, instr->src1);        
         success = ret(source1, &SF);
       break;
 
@@ -1761,8 +1761,12 @@ int substring(tData *src1, tData *src2, tData *src3, tData *dest){
 
 //-------------------IPRECALL--------------------------------------------------
 int precall(string *funcName, globalTS *GTS, struct Frame *newF){
+  tGData* func;
+  func = GtableSearch (GTS, funcName);
+  if (!func->isdef){
+    return DEFINE_ERROR;
+  }
   newF = FrameCreate(GTS, funcName);
-
   if (newF == NULL){
     return INTERN_ERROR;
   }
@@ -1773,17 +1777,28 @@ int precall(string *funcName, globalTS *GTS, struct Frame *newF){
 //-------------------IPAR------------------------------------------------------
 int parametr(tGData *source1, tLData *source2, struct Frame *newF, int cnt){
   int success;
-  tLTableItem *param = source1->params[cnt];
+  
 
   if (!source2->isinit){
     return UNINIT_ERROR;
   }
 
-  if (param->data.varType != source2->varType){
+  //ziskani jmena parametru
+  string *param;
+  param = source1->params[cnt];
+  //
+
+  //hledani parametru v ramci  
+  tLData *searched;
+  searched = LtableSearch (newF->proms, param);
+  //
+
+  
+  if (searched->data.varType != source2->varType){
     return TYPE_ERROR;
   }
 
-  success = FrameInsertVar(newF, param->key, param->data.varType, source2->varValue);
+  int LtableInsertValue (newF->proms, param, source2->varValue);
 
   return success;
 }
