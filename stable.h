@@ -39,7 +39,7 @@ typedef struct
 typedef struct GtableItem
 {
   string key;  // klic, podle ktereho se bude vyhledavat = nazev identifikatoru
-  tGData data;                  // data, ktera jsou ke klici pridruzena
+  tGData *data;                  // data, ktera jsou ke klici pridruzena
   struct GtableItem *nextItem;  // ukazatel na dalsi prvek tabulky symbolu
 } tGTableItem;
 
