@@ -226,7 +226,7 @@ int FindT(Tstack* St) {
 	return St->top - i;
 }
 //------------Redugujeme--:D---------------------------------------------------
-int SReduction_expr(Tstack* St, int i, TinstList *instrList) {
+int SReduction_expr(Tstack* St, int i, tSymbolTable *global_table, string *id) {
 	// pokusi se aplikovat pravidlo a zredukovat vyraz
 	char E1;
 	double * value1;
@@ -243,7 +243,8 @@ int SReduction_expr(Tstack* St, int i, TinstList *instrList) {
 
 		if (error != ERR)
 			//Generovani instrukce
-			genInstr(IMOV, (void *)value1, NULL, (void *)value3, instrList);
+			Tinst *instrukce = genInstr(IMOV, (void *)value1, NULL, (void *)value3);
+			GtableInsertInstr(global_table, id, instrukce);
 		DelI(St, 1);
 
 		PushE(St, E1, value3);
@@ -259,7 +260,8 @@ int SReduction_expr(Tstack* St, int i, TinstList *instrList) {
 			E1 = St->prom_val[i + 1];
 			value1 = St->val[i + 1];
 			//Generovani instrukce
-			genInstr(IMOV, (void *)value1, NULL, (void *)value3, instrList);
+			Tinst *instrukce = genInstr(IMOV, (void *)value1, NULL, (void *)value3);
+			GtableInsertInstr(global_table, id, instrukce);
 		}
 
 		DelI(St, 3);
@@ -491,7 +493,7 @@ int SReduction_expr(Tstack* St, int i, TinstList *instrList) {
 
 }
 //-----------------------------------------------------------------------------------------
-int comp_expr(TinstList *instrList) {
+int comp_expr(tSymbolTable *global_table, string *id) {
 
 	char result;
 	int i;
@@ -529,7 +531,7 @@ int comp_expr(TinstList *instrList) {
 			}
 
 			strDelLastChar(&(St.pom[i]));
-			chba = (TReduction(&St, i + 1, instrList);
+			chba = (TReduction(&St, i + 1, global_table->data->LInstr);
 			if (chba != SYNTAX_OK)
 				SDipose(&St);
 			error = ERR;
