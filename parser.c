@@ -307,7 +307,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 		// E-> E/E
 		if (error != ERR) {
 			char E2 = St->prom_val[i + 2];
-			double *value2 = St->val[i + 2];
+			string *value2 = St->val[i + 2];
 
 			//seman
 			if (E1 != E2) return SEMANTIC_ERROR;
