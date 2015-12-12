@@ -228,9 +228,6 @@ int TPush(Tstack *St) {
 
 		//semantika a rozdelovani
 
-		if (token == TOK_ID) {
-			//tady se to musi ulozit do tabulky symbolu 
-		}
 
 		St->top++;
 		St->t_n[St->top] = 'T';
@@ -240,11 +237,11 @@ int TPush(Tstack *St) {
 
 			//tady to musime narvat do tabulky promenou, ktera obsahuje cele cislo a do val navrat odkaz na ten symbol promenne, co je v tabulce
 			string NewVar; //label, pro navrat
-    			strInit(&NewVar); //inicializace
-    			GenNewVariable(&NewVar);  // vygenerovani promenne
-    			tGData* prom = GtableSearch(global_table, id);
-    			LtableInsert(prom->LTable, &NewVar, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
-    			LtableInsertValue(prom->LTable, &NewVar, token);
+    		strInit(&NewVar); //inicializace
+    		GenNewVariable(&NewVar);  // vygenerovani promenne
+    		tGData* prom = GtableSearch(global_table, id);
+    		LtableInsert(prom->LTable, &NewVar, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+    		LtableInsertValue(prom->LTable, &NewVar, &attr);
     			
 			string *val = &NewVar;
 			St->val[St->top] = val;
@@ -254,7 +251,14 @@ int TPush(Tstack *St) {
 		else if (token == TOK_FLOATING_POINT_NUMBER) {
 			
 			//tady to musime narvat do tabulky promenou, ktera obsahuje float cislo a do val navrat odkaz na ten symbol promenne, co je v tabulce
-			string *val = ;
+			string NewVar; //label, pro navrat
+			strInit(&NewVar); //inicializace
+			GenNewVariable(&NewVar);  // vygenerovani promenne
+			tGData* prom = GtableSearch(global_table, id);
+			LtableInsert(prom->LTable, &NewVar, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+			LtableInsertValue(prom->LTable, &NewVar, &attr);
+
+			string *val = &NewVar;
 			St->val[St->top] = val;
 			St->prom_val[St->top] = 'f';
 		}
@@ -262,7 +266,13 @@ int TPush(Tstack *St) {
 		else if (token == TOK_STR) {
 
 			//tady to musime narvat do tabulky promenou, ktera obsahuje retezec a do val navrat odkaz na ten symbol promenne, co je v tabulce
-			string *val = ;
+			string NewVar; //label, pro navrat
+			strInit(&NewVar); //inicializace
+			GenNewVariable(&NewVar);  // vygenerovani promenne
+			tGData* prom = GtableSearch(global_table, id);
+			LtableInsert(prom->LTable, &NewVar, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+			LtableInsertValue(prom->LTable, &NewVar, &attr);
+			string *val = &NewVar;
 			St->val[St->top] = val;
 			St->prom_val[St->top] = 'sn';
 
