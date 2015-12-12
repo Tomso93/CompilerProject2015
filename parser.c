@@ -32,7 +32,7 @@ int error;
 //					PRECEDENCNI SYNTAKTICKY ANALYZATOR							  //
 //--------------------------------------------------------------------------------//																				
 
-char prec_table[][14]={
+char prec_table[][16]={
 //+   -   *   /   <   >  <=  >=  ==  !=	 (	 )    ID  $   ST  IN  FL
 {'>','>','<','<','>','>','>','>','>','>','<','>','<','>','<','<'},	// +
 {'>','>','<','<','>','>','>','>','>','>','<','>','<','>','0','<'},	// -
@@ -632,7 +632,7 @@ int comp_expr(globalTS *global_table, string *id) {
 			break;
 
 		case TOK_EQUALS:
-			chba = TPush(&St);
+			chba = TPush(&St, global_table, id);
 			if (chba != SUCCESS) return chba;
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			token = getNextToken(&attr);
@@ -661,7 +661,7 @@ int comp_expr(globalTS *global_table, string *id) {
 		switch (vyber) {
 		case TOK_LESS_THAN:
 			GnTerm(&St, '<');
-			TPush(&St);
+			TPush(&St, global_table, id);
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			break;
 
@@ -682,7 +682,7 @@ int comp_expr(globalTS *global_table, string *id) {
 			break;
 
 		case TOK_EQUALS:
-			chba = TPush(&St);
+			chba = TPush(&St, global_table, id);
 			if (chba != SUCCESS) return chba;
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			token = getNextToken(&attr);
