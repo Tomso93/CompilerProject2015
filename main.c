@@ -46,9 +46,7 @@ int main(int argc, char *argv[]){
 
     } else {
         fprintf(stderr, "Zadej soubor!");
-        fclose(f);
         return 99;
     }
-    fclose(f);
     return 0;
 }
