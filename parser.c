@@ -239,7 +239,14 @@ int TPush(Tstack *St) {
 		else if (token == TOK_DECIMAL_NUMBER) {
 
 			//tady to musime narvat do tabulky promenou, ktera obsahuje cele cislo a do val navrat odkaz na ten symbol promenne, co je v tabulce
-			string *val = ;
+			string NewVar; //label, pro navrat
+    			strInit(&NewVar); //inicializace
+    			GenNewVariable(&NewVar);  // vygenerovani promenne
+    			tGData* prom = GtableSearch(global_table, id);
+    			LtableInsert(prom->LTable, &NewVar, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+    			LtableInsertValue(prom->LTable, &NewVar, token);
+    			
+			string *val = &NewVar;
 			St->val[St->top] = val;
 			St->prom_val[St->top] = 'd';
 		}
