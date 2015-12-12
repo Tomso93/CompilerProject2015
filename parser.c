@@ -86,7 +86,7 @@ int select_ruler(string *zas_term, int term){
 
 	if (strCmpConstStr(zas_term, "$")==0  || strCmpConstStr(zas_term, "$<") == 0) radek=13;
 
-	if (strCmpConstStr(zas_term, "sn") == 0 || strCmpConstStr(zas_term, "sn<") == 0) radek = 14;
+	if (strCmpConstStr(zas_term, "s") == 0 || strCmpConstStr(zas_term, "s<") == 0) radek = 14;
 
 	if (strCmpConstStr(zas_term, "d") == 0 || strCmpConstStr(zas_term, "d<") == 0) radek = 15;
 
@@ -217,7 +217,7 @@ int FindBrc(Tstack *St) {
 }
 
 //----------------------------Vloz--token--terminal-------------------------
-int TPush(Tstack *St) {
+int TPush(Tstack *St, globalTS *global_table, string *id) {
 	//dam terminal na zasobnik
 	if (St->top == MAX) return INTERN_ERROR;	//vnitrni chyba interperetu
 
@@ -274,13 +274,13 @@ int TPush(Tstack *St) {
 			LtableInsertValue(prom->LTable, &NewVar, &attr);
 			string *val = &NewVar;
 			St->val[St->top] = val;
-			St->prom_val[St->top] = 'sn';
+			St->prom_val[St->top] = 's';
 
 		}
 
 		else {
 			St->prom_val[St->top] = 'N';
-			S->val[St->top] = NULL;
+			St->val[St->top] = NULL;
 		}
 	}
 
@@ -611,7 +611,7 @@ int comp_expr(globalTS *global_table, string *id) {
 		switch (vyber) {
 		case TOK_LESS_THAN:
 			GnTerm(&St, '<');
-			TPush(&St);
+			TPush(&St, global_table, id);
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			break;
 
