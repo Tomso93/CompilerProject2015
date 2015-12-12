@@ -1038,18 +1038,21 @@ int stmnt(globalTS *global_table, string *id){
 		case TOK_IF:
 			result= _if(global_table, id);
 			if (result != SYNTAX_OK) return result;
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			return stmnt(global_table, id);
 			break;
 		
 		case TOK_FOR:
 			result= _for(global_table, id);
 			if (result != SYNTAX_OK) return result;
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			return stmnt(global_table, id);
 			break;
 
 		case TOK_CIN:
 			result= _cin(global_table, id);
 			if (result != SYNTAX_OK) return result;
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			return stmnt(global_table, id);
 			break;
 
@@ -1057,12 +1060,14 @@ int stmnt(globalTS *global_table, string *id){
 			result= _cout(global_table, id);
 			if (result != SYNTAX_OK) return result;
 			// volam rekurzvine funkci
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			return stmnt(global_table, id);
 			break;
 		
 		case TOK_RETURN:
 			result= _return(global_table, id);
 			if (result != SYNTAX_OK) return result;
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			return stmnt(global_table, id);
 			break;
 
