@@ -576,7 +576,57 @@ int comp_expr(globalTS *global_table, string *id) {
 
 		
 		pom = TopT(&St);	//prvni term.
-	}	while (strCmpConstStr(&pom, "$") != 0 && (token != TOK_LEFT_BRACE || token != TOK_SEMICOLON));
+	}	while (strCmpConstStr(&pom, "$") != 0 && (token != TOK_LEFT_BRACE || token != TOK_SEMICOLON))
+	{
+
+		result = select_ruler(&pom, token);
+
+		if (result == '<') vyber = TOK_LESS_THAN;
+		else if (result == '>') vyber = TOK_GREATER_THAN;
+		else if (result == '=') vyber = TOK_EQUALS;
+		else vyber = OTHER;
+
+
+		switch (vyber) {
+		case TOK_LESS_THAN:
+			GnTerm(&St, '<');
+			TPush(&St);
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+			break;
+
+		case TOK_GREATER_THAN:
+			if ((i = FindBrc(&St)) == SYNTAX_ERROR) {
+				SDipose(&St);
+				error = ERR;
+				return SYNTAX_ERROR;
+			}
+			strDelLastChar(&(St.pom[i]));
+			chba = (SReduction_expr(&St, i + 1, global_table, id));
+			if (chba != SYNTAX_OK) {
+				SDipose(&St);
+				error = ERR;
+				return result;
+			}
+
+			break;
+
+		case TOK_EQUALS:
+			chba = TPush(&St);
+			if (chba != SUCCESS) return chba;
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+			token = getNextToken(&attr);
+			break;
+
+		case OTHER:
+			SDipose(&St);
+			error = ERR;
+			return SYNTAX_ERROR;
+			break;
+		}
+
+		
+		pom = TopT(&St);	//prvni term.
+	}
 
 
 	strFree(&pom);
