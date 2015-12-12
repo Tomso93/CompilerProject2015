@@ -81,12 +81,11 @@ return 0;
 
 void FailCreate(char *s, int delka, int fail[])
 //funkce vektoru FAIL
-//urcuje pozici kam se algoritmus musi vratit v porovnavani retezcu
 {
   int k,r = 0;
   fail[0] = 0;
 
-  for (k = 1; k < delka; k++){
+  for (k = 2; k < delka; k++){
     r = fail[k-1];
     if (r > 0){
       while (s[r] != s[k-1]){
