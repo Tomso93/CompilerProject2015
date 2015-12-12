@@ -240,7 +240,7 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
     		strInit(&NewVar); //inicializace
     		GenNewVariable(&NewVar);  // vygenerovani promenne
     		tGData* prom = GtableSearch(global_table, id);
-    		LtableInsert(prom->LTable, &NewVar, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+    		LtableInsert(prom->LTable, &NewVar, TOK_INT);    // vlozeni do lokalni tabulky symbolu
     		LtableInsertValue(prom->LTable, &NewVar, &attr);
     			
 			string *val = &NewVar;
@@ -255,7 +255,7 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			strInit(&NewVar); //inicializace
 			GenNewVariable(&NewVar);  // vygenerovani promenne
 			tGData* prom = GtableSearch(global_table, id);
-			LtableInsert(prom->LTable, &NewVar, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+			LtableInsert(prom->LTable, &NewVar, TOK_DOUBLE);    // vlozeni do lokalni tabulky symbolu
 			LtableInsertValue(prom->LTable, &NewVar, &attr);
 
 			string *val = &NewVar;
