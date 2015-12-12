@@ -54,7 +54,7 @@ char prec_table[][16]={
 
 };
 //--hleda--rade/sloupec, aby mohl potom rozhodnout---------------------------------
-int select_ruler(string *zas_term, int term){
+char select_ruler(string *zas_term, int term){
 	int radek, sloupec;
 	
 	//radek--jeste neni reseno, ze by bylo =<
