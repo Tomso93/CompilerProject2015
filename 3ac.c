@@ -25,12 +25,16 @@ int cnt = 1; // counter pro poÄŤĂ­tĂˇnĂ­ hodnot generovanĂ˝ch promÄ�
 // Funkce na generovĂˇnĂ­ novĂ© instrukce, kterĂˇ je nĂˇslednÄ› vloĹľena do seznamu instrukcĂ­
 Tinst *genInstr(int InstType, string *src1, string *src2, string *dest)
 {
-    Tinst TItem;
-    TItem.itype = InstType;
-    TItem.src1 = src1;
-    TItem.src2 = src2;
-    TItem.dest = dest;
-    return &TItem;
+    Tinst *TItem;
+    TItem = malloc(sizeof(Tinst));
+    if (TItem == NULL){
+      return NULL;
+    }
+    (*TItem).itype = InstType;
+    (*TItem).src1 = src1;
+    (*TItem).src2 = src2;
+    (*TItem).dest = dest;
+    return TItem;
 }
 
 // Fuknce na generovĂˇnĂ­ novĂ˝ch promÄ›nnĂ˝ch
