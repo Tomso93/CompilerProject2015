@@ -811,14 +811,16 @@ int _for(globalTS *global_table, string *id){
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	result= comp_expr(global_table, id);
 
-	if (result !=SYNTAX_OK) return SYNTAX_ERROR;
+	if (result !=SYNTAX_OK) return result;
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_RIGHT_BRACKET) return SYNTAX_ERROR;
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_LEFT_BRACE) return SYNTAX_ERROR;
-	result= body(global_table, id);
+	result= stmnt(global_table, id);
+
+	if (result != SYNTAX_OK) return result;
 
     // instrukce skoku
     instrukce = genInstr(IGOTO, NULL, NULL, &Label_1);
@@ -871,7 +873,7 @@ int _cout(globalTS *global_table, string *id){
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	result = term();
 
-	if(token !=SYNTAX_OK) return result;
+	if(result !=SYNTAX_OK) return result;
 	
 	// instrukce pro zapis, pokud jich je vice generuji se v term_n()
     	Tinst *instrukce = genInstr(IWRITE, NULL, NULL, &attr);
@@ -972,7 +974,10 @@ int _if(globalTS *global_table, string *id){
 	//telo pokud je v if pravda
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_LEFT_BRACE) return SYNTAX_ERROR;
-	result= body(global_table, id);
+	result= stmnt(global_table, id);
+
+	if (result != SYNTAX_OK) return result;
+
 
     string Label_2;  // label dva, skok az za else, podminka v IF byla pravda
     strInit(&Label_2);
@@ -995,7 +1000,9 @@ int _if(globalTS *global_table, string *id){
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_LEFT_BRACE) return SYNTAX_ERROR;
-	result= body(global_table, id);
+	result= stmnt(global_table, id);
+
+	if (result != SYNTAX_OK) return result;
 
     // instrukce pro label_2, sem se skoci jestlize podminka IF byla pravda
     instrukce = genInstr(ILABEL, &Label_2, NULL, NULL);
@@ -1042,7 +1049,7 @@ int stmnt(globalTS *global_table, string *id){
 		case TOK_RETURN:
 			result= _return(global_table, id);
 			if (result != SYNTAX_OK) return result;
-			return SYNTAX_OK;
+			return stmnt(global_table, id);
 			break;
 
 		//PROM
@@ -1053,7 +1060,8 @@ int stmnt(globalTS *global_table, string *id){
 		case TOK_AUTO:
 			result= _prom(global_table, id);
 			if (result != SYNTAX_OK) return result;
-			return SYNTAX_OK;
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+			return stmnt(global_table, id);
 			break;
 		
 		//prazdny statement
@@ -1111,7 +1119,7 @@ int param_n(globalTS *global_table, string *id){
 			
 			//musi nasledovat TYPE a id
 			result = type();
-			if (result != SYNTAX_OK) return SYNTAX_ERROR;
+			if (result != SYNTAX_OK) return result;
 			int InternalType = token;
 			
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -1168,7 +1176,7 @@ int func_dclr(globalTS *global_table){
 	
 	
 	result= type();
-	if (result != SYNTAX_OK) return SYNTAX_ERROR;
+	if (result != SYNTAX_OK) return result;
 ///	
 	int InternalType = token; 
 	
