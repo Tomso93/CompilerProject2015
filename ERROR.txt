@@ -11,10 +11,6 @@ gcc -Wall -std=c99 -pedantic -g -lm -c interpret.c
 gcc -Wall -std=c99 -pedantic -g -lm -c errors.c
 gcc -Wall -std=c99 -pedantic -g -lm -c ial.c
 gcc -Wall -std=c99 -pedantic -g -lm -c parser.c
-parser.c: In function 'comp_expr':
-parser.c:564:4: warning: implicit declaration of function 'Tpush' [-Wimplicit-function-declaration]
-    chba = Tpush(&St);
-    ^
 gcc -Wall -std=c99 -pedantic -g -lm -c lex.c
 gcc -Wall -std=c99 -pedantic -g -lm -c 3ac.c
 3ac.c: In function 'genInstr':
