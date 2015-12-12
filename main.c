@@ -29,6 +29,7 @@ int main(int argc, char *argv[]){
                 fprintf(stderr, "Soubor se nepodarilo otevrit!");
                 return 99;
         } else {
+            set_source_file(f);
             // volani parseru
             result = parse(&symtab);
             if (result != SUCCESS){
@@ -42,7 +43,8 @@ int main(int argc, char *argv[]){
                 fclose(f);
                 return result;
             }
-        }
+
+	}
 
     } else {
         fprintf(stderr, "Zadej soubor!");
