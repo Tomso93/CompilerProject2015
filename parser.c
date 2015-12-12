@@ -232,6 +232,7 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 		St->top++;
 		St->t_n[St->top] = 'T';
 		St->pom[St->top] = pom;
+		St->prom_val[St->top] = 'id';
 
 		if (token == TOK_DECIMAL_NUMBER) {
 
