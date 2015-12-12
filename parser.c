@@ -241,12 +241,14 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
     		GenNewVariable(&NewVar);  // vygenerovani promenne
     		tGData* prom = GtableSearch(global_table, id);
     		LtableInsert(prom->LTable, &NewVar, TOK_INT);    // vlozeni do lokalni tabulky symbolu
-    		Tvalue value = &attr;
+    		Tvalue value;
+		value.s = attr;
     		LtableInsertValue(prom->LTable, &NewVar, value);
     			
 			string *val = &NewVar;
 			St->val[St->top] = val;
 			St->prom_val[St->top] = 'd';
+		strFree(&NewVar);
 		}
 
 		else if (token == TOK_FLOATING_POINT_NUMBER) {
@@ -257,12 +259,14 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			GenNewVariable(&NewVar);  // vygenerovani promenne
 			tGData* prom = GtableSearch(global_table, id);
 			LtableInsert(prom->LTable, &NewVar, TOK_DOUBLE);    // vlozeni do lokalni tabulky symbolu
-			Tvalue value = &attr;
+			Tvalue value;
+			value.s = attr;
 			LtableInsertValue(prom->LTable, &NewVar, value);
 
 			string *val = &NewVar;
 			St->val[St->top] = val;
 			St->prom_val[St->top] = 'f';
+			strFree(&NewVar);
 		}
 
 		else if (token == TOK_STR) {
@@ -273,11 +277,13 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			GenNewVariable(&NewVar);  // vygenerovani promenne
 			tGData* prom = GtableSearch(global_table, id);
 			LtableInsert(prom->LTable, &NewVar, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
-			Tvalue value = &attr;
+			Tvalue value;
+			value.s = attr;
 			LtableInsertValue(prom->LTable, &NewVar, value);
 			string *val = &NewVar;
 			St->val[St->top] = val;
 			St->prom_val[St->top] = 's';
+			strFree(&NewVar);
 
 		}
 
@@ -968,8 +974,8 @@ int _for(globalTS *global_table, string *id){
     GtableInsertInstr(global_table, id, instrukce);
     
 	if(result !=SYNTAX_OK) return result;
-
-
+    strFree(&Label_1);
+    strFree(&Label_2);
 	//cely for je v tom, ze je to opravdu for a dokonce spravne zapsany >:D
 	return SYNTAX_OK;
 }
@@ -1146,6 +1152,8 @@ int _if(globalTS *global_table, string *id){
     instrukce = genInstr(ILABEL, &Label_2, NULL, NULL);
     GtableInsertInstr(global_table, id, instrukce);
 	if(result !=SYNTAX_OK) return result;
+    strFree(&Label_1);
+    strFree(&Label_2);
 	// konstrukce if je v poradku muze opustit s pozitvni odpovedi
 	return SYNTAX_OK;
 
