@@ -527,7 +527,7 @@ int comp_expr(globalTS *global_table, string *id) {
 	InitialSt(&St);
 	pom = TopT(&St);
 
-	while (strCmpConstStr(&pom, "$") != 0 && (token != TOK_LEFT_BRACE || token != TOK_SEMICOLON)) {
+	if(token != TOK_LEFT_BRACE || token != TOK_SEMICOLON) {
 
 		result = select_ruler(&pom, token);
 
@@ -576,7 +576,7 @@ int comp_expr(globalTS *global_table, string *id) {
 
 		
 		pom = TopT(&St);	//prvni term.
-	}
+	}	while (strCmpConstStr(&pom, "$") != 0 && (token != TOK_LEFT_BRACE || token != TOK_SEMICOLON));
 
 
 	strFree(&pom);
