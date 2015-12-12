@@ -79,7 +79,7 @@ void PushE(Tstack *St, char Type, void * data);
 
 int FindBrc(Tstack *St);
 
-int TPush(Tstack *St);
+int TPush(Tstack *St, globalTS *global_table, string *id);
 
 void DelI(Tstack* St, int n);
 
