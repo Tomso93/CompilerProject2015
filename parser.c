@@ -591,11 +591,18 @@ int comp_expr(globalTS *global_table, string *id) {
 
 //-TERM->TOK_STR--||--TOK_ID--||--TOK_DECIMAL_NUMBER--||--TOK_FLOATING_POINT_NUMBER
 int term(){
-	if (token != (TOK_STR || TOK_ID || TOK_DECIMAL_NUMBER || TOK_FLOATING_POINT_NUMBER)){
-		return SYNTAX_ERROR;
+	
+	switch (token) {
+		case(TOK_STR) :
+		case(TOK_ID) :
+		case(TOK_DECIMAL_NUMBER) :
+		case(TOK_FLOATING_POINT_NUMBER) :
+			return SYNTAX_OK;
+			break;
+		default:
+			return SYNTAX_ERROR;
+			break;
 	}
-
-	return SYNTAX_OK;
 }
 //-----------NONTERMINAL-TYPE---------------------------------------------------
 int type(){
