@@ -26,7 +26,7 @@ int StackInit(Tstackframe *S){
 }
 
 
-int StackPush(Tstackframe *S, struct Frame *F){
+int PushFrame(Tstackframe *S, struct Frame *F){
   F->down = S->top;
   S->top = F;
   S->act = F;
@@ -34,7 +34,7 @@ int StackPush(Tstackframe *S, struct Frame *F){
 }
 
 
-struct Frame *StackPop(Tstackframe *S){
+struct Frame *PopFrame(Tstackframe *S){
   struct Frame *pom;
 
   if (S->top == NULL){
@@ -70,7 +70,7 @@ struct Frame *FrameCreate(globalTS *GTS, string *funcName){
 
   //copy Ltables (LTable) do LTS
   localTS LTS;
-  struct tLTableItem *prom;
+  tLTableItem *prom;
   int i;
 
   success = LtableInit(&LTS);
@@ -85,7 +85,7 @@ struct Frame *FrameCreate(globalTS *GTS, string *funcName){
       if (success != 0){
         return NULL;
       }
-      if (prom->isinit){
+      if (prom->data.isinit){
         success = LtableInsertValue (&LTS, &prom->key, prom->data.varValue);
         if (success != SUCCESS){
           return NULL;
