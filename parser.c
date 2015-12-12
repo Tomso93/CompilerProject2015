@@ -33,20 +33,25 @@ int error;
 //--------------------------------------------------------------------------------//																				
 
 char prec_table[][14]={
-{'>','>','<','<','>','>','>','>','>','>','<','>','<','>'},
-{'>','>','<','<','>','>','>','>','>','>','<','>','<','>'},
-{'>','>','>','>','>','>','>','>','>','>','<','>','<','>'},
-{'>','>','>','>','>','>','>','>','>','>','<','>','<','>'},
-{'<','<','<','<','>','>','>','>','>','>','<','>','<','>'},
-{'<','<','<','<','>','>','>','>','>','>','<','>','<','>'},
-{'<','<','<','<','>','>','>','>','>','>','<','>','<','>'},
-{'<','<','<','<','>','>','>','>','>','>','<','>','<','>'},
-{'<','<','<','<','>','>','>','>','>','>','<','>','<','>'},
-{'<','<','<','<','>','>','>','>','>','>','<','>','<','>'},
-{'<','<','<','<','<','<','<','<','<','<','=','<','<','0'},
-{'>','>','>','>','>','>','>','>','>','>','0','>','0','>'},
-{'>','>','>','>','>','>','>','>','>','>','0','>','0','>'},
-{'<','<','<','<','<','<','<','<','<','<','<','0','<','0'},
+//+   -   *   /   <   >  <=  >=  ==  !=	 (	 )    ID  $   ST  IN  FL
+{'>','>','<','<','>','>','>','>','>','>','<','>','<','>','<','<'},	// +
+{'>','>','<','<','>','>','>','>','>','>','<','>','<','>','0','<'},	// -
+{'>','>','>','>','>','>','>','>','>','>','<','>','<','>','0','<'},	// *
+{'>','>','>','>','>','>','>','>','>','>','<','>','<','>','0','<'},	// /
+{'<','<','<','<','>','>','>','>','>','>','<','>','<','>','<','<'},	//<
+{'<','<','<','<','>','>','>','>','>','>','<','>','<','>','<','<'},	//>
+{'<','<','<','<','>','>','>','>','>','>','<','>','<','>','<','<'},	//<=
+{'<','<','<','<','>','>','>','>','>','>','<','>','<','>','<','<'},	//>=
+{'<','<','<','<','>','>','>','>','>','>','<','>','<','>','<','<'},	//==
+{'<','<','<','<','>','>','>','>','>','>','<','>','<','>','<','<'},	//!=
+{'<','<','<','<','<','<','<','<','<','<','=','<','<','0','<','<'},	//(
+{'>','>','>','>','>','>','>','>','>','>','0','>','0','>','0','0'},	//)
+{'>','>','>','>','>','>','>','>','>','>','0','>','0','>','0','0'},	//id
+{'<','<','<','<','<','<','<','<','<','<','<','0','<','0','<','<'},	//$
+{'>','0','0','0','>','>','>','>','>','>','0','>','0','>','0','0'}, //string
+{'>','>','>','>','>','>','>','>','>','>','0','>','0','>','0','0'}, // decimal / float
+
+
 };
 //--hleda--rade/sloupec, aby mohl potom rozhodnout---------------------------------
 int select_ruler(string *zas_term, int term){
@@ -80,6 +85,12 @@ int select_ruler(string *zas_term, int term){
 	if (strCmpConstStr(zas_term, "id")==0 || strCmpConstStr(zas_term, "id<") == 0) radek=12;
 
 	if (strCmpConstStr(zas_term, "$")==0  || strCmpConstStr(zas_term, "$<") == 0) radek=13;
+
+	if (strCmpConstStr(zas_term, "sn") == 0 || strCmpConstStr(zas_term, "sn<") == 0) radek = 14;
+
+	if (strCmpConstStr(zas_term, "d") == 0 || strCmpConstStr(zas_term, "d<") == 0) radek = 15;
+
+	if (strCmpConstStr(zas_term, "f") == 0 || strCmpConstStr(zas_term, "f<") == 0) radek = 15;
 
 	//sloupec
 	switch (term){
@@ -121,6 +132,13 @@ int select_ruler(string *zas_term, int term){
 			break;
 		case TOK_ID:
 			sloupec=12;
+			break;
+		case TOK_STR:
+			sloupec=14;
+			break;
+		case TOK_DECIMAL_NUMBER:
+		case TOK_FLOATING_POINT_NUMBER:
+			sloupec=15;
 			break;
 		default:
 			sloupec=13;
@@ -208,9 +226,45 @@ int TPush(Tstack *St) {
 		strInit(&pom);
 		strCopyString(&pom, &attr);			// vlozim na zasobnik prichozi terminal
 
+		//semantika a rozdelovani
+
+		if (token == TOK_ID) {
+			//tady se to musi ulozit do tabulky symbolu 
+		}
+
 		St->top++;
 		St->t_n[St->top] = 'T';
 		St->pom[St->top] = pom;
+
+		else if (token == TOK_DECIMAL_NUMBER) {
+
+			//tady to musime narvat do tabulky promenou, ktera obsahuje cele cislo a do val navrat odkaz na ten symbol promenne, co je v tabulce
+			string *val = ;
+			St->val[St->top] = val;
+			St->prom_val[St->top] = 'd';
+		}
+
+		else if (token == TOK_FLOATING_POINT_NUMBER) {
+			
+			//tady to musime narvat do tabulky promenou, ktera obsahuje float cislo a do val navrat odkaz na ten symbol promenne, co je v tabulce
+			string *val = ;
+			St->val[St->top] = val;
+			St->prom_val[St->top] = 'f';
+		}
+
+		else if (token == TOK_STR) {
+
+			//tady to musime narvat do tabulky promenou, ktera obsahuje retezec a do val navrat odkaz na ten symbol promenne, co je v tabulce
+			string *val = ;
+			St->val[St->top] = val;
+			St->prom_val[St->top] = 'sn';
+
+		}
+
+		else {
+			St->prom_val[St->top] = 'N';
+			S->val[St->top] = NULL;
+		}
 	}
 
 	return SUCCESS;
