@@ -58,7 +58,7 @@ char select_ruler(string *zas_term, int term){
 	int radek, sloupec;
 	
 	//radek--jeste neni reseno, ze by bylo =<
-	if ((strCmpConstStr(zas_term, "*"))==0  || ((strCmpConstStr(zas_term, "*<")) == 0) radek=0;
+	if ((strCmpConstStr(zas_term, "*\0"))==0  || ((strCmpConstStr(zas_term, "*<\0")) == 0) radek=0;
 	
 	if (strCmpConstStr(zas_term, "/")==0  || strCmpConstStr(zas_term, "/<") == 0) radek=1;
 	
