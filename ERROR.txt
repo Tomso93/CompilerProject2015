@@ -1,7 +1,7 @@
-/home/users/xw/xwojac00/CompilerProject2015-master (3)/CompilerProject2015-master$ make
+/homes/eva/xw/xwojac00/CompilerProject2015-master/CompilerProject2015-master$ make
 gcc -Wall -std=c99 -pedantic -g -lm -c main.c
-main.c: In function 'main':
-main.c:49:9: warning: 'f' may be used uninitialized in this function [-Wmaybe-uninitialized]
+main.c: In function ‘main’:
+main.c:49:9: warning: ‘f’ may be used uninitialized in this function [-Wmaybe-uninitialized]
          fclose(f);
          ^
 gcc -Wall -std=c99 -pedantic -g -lm -c str.c
@@ -13,19 +13,35 @@ gcc -Wall -std=c99 -pedantic -g -lm -c ial.c
 gcc -Wall -std=c99 -pedantic -g -lm -c parser.c
 gcc -Wall -std=c99 -pedantic -g -lm -c lex.c
 gcc -Wall -std=c99 -pedantic -g -lm -c 3ac.c
-3ac.c: In function 'genInstr':
+3ac.c: In function ‘genInstr’:
 3ac.c:33:5: warning: function returns address of local variable [-Wreturn-local-addr]
      return &TItem;
      ^
 gcc -Wall -std=c99 -pedantic -g -lm -c varframe.c
-varframe.c: In function 'FrameDelete':
-varframe.c:51:21: warning: unused variable 'pom' [-Wunused-variable]
+varframe.c: In function ‘FrameDelete’:
+varframe.c:51:21: warning: unused variable ‘pom’ [-Wunused-variable]
    struct FrameItem *pom;
                      ^
-varframe.c: In function 'FrameCreate':
-varframe.c:88:21: error: invalid type argument of '->' (have 'tLData')
-       if (prom->data->isinit){
-                     ^
-*** Error code 1
-
-Stop.
+varframe.c: In function ‘FrameCreate’:
+varframe.c:82:10: warning: assignment from incompatible pointer type
+     prom = (*(func->LTable))[i]; 
+          ^
+varframe.c:84:42: error: dereferencing pointer to incomplete type
+       success = LtableInsert (&LTS, &prom->key, prom->data.varType);
+                                          ^
+varframe.c:84:53: error: dereferencing pointer to incomplete type
+       success = LtableInsert (&LTS, &prom->key, prom->data.varType);
+                                                     ^
+varframe.c:88:15: error: dereferencing pointer to incomplete type
+       if (prom->isinit){
+               ^
+varframe.c:89:49: error: dereferencing pointer to incomplete type
+         success = LtableInsertValue (&LTS, &prom->key, prom->data.varValue);
+                                                 ^
+varframe.c:89:60: error: dereferencing pointer to incomplete type
+         success = LtableInsertValue (&LTS, &prom->key, prom->data.varValue);
+                                                            ^
+varframe.c:94:18: error: dereferencing pointer to incomplete type
+       prom = prom->nextItem;
+                  ^
+make: *** [varframe.o] Error 1
