@@ -599,11 +599,18 @@ int term(){
 }
 //-----------NONTERMINAL-TYPE---------------------------------------------------
 int type(){
-	if (token != (TOK_INT || TOK_DOUBLE || TOK_STRING || TOK_AUTO)){
-		return SYNTAX_ERROR;
+	
+	switch(token){
+		case(TOK_INT) :
+		case(TOK_DOUBLE) :
+		case(TOK_STRING) :
+		case(TOK_AUTO) :
+			return SYNTAX_OK;
+			break;
+		default:
+			return SYNTAX_ERROR;
+			break;
 	}
-
-	return SYNTAX_OK;
 }
 
 //-----I_PROM->--=--EXPR--||--eps
