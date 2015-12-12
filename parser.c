@@ -233,7 +233,7 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 		St->t_n[St->top] = 'T';
 		St->pom[St->top] = pom;
 
-		else if (token == TOK_DECIMAL_NUMBER) {
+		if (token == TOK_DECIMAL_NUMBER) {
 
 			//tady to musime narvat do tabulky promenou, ktera obsahuje cele cislo a do val navrat odkaz na ten symbol promenne, co je v tabulce
 			string NewVar; //label, pro navrat
@@ -241,7 +241,7 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
     		GenNewVariable(&NewVar);  // vygenerovani promenne
     		tGData* prom = GtableSearch(global_table, id);
     		LtableInsert(prom->LTable, &NewVar, TOK_INT);    // vlozeni do lokalni tabulky symbolu
-    		LtableInsertValue(prom->LTable, &NewVar, &attr);
+    		LtableInsertValue(prom->LTable, &NewVar, attr);
     			
 			string *val = &NewVar;
 			St->val[St->top] = val;
@@ -256,7 +256,7 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			GenNewVariable(&NewVar);  // vygenerovani promenne
 			tGData* prom = GtableSearch(global_table, id);
 			LtableInsert(prom->LTable, &NewVar, TOK_DOUBLE);    // vlozeni do lokalni tabulky symbolu
-			LtableInsertValue(prom->LTable, &NewVar, &attr);
+			LtableInsertValue(prom->LTable, &NewVar, attr);
 
 			string *val = &NewVar;
 			St->val[St->top] = val;
@@ -271,7 +271,7 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			GenNewVariable(&NewVar);  // vygenerovani promenne
 			tGData* prom = GtableSearch(global_table, id);
 			LtableInsert(prom->LTable, &NewVar, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
-			LtableInsertValue(prom->LTable, &NewVar, &attr);
+			LtableInsertValue(prom->LTable, &NewVar, attr);
 			string *val = &NewVar;
 			St->val[St->top] = val;
 			St->prom_val[St->top] = 's';
