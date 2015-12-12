@@ -60,37 +60,37 @@ char select_ruler(string *zas_term, int term){
 	//radek--jeste neni reseno, ze by bylo =<
 	if ((strCmpConstStr(zas_term, "*\0"))==0  || ((strCmpConstStr(zas_term, "*<\0")) == 0) radek=0;
 	
-	if (strCmpConstStr(zas_term, "/")==0  || strCmpConstStr(zas_term, "/<") == 0) radek=1;
+	if (strCmpConstStr(zas_term, "/\0")==0  || strCmpConstStr(zas_term, "/<\0") == 0) radek=1;
 	
-	if (strCmpConstStr(zas_term, "+")==0  || strCmpConstStr(zas_term, "+<") == 0) radek=2;
+	if (strCmpConstStr(zas_term, "+\0")==0  || strCmpConstStr(zas_term, "+<\0") == 0) radek=2;
 	
-	if (strCmpConstStr(zas_term, "-")==0  || strCmpConstStr(zas_term, "-<") == 0) radek=3;
+	if (strCmpConstStr(zas_term, "-\0")==0  || strCmpConstStr(zas_term, "-<\0") == 0) radek=3;
 	
-	if (strCmpConstStr(zas_term, "<")==0  || strCmpConstStr(zas_term, "<<") == 0) radek=4;
+	if (strCmpConstStr(zas_term, "<\0")==0  || strCmpConstStr(zas_term, "<<\0") == 0) radek=4;
 
-	if (strCmpConstStr(zas_term, ">")==0  || strCmpConstStr(zas_term, "><") == 0) radek=5;
+	if (strCmpConstStr(zas_term, ">\0")==0  || strCmpConstStr(zas_term, "><\0") == 0) radek=5;
 
-	if (strCmpConstStr(zas_term, "<=")==0 || strCmpConstStr(zas_term, "<=<") == 0) radek=6;
+	if (strCmpConstStr(zas_term, "<=\0")==0 || strCmpConstStr(zas_term, "<=<\0") == 0) radek=6;
 
-	if (strCmpConstStr(zas_term, ">=")==0 || strCmpConstStr(zas_term, ">=<") == 0) radek=7;
+	if (strCmpConstStr(zas_term, ">=\0")==0 || strCmpConstStr(zas_term, ">=<\0") == 0) radek=7;
 
-	if (strCmpConstStr(zas_term, "==")==0 || strCmpConstStr(zas_term, "==<") == 0) radek=8;
+	if (strCmpConstStr(zas_term, "==\0")==0 || strCmpConstStr(zas_term, "==<\0") == 0) radek=8;
 
-	if (strCmpConstStr(zas_term, "!=")==0 || strCmpConstStr(zas_term, "!=<") == 0) radek=9;
+	if (strCmpConstStr(zas_term, "!=\0")==0 || strCmpConstStr(zas_term, "!=<\0") == 0) radek=9;
 
-	if (strCmpConstStr(zas_term, "(")==0  || strCmpConstStr(zas_term, "(<") == 0) radek=10;
+	if (strCmpConstStr(zas_term, "(\0")==0  || strCmpConstStr(zas_term, "(<\0") == 0) radek=10;
 
-	if (strCmpConstStr(zas_term, ")")==0  || strCmpConstStr(zas_term, ")<") == 0) radek=11;
+	if (strCmpConstStr(zas_term, ")\0")==0  || strCmpConstStr(zas_term, ")<\0") == 0) radek=11;
 
-	if (strCmpConstStr(zas_term, "id")==0 || strCmpConstStr(zas_term, "id<") == 0) radek=12;
+	if (strCmpConstStr(zas_term, "id\0")==0 || strCmpConstStr(zas_term, "id<\0") == 0) radek=12;
 
-	if (strCmpConstStr(zas_term, "$")==0  || strCmpConstStr(zas_term, "$<") == 0) radek=13;
+	if (strCmpConstStr(zas_term, "$\0")==0  || strCmpConstStr(zas_term, "$<\0") == 0) radek=13;
 
-	if (strCmpConstStr(zas_term, "s") == 0 || strCmpConstStr(zas_term, "s<") == 0) radek = 14;
+	if (strCmpConstStr(zas_term, "s\0") == 0 || strCmpConstStr(zas_term, "s<\0") == 0) radek = 14;
 
-	if (strCmpConstStr(zas_term, "d") == 0 || strCmpConstStr(zas_term, "d<") == 0) radek = 15;
+	if (strCmpConstStr(zas_term, "d\0") == 0 || strCmpConstStr(zas_term, "d<\0") == 0) radek = 15;
 
-	if (strCmpConstStr(zas_term, "f") == 0 || strCmpConstStr(zas_term, "f<") == 0) radek = 15;
+	if (strCmpConstStr(zas_term, "f\0") == 0 || strCmpConstStr(zas_term, "f<\0") == 0) radek = 15;
 
 	//sloupec
 	switch (term){
