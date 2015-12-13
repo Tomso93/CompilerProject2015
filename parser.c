@@ -251,7 +251,7 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			NewVar = malloc(sizeof(string));
     		strInit(NewVar); //inicializace
     		GenNewVariable(NewVar);  // vygenerovani promenne
-		GtableInsertVar(global_table, id , NewVar, TOK_INT);
+		GtableInsertVar(global_table, id , NewVar, TOK_AUTO);
     		//tGData* prom = GtableSearch(global_table, id);
     		//LtableInsert(prom->LTable, &NewVar, TOK_INT);    // vlozeni do lokalni tabulky symbolu
     		Tvalue value;
@@ -274,7 +274,7 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			NewVar = malloc(sizeof(string));
 			strInit(NewVar); //inicializace
 			GenNewVariable(NewVar);  // vygenerovani promenne
-			GtableInsertVar(global_table, id, NewVar, TOK_DOUBLE);		
+			GtableInsertVar(global_table, id, NewVar, TOK_AUTO);		
 			//tGData* prom = GtableSearch(global_table, id);
 			//LtableInsert(prom->LTable, &NewVar, TOK_DOUBLE);    // vlozeni do lokalni tabulky symbolu
 			Tvalue value;
@@ -298,7 +298,7 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			NewVar = malloc(sizeof(string));
 			strInit(NewVar); //inicializace
 			GenNewVariable(NewVar);  // vygenerovani promenne
-			GtableInsertVar(global_table, id, NewVar, TOK_STRING);
+			GtableInsertVar(global_table, id, NewVar, TOK_AUTO);
 			//tGData* prom = GtableSearch(global_table, id);
 			//LtableInsert(prom->LTable, &NewVar, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
 			Tvalue value;
@@ -420,7 +420,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 		value3 = malloc(sizeof(string));
     		strInit(value3); //inicializace
     		GenNewVariable(value3);  // vygenerovani promenne
-		GtableInsertVar(global_table, id, value3, TOK_STRING);
+		GtableInsertVar(global_table, id, value3, TOK_AUTO);
     		//tGData* prom = GtableSearch(global_table, id);
     		//LtableInsert(prom->LTable, &value3, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
   
