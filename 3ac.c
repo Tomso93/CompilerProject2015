@@ -59,3 +59,27 @@ string *ReadNameVar(TinstList *list)
     
     return I->dest;
 }
+
+
+string *GtableLastDest(globalTS *T, string *id){
+  if (T == NULL || id == NULL){
+    return NULL;
+  }
+
+  tGData* prom;
+  prom = GtableSearch(T, id);
+  if(prom == NULL){
+    return NULL;
+  }
+  if(prom->LInstr == NULL){
+    return NULL;
+  }
+  if(prom->LInstr->last == NULL){
+    return NULL;
+  }
+  if(prom->LInstr->last->inst.dest == NULL){
+    return NULL;
+  }
+  
+  return prom->LInstr->last->inst.dest;
+}
