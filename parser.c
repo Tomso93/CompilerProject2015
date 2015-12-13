@@ -994,16 +994,17 @@ int _for(globalTS *global_table, string *id){
 	result= _i_prom(global_table, id);
 	if (result !=SYNTAX_OK) return SYNTAX_ERROR;
 
-    string Label_1; //label, pro navrat
-    strInit(&Label_1); //inicializace
-    GenNewVariable(&Label_1);  // vygenerovani promenne
-    GtableInsertVar(global_table, id, &Label_1, TOK_STRING);
+    string *Label_1; //label, pro navrat
+    Label_1 = malloc(sizeof(string));
+    strInit(Label_1); //inicializace
+    GenNewVariable(Label_1);  // vygenerovani promenne
+    GtableInsertVar(global_table, id, Label_1, TOK_STRING);
    // tGData* prom = GtableSearch(global_table, id);
     //LtableInsert(prom->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
     //LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
    
     // instrukce pro label
-    Tinst *instrukce = genInstr(ILABEL, &Label_1, NULL, NULL);
+    Tinst *instrukce = genInstr(ILABEL, Label_1, NULL, NULL);
     GtableInsertInstr(global_table, id, instrukce);
     
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -1014,21 +1015,23 @@ int _for(globalTS *global_table, string *id){
     //prom = GtableSearch(global_table, id);
     //string *LastVar = ReadNameVar(prom->LInstr);
     string *LastVar = GtableLastDest(global_table, id);
-    string tmp;
-    strInit(&tmp);
-    strCopyString(&tmp,LastVar);
-    instrukce = genInstr(INOT, &tmp, NULL, &tmp);
+    string *tmp;
+    tmp = malloc(sizeof(string));
+    strInit(tmp);
+    strCopyString(tmp,LastVar);
+    instrukce = genInstr(INOT, tmp, NULL, tmp);
     GtableInsertInstr(global_table, id, instrukce);
     
-    string Label_2; //label, pro navrat
-    strInit(&Label_2); //inicializace
-    GenNewVariable(&Label_2);  // vygenerovani promenne
-    GtableInsertVar(global_table, id, &Label_2, TOK_STRING);
+    string *Label_2; //label, pro navrat
+    Label_2 = malloc(sizeof(string));
+    strInit(Label_2); //inicializace
+    GenNewVariable(Label_2);  // vygenerovani promenne
+    GtableInsertVar(global_table, id, Label_2, TOK_STRING);
     //prom = GtableSearch(global_table, id);
     //LtableInsert(prom->LTable, &Label_2, TOK_STRING);
     //LtableInsertValue(global_table->data->LTable, &Label_2, Label_2);
     
-    instrukce = genInstr(IIFGOTO, &tmp, NULL, &Label_2);
+    instrukce = genInstr(IIFGOTO, tmp, NULL, Label_2);
     GtableInsertInstr(global_table, id, instrukce);
      
 	//if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -1056,10 +1059,10 @@ int _for(globalTS *global_table, string *id){
 	if (result != SYNTAX_OK) return result;
 
     // instrukce skoku
-    instrukce = genInstr(IGOTO, NULL, NULL, &Label_1);
+    instrukce = genInstr(IGOTO, NULL, NULL, Label_1);
     GtableInsertInstr(global_table, id, instrukce);
     //instrukce label pro skonceni cyklu
-    instrukce = genInstr(ILABEL, &Label_2, NULL, NULL);
+    instrukce = genInstr(ILABEL, Label_2, NULL, NULL);
     GtableInsertInstr(global_table, id, instrukce);
     
 	if(result !=SYNTAX_OK) return result;
