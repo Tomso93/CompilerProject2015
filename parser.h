@@ -11,7 +11,6 @@
 // Strunktura zasobniku pro vkladani terminalu na zasobnik
 typedef struct {
 	string pom[MAX];	// text
-	char prom_val[MAX]; // type promenne
 	int top;			// vrchol
 	char t_n[MAX];		// T , N 
 	string *val[MAX];	// hodnota 
@@ -69,13 +68,13 @@ int term();
 
 
 // Precedence 
-int select_ruler(string *zas_term, int term);
+char select_ruler(string *zas_term, int term);
 
 void SDipose(Tstack* St);
 
 void InitialSt(Tstack* St);
 
-void PushE(Tstack *St, char Type, void * data);
+void PushE(Tstack *St, string * data);
 
 int FindBrc(Tstack *St);
 

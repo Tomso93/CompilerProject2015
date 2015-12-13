@@ -54,11 +54,11 @@ char prec_table[][16]={
 
 };
 //--hleda--rade/sloupec, aby mohl potom rozhodnout---------------------------------
-char select_ruler(string *zas_term, int term){
+char select_ruler(string *zas_term, int term){			// prosim nesahat, hotove
 	int radek, sloupec;
 	
 	//radek--jeste neni reseno, ze by bylo =<
-	if ((strCmpConstStr(zas_term, "*\0"))==0  || ((strCmpConstStr(zas_term, "*<\0")) == 0) radek=0;
+	if (strCmpConstStr(zas_term, "*\0")==0  || strCmpConstStr(zas_term, "*<\0") == 0) radek=0;
 	
 	if (strCmpConstStr(zas_term, "/\0")==0  || strCmpConstStr(zas_term, "/<\0") == 0) radek=1;
 	
@@ -150,7 +150,7 @@ char select_ruler(string *zas_term, int term){
 
 
 //----------------------------Smaze---zasobnik------------------------------
-void SDipose(Tstack* St) {
+void SDipose(Tstack* St) {					// prosim nesahat, hotove
 
 	while (St->top > 0) {
 		strFree(&(St->pom[St->top]));
@@ -159,24 +159,24 @@ void SDipose(Tstack* St) {
 }
 
 //----------------------------INIT-Zasobniku--------------------------------
-void InitialSt(Tstack* St) {
+void InitialSt(Tstack* St) {				// prosim nesahat, hotove
 	string pom;
 	strInit(&pom);
 	strAddChar(&pom, '$');
 
-	St->top = 0;
-	St->t_n[St->top] = 'T';
-	St->pom[St->top] = pom;
-	St->val[St->top] = NULL;
-	St->prom_val[St->top] = 'N';
+	St->top = 0;				// vrchol == 0
+	St->t_n[St->top] = 'T';		// je to terminal
+	St->pom[St->top] = pom;		// je tam znak T
+	St->val[St->top] = NULL;	// data o promenne v tabulce
+		
 }
 //-------------------------------add-term-----------------------------------
-void GnTerm(Tstack *St, char x){
+void GnTerm(Tstack *St, char x){			// prosim nesahat, hotove
 
 	strAddChar(&(St->pom[FindT(St)]), x);
 } 
 //--------------------------------------------------------------------------
-void PushE(Tstack *St, char Type, void * data) {
+void PushE(Tstack *St, string * data) {		// los nechutnost
 	//dam pravidlo na zasobnik
 	if (St->top != MAX) {
 		string pom;
@@ -186,15 +186,14 @@ void PushE(Tstack *St, char Type, void * data) {
 		// vlozi o vlozem informace
 		St->top++;
 		St->t_n[St->top] = 'N';
-		St->pom[St->top] = pom;
-		St->val[St->top] = data;	//
+		St->pom[St->top] = pom;		// toto, zastav se u toho
+		St->val[St->top] = data;	// toto
 
-		if (data == NULL)
-			St->prom_val[St->top] = Type;	//
+		// len bordel tu robi darebak, pryc s nim 
 	}
 }
 //----------------------------hleda--prvni--hnadle--------------------------
-int FindBrc(Tstack *St) {
+int FindBrc(Tstack *St) {							// prosim nesahat, hotove
 	// hleda prvni handle, jinak vraci syn. err
 	int i = 0;
 	char pom;
@@ -202,6 +201,8 @@ int FindBrc(Tstack *St) {
 		pom = St->pom[(St->top - i)].str[St->pom[(St->top - i)].length - 1];
 
 	else pom = 0;
+
+
 
 	while (pom != '<' && i < St->top) {
 		i++;
@@ -224,20 +225,20 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 	else {
 		string pom;
 		strInit(&pom);
-		strCopyString(&pom, &attr);			// vlozim na zasobnik prichozi terminal
-
-		//semantika a rozdelovani
-
-
 		St->top++;
 		St->t_n[St->top] = 'T';
 		
-		if (token == TOK_ID) {
-			St->pom[St->top] = 'i';
+
+		if (token == TOK_ID){
+			// tady bych se mel podivat, jestli je uz tabulce symbolu 
+			strAddChar(&pom, 'i');
+			St->pom[St->top] = pom;		//sd
 		}
-		
 
 		else if (token == TOK_DECIMAL_NUMBER) {
+
+			strAddChar(&pom, 'd');
+			St->pom[St->top] = pom;
 
 			//tady to musime narvat do tabulky promenou, ktera obsahuje cele cislo a do val navrat odkaz na ten symbol promenne, co je v tabulce
 			string NewVar; //label, pro navrat
@@ -249,14 +250,16 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 		value.s = attr;
     		LtableInsertValue(prom->LTable, &NewVar, value);
     			
-			string *val = &NewVar;
-			St->val[St->top] = val;
-			St->prom_val[St->top] = 'd';
-		strFree(&NewVar);
+		
+			St->val[St->top] = &NewVar;
+			strFree(&NewVar);
 		}
 
 		else if (token == TOK_FLOATING_POINT_NUMBER) {
 			
+			strAddChar(&pom, 'f');
+			St->pom[St->top] = pom;
+
 			//tady to musime narvat do tabulky promenou, ktera obsahuje float cislo a do val navrat odkaz na ten symbol promenne, co je v tabulce
 			string NewVar; //label, pro navrat
 			strInit(&NewVar); //inicializace
@@ -267,13 +270,16 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			value.s = attr;
 			LtableInsertValue(prom->LTable, &NewVar, value);
 
-			string *val = &NewVar;
-			St->val[St->top] = val;
-			St->prom_val[St->top] = 'f';
+			
+			St->val[St->top] = &NewVar;
 			strFree(&NewVar);
 		}
 
 		else if (token == TOK_STR) {
+
+
+			strAddChar(&pom, 's');
+			St->pom[St->top] = pom;
 
 			//tady to musime narvat do tabulky promenou, ktera obsahuje retezec a do val navrat odkaz na ten symbol promenne, co je v tabulce
 			string NewVar; //label, pro navrat
@@ -284,15 +290,13 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			Tvalue value;
 			value.s = attr;
 			LtableInsertValue(prom->LTable, &NewVar, value);
-			string *val = &NewVar;
-			St->val[St->top] = val;
-			St->prom_val[St->top] = 's';
+			
+			St->val[St->top] = &NewVar;
 			strFree(&NewVar);
 
 		}
 
 		else {
-			St->prom_val[St->top] = 'N';
 			St->val[St->top] = NULL;
 		}
 	}
@@ -300,7 +304,7 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 	return SUCCESS;
 }
 //--------------------Mazu---polozky--------------------------------------------
-void DelI(Tstack* St, int n) {
+void DelI(Tstack* St, int n) {				//nejlepsi zpusob, jak mazat prvky, ktere redukuju
 	int i = 0;
 
 	while (i<n) {
@@ -311,7 +315,7 @@ void DelI(Tstack* St, int n) {
 }
 
 //--------------------hleda-prvni--term--v--zasobniku---------------------------
-int FindT(Tstack* St) {
+int FindT(Tstack* St) {					// taktez, radeji ruky do kapes
 	int i = 0;
 	while (St->t_n[(St->top - i)] != 'T' && i < St->top) {
 		i++;
@@ -319,25 +323,24 @@ int FindT(Tstack* St) {
 	return St->top - i;
 }
 //----------------------------Vrchni---term---------------------------------
-string TopT(Tstack* St) {
+string TopT(Tstack* St) {				// prosim nesahat
 
 	return St->pom[FindT(St)];
 }
 //------------Redugujeme--:D---------------------------------------------------
 int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
-	// pokusi se aplikovat pravidlo a zredukovat vyraz
-	char E1;
+	// nejlepsi redukce aku svet nezazil
+	// upravit potom pushE, tak aby si predavalo dal ukazatel na data
 	string * value1;
 	string * value3;
 	if (error != ERR) {
-		E1 = St->prom_val[i];
 		value1 = St->val[i];
 		value3 = malloc(sizeof(string));
 		if (value3 == NULL)
 			return INTERN_ERROR;
 	}
 	//----------------------------- E-> id------------------------------------------	
-	if (strCmpConstStr(&(St->pom[i]), "id") == 0) {
+	if (strCmpConstStr(&(St->pom[i]), "i") == 0) {
 
 		if (error != ERR){
 			//Generovani instrukce
@@ -346,7 +349,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 		}
 			DelI(St, 1);
 
-		PushE(St, E1, value3);
+		PushE(St, value3);
 		return SYNTAX_OK;
 	}
 	//------------------------------E-> (E)------------------------------------------	
@@ -356,7 +359,6 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 		if (error != ERR) {
-			E1 = St->prom_val[i + 1];
 			value1 = St->val[i + 1];
 			//Generovani instrukce
 			Tinst *instrukce = genInstr(IMOV, value1, NULL, value3);
@@ -364,7 +366,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 		}
 
 		DelI(St, 3);
-		PushE(St, E1, value3);
+		PushE(St, value3);
 		return SYNTAX_OK;
 	}
 	//------------------------------E-> E*E------------------------------------------	
@@ -374,10 +376,8 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 		if (error != ERR) {
-			char E2 = St->prom_val[i + 2];
 			string *value2 = St->val[i + 2];
 
-			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
 			Tinst *instrukce = genInstr(IMUL, value1, value2, value3);
 			GtableInsertInstr(global_table, id, instrukce);
@@ -386,7 +386,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 		DelI(St, 3);
 		// 3 se ulozi do zasobniku a ceka 
-		PushE(St, E1, value3);
+		PushE(St, value3);
 		return SYNTAX_OK;
 
 	}
@@ -397,11 +397,10 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 		// E-> E/E
 		if (error != ERR) {
-			char E2 = St->prom_val[i + 2];
+			
 			string *value2 = St->val[i + 2];
 
-			//seman
-			if (E1 != E2) return SEMANTIC_ERROR;
+			
 			//Generovani instrukce
 			Tinst *instrukce = genInstr(IDIV,value1, value2, value3);
 			GtableInsertInstr(global_table, id ,instrukce);
@@ -409,7 +408,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 		DelI(St, 3);
-		PushE(St, E1, value3);
+		PushE(St, value3);
 		return SYNTAX_OK;
 
 	}
@@ -420,11 +419,9 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 		if (error != ERR) {
-			char E2 = St->prom_val[i + 2];
+
 			string *value2 = St->val[i + 2];
 
-			//seman
-			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
 			Tinst *instrukce = genInstr(IADD, value1, value2,value3);
 			GtableInsertInstr(global_table, id, instrukce);
@@ -432,7 +429,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 		DelI(St, 3);
-		PushE(St, E1, value3);
+		PushE(St, value3);
 		return SYNTAX_OK;
 
 	}
@@ -443,11 +440,9 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 		if (error != ERR) {
-			char E2 = St->prom_val[i + 2];
+			
 			string *value2 = St->val[i + 2];
 
-			//seman
-			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
 			Tinst *instrukce = genInstr(ISUB,value1, value2, value3);
 			GtableInsertInstr(global_table, id, instrukce);
@@ -455,7 +450,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 		DelI(St, 3);
-		PushE(St, E1, value3);
+		PushE(St, value3);
 		return SYNTAX_OK;
 	}
 
@@ -466,11 +461,9 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 		if (error != ERR) {
-			char E2 = St->prom_val[i + 2];
+
 			string *value2 = St->val[i + 2];
 
-			//seman
-			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
 			Tinst *instrukce = genInstr(IBIG, value1, value2, value3);
 			GtableInsertInstr(global_table, id, instrukce);
@@ -478,7 +471,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 		DelI(St, 3);
-		PushE(St, E1, value3);
+		PushE(St, value3);
 		return SYNTAX_OK;
 	}
 
@@ -488,11 +481,9 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 		if (error != ERR) {
-			char E2 = St->prom_val[i + 2];
 			string *value2 = St->val[i + 2];
 
-			//seman
-			if (E1 != E2) return SEMANTIC_ERROR;
+		
 			//Generovani instrukce
 			Tinst *instrukce = genInstr(IEQBG, value1, value2, value3);
 			GtableInsertInstr(global_table, id, instrukce);
@@ -501,7 +492,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 		DelI(St, 3);
-		PushE(St, E1, value3);
+		PushE(St, value3);
 		return SYNTAX_OK;
 	}
 
@@ -511,11 +502,8 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 		if (error != ERR) {
-			char E2 = St->prom_val[i + 2];
 			string *value2 = St->val[i + 2];
 
-			//seman
-			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
 			Tinst *instrukce = genInstr(ISMALL,value1, value2, value3);
 			GtableInsertInstr(global_table, id, instrukce);
@@ -523,7 +511,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 		DelI(St, 3);
-		PushE(St, E1, value3);
+		PushE(St, value3);
 		return SYNTAX_OK;
 	}
 
@@ -533,18 +521,16 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 		(strCmpConstStr(&(St->pom[i + 2]), "E") == 0)) {
 
 		if (error != ERR) {
-			char E2 = St->prom_val[i + 2];
+			
 			string *value2 = St->val[i + 2];
 
-			//seman
-			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
 			Tinst *instrukce = genInstr(IEQSM, value1,value2, value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
 		DelI(St, 3);
-		PushE(St, E1, value3);
+		PushE(St, value3);
 		return SYNTAX_OK;
 	}
 
@@ -555,11 +541,8 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 		if (error != ERR) {
-			char E2 = St->prom_val[i + 2];
 			string *value2 = St->val[i + 2];
 
-			//seman
-			if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
 			Tinst *instrukce = genInstr(IEQUAL, value1,value2, value3);
 			GtableInsertInstr(global_table, id, instrukce);
@@ -567,7 +550,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 		DelI(St, 3);
-		PushE(St, E1, value3);
+		PushE(St, value3);
 		return SYNTAX_OK;
 	}
 
@@ -578,11 +561,9 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 		if (error != ERR) {
-			char E2 = St->prom_val[i + 2];
+			
 			string *value2 = St->val[i + 2];
 
-			//seman
-				if (E1 != E2) return SEMANTIC_ERROR;
 			//Generovani instrukce
 			Tinst *instrukce = genInstr(INOTEQ, value1, value2, value3);
 			GtableInsertInstr(global_table, id, instrukce);
@@ -590,7 +571,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 
 		DelI(St, 3);
-		PushE(St, E1, value3);
+		PushE(St, value3);
 		return SYNTAX_OK;
 	}
 
