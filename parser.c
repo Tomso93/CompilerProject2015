@@ -882,7 +882,11 @@ int callf_dec(globalTS *global_table, string *id){
 
 	switch(token){
 		case TOK_ID:
-			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+			tGData fnce = GtableSearch(global_table, &attr);
+			if(fnce == NULL)
+				result = comp_expr(global_table, id);
+			
+			else if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			if(token !=TOK_LEFT_BRACKET) return SYNTAX_ERROR;
 
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
