@@ -861,36 +861,269 @@ int list_par_n(){
 		case TOK_COMMA:
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			result= term();
+
+			switch(token){
+			
+		case TOK_ID:
+			result= term();
+			///
+				string *funcid;
+				funcid = malloc(sizeof(string));
+				strInit(funcid);
+				strCopyString(funcid, id);
+
+				string *tmp;
+				tmp = malloc(sizeof(string));
+				strInit(tmp);
+				strCopyString(tmp, attr);
+			 	Tinst *instrukce = genInstr(IPAR, funcid, tmp, NULL);
+			    	GtableInsertInstr(global_table, id, instrukce);
+			///
+			if(result !=SYNTAX_OK) return result;
+
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+			result= list_par_n(global_table, id);
+
+			if (result !=SYNTAX_OK) return result;
+			return SYNTAX_OK;
+			break;
+
+		case TOK_DECIMAL_NUMBER:
+			result= term();
+			///
+				string *funcid;
+				funcid = malloc(sizeof(string));
+				strInit(funcid);
+				strCopyString(funcid, id);
+
+				string *NewVar;
+				NewVar = malloc(sizeof(string));
+				strInit(NewVar);
+				GenNewVariable(NewVar);
+				GtableInsertVar(global_table, id, Label_1, TOK_INT);
+				
+				Tvalue v;
+				v.i = atoi(attr.str);
+				GtableInsertVar(global_table, id, Label_1, v);
+
+			 	Tinst *instrukce = genInstr(IPAR, funcid, NewVar, NULL);
+			    	GtableInsertInstr(global_table, id, instrukce);
+			///
+			if(result !=SYNTAX_OK) return result;
+
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+			result= list_par_n(global_table, id);
+
+			if (result !=SYNTAX_OK) return result;
+			return SYNTAX_OK;
+			break;
+
+		case TOK_FLOATING_POINT_NUMBER:
+			result= term();
+			///
+				string *funcid;
+				funcid = malloc(sizeof(string));
+				strInit(funcid);
+				strCopyString(funcid, id);
+
+				string *NewVar;
+				NewVar = malloc(sizeof(string));
+				strInit(NewVar);
+				GenNewVariable(NewVar);
+				GtableInsertVar(global_table, id, Label_1, TOK_INT);
+				
+				Tvalue v;
+				v.d = (double)atof(attr.str);
+				GtableInsertVar(global_table, id, Label_1, v);
+
+			 	Tinst *instrukce = genInstr(IPAR, funcid, NewVar, NULL);
+			    	GtableInsertInstr(global_table, id, instrukce);
+			///
+			if(result !=SYNTAX_OK) return result;
+
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+			result= list_par_n(global_table, id);
+
+			if (result !=SYNTAX_OK) return result;
+			return SYNTAX_OK;
+			break;
+
+
+		case TOK_STR:
+			result= term();
+			///
+				string *funcid;
+				funcid = malloc(sizeof(string));
+				strInit(funcid);
+				strCopyString(funcid, id);
+
+				string *NewVar;
+				NewVar = malloc(sizeof(string));
+				strInit(NewVar);
+				GenNewVariable(NewVar);
+				GtableInsertVar(global_table, id, Label_1, TOK_INT);
+				
+				Tvalue v;
+				strInit(&v.s);
+				strCopyString(&v.s,&attr);
+				GtableInsertVar(global_table, id, Label_1, v);
+
+			 	Tinst *instrukce = genInstr(IPAR, funcid, NewVar, NULL);
+			    	GtableInsertInstr(global_table, id, instrukce);
+			///
+			if(result !=SYNTAX_OK) return result;
+
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+			result= list_par_n(global_table, id);
+
+			if (result !=SYNTAX_OK) return result;
+			return SYNTAX_OK;
+			break;
+
+
+			}
+
 			if(result !=SYNTAX_OK) return result;
 
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			return list_par_n();
 			break;
 
+
+
 	}
 	return SYNTAX_ERROR;
 }
 //-----LIST_PAR->--TERM--LIST_PAR_N--||--eps-------------------------------------
-int list_par(){
+int list_par(globalTS *global_table, string *id){
 	int result;
 
 	switch(token){
 		case TOK_RIGHT_BRACKET:
 			return SYNTAX_OK;
 			break;
-		default:
-			result= term();
 
+		case TOK_ID:
+			result= term();
+			///
+				string *funcid;
+				funcid = malloc(sizeof(string));
+				strInit(funcid);
+				strCopyString(funcid, id);
+
+				string *tmp;
+				tmp = malloc(sizeof(string));
+				strInit(tmp);
+				strCopyString(tmp, attr);
+			 	Tinst *instrukce = genInstr(IPAR, funcid, tmp, NULL);
+			    	GtableInsertInstr(global_table, id, instrukce);
+			///
 			if(result !=SYNTAX_OK) return result;
 
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-			result= list_par_n();
+			result= list_par_n(global_table, id);
 
 			if (result !=SYNTAX_OK) return result;
 			return SYNTAX_OK;
 			break;
+
+		case TOK_DECIMAL_NUMBER:
+			result= term();
+			///
+				string *funcid;
+				funcid = malloc(sizeof(string));
+				strInit(funcid);
+				strCopyString(funcid, id);
+
+				string *NewVar;
+				NewVar = malloc(sizeof(string));
+				strInit(NewVar);
+				GenNewVariable(NewVar);
+				GtableInsertVar(global_table, id, Label_1, TOK_INT);
+				
+				Tvalue v;
+				v.i = atoi(attr.str);
+				GtableInsertVar(global_table, id, Label_1, v);
+
+			 	Tinst *instrukce = genInstr(IPAR, funcid, NewVar, NULL);
+			    	GtableInsertInstr(global_table, id, instrukce);
+			///
+			if(result !=SYNTAX_OK) return result;
+
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+			result= list_par_n(global_table, id);
+
+			if (result !=SYNTAX_OK) return result;
+			return SYNTAX_OK;
+			break;
+
+		case TOK_FLOATING_POINT_NUMBER:
+			result= term();
+			///
+				string *funcid;
+				funcid = malloc(sizeof(string));
+				strInit(funcid);
+				strCopyString(funcid, id);
+
+				string *NewVar;
+				NewVar = malloc(sizeof(string));
+				strInit(NewVar);
+				GenNewVariable(NewVar);
+				GtableInsertVar(global_table, id, Label_1, TOK_INT);
+				
+				Tvalue v;
+				v.d = (double)atof(attr.str);
+				GtableInsertVar(global_table, id, Label_1, v);
+
+			 	Tinst *instrukce = genInstr(IPAR, funcid, NewVar, NULL);
+			    	GtableInsertInstr(global_table, id, instrukce);
+			///
+			if(result !=SYNTAX_OK) return result;
+
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+			result= list_par_n(global_table, id);
+
+			if (result !=SYNTAX_OK) return result;
+			return SYNTAX_OK;
+			break;
+
+
+		case TOK_STR:
+			result= term();
+			///
+				string *funcid;
+				funcid = malloc(sizeof(string));
+				strInit(funcid);
+				strCopyString(funcid, id);
+
+				string *NewVar;
+				NewVar = malloc(sizeof(string));
+				strInit(NewVar);
+				GenNewVariable(NewVar);
+				GtableInsertVar(global_table, id, Label_1, TOK_INT);
+				
+				Tvalue v;
+				strInit(&v.s);
+				strCopyString(&v.s,&attr);
+				GtableInsertVar(global_table, id, Label_1, v);
+
+			 	Tinst *instrukce = genInstr(IPAR, funcid, NewVar, NULL);
+			    	GtableInsertInstr(global_table, id, instrukce);
+			///
+			if(result !=SYNTAX_OK) return result;
+
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+			result= list_par_n(global_table, id);
+
+			if (result !=SYNTAX_OK) return result;
+			return SYNTAX_OK;
+			break;
+
+		default:
+			return SYNTAX_ERROR;
+			break;
 	}
-	return SYNTAX_ERROR;		
+	return SYNTAX_ERROR;
 }
 //-----CALLF_DEC->--id--(--LIST_PAR--)--||->EXPR---------------------------------
 int callf_dec(globalTS *global_table, string *id){
