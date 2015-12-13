@@ -154,32 +154,44 @@ int GtableFree (globalTS *T){
 
 
 int GtableInsert (globalTS *T, string *key, int funcType){
-  localTS LTS;
-  TinstList LIL;
+  localTS *LTS;
+  TinstList *LIL;
+  
   
   int success;
   int hashed = hash(key);
 //  tGTableItem *act;
   tGTableItem *newItem;
+
   newItem = malloc(sizeof(tGTableItem));
   if (newItem == NULL){
     return INTERN_ERROR;
   }
-  success = LtableInit(&LTS);
-  if (success != SUCCESS){
-    return INTERN_ERROR;
-  }
-  success = ListInit(&LIL);
-  if (success != SUCCESS){
+
+  LTS = malloc(sizeof(localTS));
+  if (LTS == NULL){
     return INTERN_ERROR;
   }
 
+  LIL = malloc(sizeof(TinstList));
+  if (LIL == NULL){
+    return INTERN_ERROR;
+  }
+
+  success = LtableInit(LTS);
+  if (success != SUCCESS){
+    return INTERN_ERROR;
+  }
+  success = ListInit(LIL);
+  if (success != SUCCESS){
+    return INTERN_ERROR;
+  }
   strInit(&(newItem->key));
   strCopyString(&(newItem->key), key);
   newItem->data.funcType = funcType;
   newItem->data.isdef = false;
-  newItem->data.LTable = &LTS;
-  newItem->data.LInstr = &LIL;
+  newItem->data.LTable = LTS;
+  newItem->data.LInstr = LIL;
   for (int i = 0; i < TABLE_SIZE; i++){
     newItem->data.params[i] = NULL;
   } 
@@ -284,6 +296,12 @@ int GtablePrintVars (globalTS *T, string *funcID){
   lokalni = act->LTable;
   for (int i = 0; i < TABLE_SIZE; i++){
     prom = (*lokalni)[i];
+    if(prom == NULL){
+      printf("null\n");
+    }else{
+      printf("not null\n");
+    }
+
     while (prom != NULL){
       if (prom->data.varType == TOK_INT){
         printf("int %s", prom->key.str);
@@ -291,19 +309,86 @@ int GtablePrintVars (globalTS *T, string *funcID){
         printf("double %s", prom->key.str);
       }else if (prom->data.varType == TOK_STRING){
         printf("string %s", prom->key.str);
-      }else if (prom->data.varTyoe == TOKAUTO){
+      }else if (prom->data.varType == TOK_AUTO){
         printf("auto %s", prom->key.str);
       }
       if (prom->data.isinit){
         if (prom->data.varType == TOK_INT){
-          printf(" = %d\n",prom->data.varValue.i);
+          printf(" = %d",prom->data.varValue.i);
         }else if (prom->data.varType == TOK_DOUBLE){
-          printf(" = %g\n",prom->data.varValue.d);
+          printf(" = %g",prom->data.varValue.d);
         }else if (prom->data.varType == TOK_STRING){
-          printf(" = %s\n",prom->data.varValue.s.str);
+          printf(" = %s",prom->data.varValue.s.str);
         }
       }
+      printf("\n");
+      prom = prom->nextItem;
+    }
+  }
+    int i = 0;
+    while (act->params[i] != NULL){
+      printf("param %s\n", act->params[i]->str);
+      i++; 
+    }
+  
+  return SUCCESS;
+}
+
+int GtablePrintVarsAll (globalTS *T){
+  tGTableItem *funkce;
+  for (int i = 0; i< TABLE_SIZE; i++){
+    funkce = (*T)[i];
+    while (funkce != NULL){
+      printf("funkce %s", funkce->key.str);
+      GtablePrintVars (T, &funkce->key);
+      funkce = funkce->nextItem;
     }
   }
   return SUCCESS;
 }
+
+int GTablePrintInst (globalTS *T, string* funcID){
+  tGData *funkce;
+  TinstList *seznam;
+  Tinst instrukce;
+
+  char *str1;
+  char *str2;
+  char *str3;
+
+
+  if(T == NULL){
+    return INTERN_ERROR;
+  }
+
+  funkce = GtableSearch(T, funcID);
+  if (funkce == NULL){
+    return INTERN_ERROR;
+  }
+
+  seznam = funkce->LInstr;
+  seznam->act = seznam->first;
+  while(seznam->act != NULL){
+    instrukce = seznam->act->inst;
+    if (instrukce.src1 == NULL){
+      str1 = "NULL\0";
+    }else{
+      str1 = instrukce.src1->str;
+    }
+    if (instrukce.src2 == NULL){
+      str2 = "NULL\0";
+    }else{
+      str2 = instrukce.src2->str;
+    }
+    if (instrukce.dest == NULL){
+      str3 = "NULL\0";
+    }else{
+      str3 = instrukce.dest->str;
+    }
+    printf("%d,\t%s,\t%s,\t%s\n", instrukce.itype, str1, str2, str3);
+    seznam->act = seznam->act->nextInst;
+  }
+
+  return SUCCESS;
+}
+
