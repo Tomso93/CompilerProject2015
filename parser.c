@@ -233,6 +233,7 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			// tady bych se mel podivat, jestli je uz tabulce symbolu 
 			strAddChar(&pom, 'i');
 			St->pom[St->top] = pom;		//sd
+			St->val[St->top] = &attr;
 		}
 
 		else if (token == TOK_DECIMAL_NUMBER) {
