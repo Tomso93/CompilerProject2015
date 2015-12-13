@@ -1177,7 +1177,10 @@ int _if(globalTS *global_table, string *id){
    // tGData* prom = GtableSearch(global_table, id);
    //string *LastVar = ReadNameVar(prom->LInstr);  funkce na cteni nazvu posledni instrukce 
     string *LastVar = GtableLastDest(global_table, id);
-    Tinst *instrukce = genInstr(INOT, LastVar, NULL, LastVar); // negace podminky
+       	string tmp;
+	strInit(&tmp);
+	strCopyString(&tmp,LastVar);
+    Tinst *instrukce = genInstr(INOT, &tmp, NULL, &tmp); // negace podminky
     GtableInsertInstr(global_table, id, instrukce);
     
     string Label_1; //novy label, skok na vetev else
@@ -1189,7 +1192,7 @@ int _if(globalTS *global_table, string *id){
     //LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
     
     //generovani skoku na ELSE vetev
-    instrukce = genInstr(IIFGOTO, LastVar, NULL, &Label_1);
+    instrukce = genInstr(IIFGOTO, &tmp, NULL, &Label_1);
     GtableInsertInstr(global_table, id, instrukce);
 	//telo pokud je v if pravda
 	//if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
