@@ -268,3 +268,42 @@ int GtableInsertInstr (globalTS *T, string *funcID, Tinst *instrukce){
   act->isdef = true;
   return success;
 }
+
+
+
+int GtablePrintProms (globalTS *T, string *funcID){
+  printf("\n");
+  tGData *act;
+  localTS *lokalni;
+  tLTableItem *prom;
+  act = GtableSearch (T, funcID);
+  if (act == NULL){
+    return INTERN_ERROR;
+  }
+  printf("%s variables:\n", funcID->str);
+  lokalni = act->LTable;
+  for (int i = 0; i < TABLE_SIZE; i++){
+    prom = (*lokalni)[i];
+    while (prom != NULL){
+      if (prom->data.varType == TOK_INT){
+        printf("int %s", prom->key.str);
+      }else if (prom->data.varType == TOK_DOUBLE){
+        printf("double %s", prom->key.str);
+      }else if (prom->data.varType == TOK_STRING){
+        printf("string %s", prom->key.str);
+      }else if (prom->data.varTyoe == TOKAUTO){
+        printf("auto %s", prom->key.str);
+      }
+      if (prom->data.isinit){
+        if (prom->data.varType == TOK_INT){
+          printf(" = %d\n",prom->data.varValue.i);
+        }else if (prom->data.varType == TOK_DOUBLE){
+          printf(" = %g\n",prom->data.varValue.d);
+        }else if (prom->data.varType == TOK_STRING){
+          printf(" = %s\n",prom->data.varValue.s.str);
+        }
+      }
+    }
+  }
+  return SUCCESS;
+}
