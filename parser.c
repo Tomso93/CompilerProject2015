@@ -244,11 +244,14 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			string NewVar; //label, pro navrat
     		strInit(&NewVar); //inicializace
     		GenNewVariable(&NewVar);  // vygenerovani promenne
-    		tGData* prom = GtableSearch(global_table, id);
-    		LtableInsert(prom->LTable, &NewVar, TOK_INT);    // vlozeni do lokalni tabulky symbolu
+    		GtableInsertVar(global_table, id, &NewVar, TOK_INT);
+    		//tGData* prom = GtableSearch(global_table, id);
+    		//LtableInsert(prom->LTable, &NewVar, TOK_INT);    // vlozeni do lokalni tabulky symbolu
     		Tvalue value;
-		value.s = attr;
-    		LtableInsertValue(prom->LTable, &NewVar, value);
+    		value.i = atoi(attr.str);
+    		GtableInsertVarVal(global_table, id, &NewVar, value);
+		//value.s = attr;
+    		//LtableInsertValue(prom->LTable, &NewVar, value);
     			
 		
 			St->val[St->top] = &NewVar;
@@ -264,11 +267,14 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			string NewVar; //label, pro navrat
 			strInit(&NewVar); //inicializace
 			GenNewVariable(&NewVar);  // vygenerovani promenne
-			tGData* prom = GtableSearch(global_table, id);
-			LtableInsert(prom->LTable, &NewVar, TOK_DOUBLE);    // vlozeni do lokalni tabulky symbolu
+			GtableInsertVar(global_table, id, &NewVar, TOK_DOUBLE);
+			//tGData* prom = GtableSearch(global_table, id);
+			//LtableInsert(prom->LTable, &NewVar, TOK_DOUBLE);    // vlozeni do lokalni tabulky symbolu
 			Tvalue value;
-			value.s = attr;
-			LtableInsertValue(prom->LTable, &NewVar, value);
+			value.d = (double)atof(attr.str);
+    			GtableInsertVarVal(global_table, id, &NewVar, value);
+			//value.s = attr;
+			//LtableInsertValue(prom->LTable, &NewVar, value);
 
 			
 			St->val[St->top] = &NewVar;
@@ -285,11 +291,13 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			string NewVar; //label, pro navrat
 			strInit(&NewVar); //inicializace
 			GenNewVariable(&NewVar);  // vygenerovani promenne
-			tGData* prom = GtableSearch(global_table, id);
-			LtableInsert(prom->LTable, &NewVar, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+			GtableInsertVar(global_table, id, &NewVar, TOK_STRING);
+			//tGData* prom = GtableSearch(global_table, id);
+			//LtableInsert(prom->LTable, &NewVar, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
 			Tvalue value;
 			value.s = attr;
-			LtableInsertValue(prom->LTable, &NewVar, value);
+			GtableInsertVarVal(global_table, id, &NewVar, value);
+			//LtableInsertValue(prom->LTable, &NewVar, value);
 			
 			St->val[St->top] = &NewVar;
 			strFree(&NewVar);
