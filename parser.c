@@ -247,19 +247,20 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			St->pom[St->top] = pom;
 
 			//tady to musime narvat do tabulky promenou, ktera obsahuje cele cislo a do val navrat odkaz na ten symbol promenne, co je v tabulce
-			string NewVar; //label, pro navrat
-    		strInit(&NewVar); //inicializace
-    		GenNewVariable(&NewVar);  // vygenerovani promenne
-		GtableInsertVar(global_table, id , &NewVar, TOK_INT);
+			string *NewVar; //label, pro navrat
+			NewVar = malloc(sizeof(string));
+    		strInit(NewVar); //inicializace
+    		GenNewVariable(NewVar);  // vygenerovani promenne
+		GtableInsertVar(global_table, id , NewVar, TOK_INT);
     		//tGData* prom = GtableSearch(global_table, id);
     		//LtableInsert(prom->LTable, &NewVar, TOK_INT);    // vlozeni do lokalni tabulky symbolu
     		Tvalue value;
 		value.i = atoi(attr.str);
-		GtableInsertVarVal(global_table, id, &NewVar, value);
+		GtableInsertVarVal(global_table, id, NewVar, value);
     		//LtableInsertValue(prom->LTable, &NewVar, value);
     			
 		
-			St->val[St->top] = &NewVar;
+			St->val[St->top] = NewVar;
 			//strFree(&NewVar);
 		}
 
@@ -269,19 +270,20 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			St->pom[St->top] = pom;
 
 			//tady to musime narvat do tabulky promenou, ktera obsahuje float cislo a do val navrat odkaz na ten symbol promenne, co je v tabulce
-			string NewVar; //label, pro navrat
-			strInit(&NewVar); //inicializace
-			GenNewVariable(&NewVar);  // vygenerovani promenne
-			GtableInsertVar(global_table, id, &NewVar, TOK_DOUBLE);		
+			string *NewVar; //label, pro navrat
+			NewVar = malloc(sizeof(string));
+			strInit(NewVar); //inicializace
+			GenNewVariable(NewVar);  // vygenerovani promenne
+			GtableInsertVar(global_table, id, NewVar, TOK_DOUBLE);		
 			//tGData* prom = GtableSearch(global_table, id);
 			//LtableInsert(prom->LTable, &NewVar, TOK_DOUBLE);    // vlozeni do lokalni tabulky symbolu
 			Tvalue value;
 			value.d = (double)atof(attr.str);
-			GtableInsertVarVal(global_table, id, &NewVar, value);
+			GtableInsertVarVal(global_table, id, NewVar, value);
 			//LtableInsertValue(prom->LTable, &NewVar, value);
 
 			
-			St->val[St->top] = &NewVar;
+			St->val[St->top] = NewVar;
 			//strFree(&NewVar);
 		}
 
@@ -292,20 +294,21 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			St->pom[St->top] = pom;
 
 			//tady to musime narvat do tabulky promenou, ktera obsahuje retezec a do val navrat odkaz na ten symbol promenne, co je v tabulce
-			string NewVar; //label, pro navrat
-			strInit(&NewVar); //inicializace
-			GenNewVariable(&NewVar);  // vygenerovani promenne
-			GtableInsertVar(global_table, id, &NewVar, TOK_STRING);
+			string *NewVar; //label, pro navrat
+			NewVar = malloc(sizeof(string));
+			strInit(NewVar); //inicializace
+			GenNewVariable(NewVar);  // vygenerovani promenne
+			GtableInsertVar(global_table, id, NewVar, TOK_STRING);
 			//tGData* prom = GtableSearch(global_table, id);
 			//LtableInsert(prom->LTable, &NewVar, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
 			Tvalue value;
 			strInit(&value.s);
-			strCopyString(&value.s, &attr);
+			strCopyString(value.s, &attr);
 			//value.s = attr;
-			GtableInsertVarVal(global_table, id, &NewVar, value);
+			GtableInsertVarVal(global_table, id, NewVar, value);
 			//LtableInsertValue(prom->LTable, &NewVar, value);
 			
-			St->val[St->top] = &NewVar;
+			St->val[St->top] = NewVar;
 			//strFree(&NewVar);
 
 		}
