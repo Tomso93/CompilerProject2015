@@ -270,7 +270,7 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			//tGData* prom = GtableSearch(global_table, id);
 			//LtableInsert(prom->LTable, &NewVar, TOK_DOUBLE);    // vlozeni do lokalni tabulky symbolu
 			Tvalue value;
-			value.i = atoi(attr.str);
+			value.d = (double)atof(attr.str);
 			GtableInsertVarVal(global_table, id, &NewVar, value);
 			//LtableInsertValue(prom->LTable, &NewVar, value);
 
@@ -912,7 +912,7 @@ int _for(globalTS *global_table, string *id){
     strInit(&Label_1); //inicializace
     GenNewVariable(&Label_1);  // vygenerovani promenne
     GtableInsertVar(global_table, id, &Label_1, TOK_STRING);
-    tGData* prom = GtableSearch(global_table, id);
+    //tGData* prom = GtableSearch(global_table, id);
     //LtableInsert(prom->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
     //LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
    
@@ -973,8 +973,8 @@ int _for(globalTS *global_table, string *id){
     GtableInsertInstr(global_table, id, instrukce);
     
 	if(result !=SYNTAX_OK) return result;
-    strFree(&Label_1);
-    strFree(&Label_2);
+//    strFree(&Label_1);
+//    strFree(&Label_2);
 	//cely for je v tom, ze je to opravdu for a dokonce spravne zapsany >:D
 	return SYNTAX_OK;
 }
@@ -1153,8 +1153,8 @@ int _if(globalTS *global_table, string *id){
     instrukce = genInstr(ILABEL, &Label_2, NULL, NULL);
     GtableInsertInstr(global_table, id, instrukce);
 	if(result !=SYNTAX_OK) return result;
-    strFree(&Label_1);
-    strFree(&Label_2);
+//    strFree(&Label_1);
+//    strFree(&Label_2);
 	// konstrukce if je v poradku muze opustit s pozitvni odpovedi
 	return SYNTAX_OK;
 
