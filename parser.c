@@ -1070,7 +1070,18 @@ int term_n(globalTS *global_table, string *id){
 			if (result != SYNTAX_OK) return result;
 			
 			//generovani instukce
-			Tinst *instrukce = genInstr(IWRITE, NULL, NULL, &attr);
+			string* tmp;
+			tmp = malloc(sizeof(string));
+        		strInit(tmp); 
+        		GenNewVariable(tmp);
+        		GtableInsertVar(global_table, id, tmp, TOK_STRING);
+
+			Tvalue v;
+			strInit(&v.s);
+			strCopyString(&v.s, &attr);
+        		GtableInsertVarVal(global_table, id, tmp, v);
+	
+			Tinst *instrukce = genInstr(IWRITE, NULL, NULL, tmp);
 			GtableInsertInstr(global_table, id, instrukce);
 			
 			//mozna jich je jeste vic, radeji si ho zavolam znovu
@@ -1094,7 +1105,18 @@ int _cout(globalTS *global_table, string *id){
 	if(result !=SYNTAX_OK) return result;
 	
 	// instrukce pro zapis, pokud jich je vice generuji se v term_n()
-    	Tinst *instrukce = genInstr(IWRITE, NULL, NULL, &attr);
+    	string* tmp;
+	tmp = malloc(sizeof(string));
+        strInit(tmp); 
+        GenNewVariable(tmp);
+        GtableInsertVar(global_table, id, tmp, TOK_STRING);
+
+	Tvalue v;
+	strInit(&v.s);
+	strCopyString(&v.s, &attr);
+        GtableInsertVarVal(global_table, id, tmp, v);
+
+    	Tinst *instrukce = genInstr(IWRITE, NULL, NULL, tmp);
    	GtableInsertInstr(global_table, id, instrukce);
 	
 	//zavolam scanner a jdu zjistit, jestli termu neni vic a jestli jsou ok
@@ -1120,7 +1142,11 @@ int _id_n(globalTS *global_table, string *id){
 			//if(!(tableSearch(local_table, &attr))) return SEMANTIC_ERROR;
 			
 			// vygeneruju instrukci
-			Tinst *instrukce = genInstr(IREAD, NULL, NULL, &attr);
+			string *tmp;
+			tmp = malloc(sizeof(string));
+			strInit(tmp);
+			strCopyString(tmp,&attr);
+			Tinst *instrukce = genInstr(IREAD, tmp, NULL, NULL);
 			GtableInsertInstr(global_table, id, instrukce);
 			
 			//a zavolam si ji znova
@@ -1143,7 +1169,11 @@ int _cin(globalTS *global_table, string *id){
 	//if(!(tableSearch(local_table, &attr))) return SEMANTIC_ERROR;
 	
 	// generuji prvni instrukci, ostatni se generujou v _id_n()
-	Tinst *instrukce = genInstr(IREAD, NULL, NULL, &attr);
+	string *tmp;
+	tmp = malloc(sizeof(string));
+	strInit(tmp);
+	strCopyString(tmp,&attr);
+	Tinst *instrukce = genInstr(IREAD, tmp, NULL, NULL);
 	GtableInsertInstr(global_table, id, instrukce);
 	
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
