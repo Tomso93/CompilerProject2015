@@ -303,7 +303,7 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			//LtableInsert(prom->LTable, &NewVar, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
 			Tvalue value;
 			strInit(&value.s);
-			strCopyString(value.s, &attr);
+			strCopyString(&value.s, &attr);
 			//value.s = attr;
 			GtableInsertVarVal(global_table, id, NewVar, value);
 			//LtableInsertValue(prom->LTable, &NewVar, value);
@@ -1733,7 +1733,7 @@ int func_dclr(globalTS *global_table){
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	// mela bz prijit rekurze, ale nevim jestli bude fungovat
 	
-GTablePrintInst (global_table, id);
+//GTablePrintInst (global_table, id);
 //GtablePrintVarsAll (global_table);
 	return SYNTAX_OK;
 
