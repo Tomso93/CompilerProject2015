@@ -842,6 +842,7 @@ int list_par_n(){
 	int result;
 	switch(token){
 		case TOK_RIGHT_BRACKET:
+			if((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			return SYNTAX_OK;
 			break;
 		
