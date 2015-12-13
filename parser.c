@@ -1253,7 +1253,7 @@ int _if(globalTS *global_table, string *id){
 
 
     string *Label_2;  // label dva, skok az za else, podminka v IF byla pravda
-    Label_2 = malloc(sizeof(string))
+    Label_2 = malloc(sizeof(string));
     strInit(Label_2);
     GenNewVariable(Label_2);
     GtableInsertVar(global_table, id, Label_2, TOK_STRING);
