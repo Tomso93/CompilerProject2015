@@ -1002,7 +1002,10 @@ int _for(globalTS *global_table, string *id){
     //prom = GtableSearch(global_table, id);
     //string *LastVar = ReadNameVar(prom->LInstr);
     string *LastVar = GtableLastDest(global_table, id);
-    instrukce = genInstr(INOT, LastVar, NULL, LastVar);
+    string tmp;
+    strInit(&tmp);
+    strCopyString(&tmp,LastVar);
+    instrukce = genInstr(INOT, &tmp, NULL, &tmp);
     GtableInsertInstr(global_table, id, instrukce);
     
     string Label_2; //label, pro navrat
@@ -1013,7 +1016,7 @@ int _for(globalTS *global_table, string *id){
     //LtableInsert(prom->LTable, &Label_2, TOK_STRING);
     //LtableInsertValue(global_table->data->LTable, &Label_2, Label_2);
     
-    instrukce = genInstr(IIFGOTO, LastVar, NULL, &Label_2);
+    instrukce = genInstr(IIFGOTO, &tmp, NULL, &Label_2);
     GtableInsertInstr(global_table, id, instrukce);
      
 	//if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
