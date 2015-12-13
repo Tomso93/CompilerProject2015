@@ -337,8 +337,9 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 		string value3
     		strInit(&value3); //inicializace
     		GenNewVariable(&value3);  // vygenerovani promenne
-    		tGData* prom = GtableSearch(global_table, id);
-    		LtableInsert(prom->LTable, &value3, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+    		GtableInsertVar(global_table, id, &value3, TOK_STRING);
+    		//tGData* prom = GtableSearch(global_table, id);
+    		//LtableInsert(prom->LTable, &value3, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
   
 	}
 	//----------------------------- E-> id------------------------------------------	
