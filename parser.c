@@ -231,10 +231,13 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 
 		St->top++;
 		St->t_n[St->top] = 'T';
-		St->pom[St->top] = pom;
-		St->prom_val[St->top] = 'id';
+		
+		if (token == TOK_ID) {
+			St->pom[St->top] = 'i';
+		}
+		
 
-		if (token == TOK_DECIMAL_NUMBER) {
+		else if (token == TOK_DECIMAL_NUMBER) {
 
 			//tady to musime narvat do tabulky promenou, ktera obsahuje cele cislo a do val navrat odkaz na ten symbol promenne, co je v tabulce
 			string NewVar; //label, pro navrat
