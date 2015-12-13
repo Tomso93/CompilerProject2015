@@ -1159,8 +1159,8 @@ int _if(globalTS *global_table, string *id){
 	if (result !=SYNTAX_OK) return result;
 	//vyraz je ve v poradku uzavru ho
 
-	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-	if (token != TOK_RIGHT_BRACKET) return SYNTAX_ERROR;
+	//if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+	//if (token != TOK_RIGHT_BRACKET) return SYNTAX_ERROR;
 
     //generovani pomocne promenne
     tGData* prom = GtableSearch(global_table, id);
