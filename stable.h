@@ -90,3 +90,5 @@ int LtableInsertValue (localTS *T, string *key, Tvalue v);
 //tLData* LtableRead (localTS *T, string key); jestli bude potreba, dodelam
 
 int GtablePrintVars (globalTS *T, string *funcID);
+int GtablePrintVarsAll (globalTS *T);
+int GTablePrintInst (globalTS *T, string* funcID);
