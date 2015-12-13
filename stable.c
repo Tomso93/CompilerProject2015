@@ -271,7 +271,7 @@ int GtableInsertInstr (globalTS *T, string *funcID, Tinst *instrukce){
 
 
 
-int GtablePrintProms (globalTS *T, string *funcID){
+int GtablePrintVars (globalTS *T, string *funcID){
   printf("\n");
   tGData *act;
   localTS *lokalni;
