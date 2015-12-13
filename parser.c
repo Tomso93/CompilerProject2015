@@ -44,7 +44,7 @@ char prec_table[][16]={
 {'<','<','<','<','>','>','>','>','>','>','<','>','<','>','<','<'},	//>=
 {'<','<','<','<','>','>','>','>','>','>','<','>','<','>','<','<'},	//==
 {'<','<','<','<','>','>','>','>','>','>','<','>','<','>','<','<'},	//!=
-{'<','<','<','<','<','<','<','<','<','<','=','<','<','0','<','<'},	//(
+{'<','<','<','<','<','<','<','<','<','<','<','=','<','0','<','<'},	//(
 {'>','>','>','>','>','>','>','>','>','>','0','>','0','>','0','0'},	//)
 {'>','>','>','>','>','>','>','>','>','>','0','>','0','>','0','0'},	//id
 {'<','<','<','<','<','<','<','<','<','<','<','0','<','0','<','<'},	//$
@@ -270,7 +270,7 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			//tGData* prom = GtableSearch(global_table, id);
 			//LtableInsert(prom->LTable, &NewVar, TOK_DOUBLE);    // vlozeni do lokalni tabulky symbolu
 			Tvalue value;
-			value.d = (double)atof(attr.str);
+			value.i = atoi(attr.str);
 			GtableInsertVarVal(global_table, id, &NewVar, value);
 			//LtableInsertValue(prom->LTable, &NewVar, value);
 
@@ -301,7 +301,71 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			strFree(&NewVar);
 
 		}
+		
+		else if (token == TOK_ADDITION) {
+			
+			strAddChar(&pom, '+');
+			St->pom[St->top] = pom; }
+		
+		else if (token == TOK_SUBTRACTION) {
+		
+			strAddChar(&pom, '-');
+			St->pom[St->top] = pom; }
 
+		else if (token == TOK_MULTIPLICATION) {
+
+			strAddChar(&pom, '*');
+			St->pom[St->top] = pom; }
+
+		else if (token == TOK_DIVISION) {
+
+			strAddChar(&pom, '/');
+			St->pom[St->top] = pom; }
+        
+        else if (token == TOK_LESS_THAN) {
+        
+            strAddChar(&pom, '<');
+			St->pom[St->top] = pom; }
+        
+        else if (token == TOK_GREATER_THAN) {
+        
+            strAddChar(&pom, '>');
+			St->pom[St->top] = pom; }
+            
+        else if (token == TOK_LESS_THAN_OR_EQUAL) {
+        
+            strAddChar(&pom, '<');
+	    strAddChar(&pom, '=');
+			St->pom[St->top] = pom; }
+            
+        else if (token == TOK_GREATER_THAN_OR_EQUAL) {
+        
+            strAddChar(&pom, '>');
+		strAddChar(&pom, '=');
+			St->pom[St->top] = pom; }
+            
+        else if (token == TOK_COMPARISON) {
+        
+            strAddChar(&pom, '=');
+		strAddChar(&pom, '=');
+			St->pom[St->top] = pom; }
+            
+        else if (token == TOK_INEQUALITY) {
+        
+            strAddChar(&pom, '!');
+		strAddChar(&pom, '=');
+			St->pom[St->top] = pom; }
+            
+        else if (token == TOK_LEFT_BRACKET) {
+        
+            strAddChar(&pom, '(');
+			St->pom[St->top] = pom; }
+            
+        else if (token == TOK_RIGHT_BRACKET) {
+        
+            strAddChar(&pom, ')');
+			St->pom[St->top] = pom; }
+            
 		else {
 			St->val[St->top] = NULL;
 		}
@@ -350,7 +414,7 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
   
 	}
 	//----------------------------- E-> id------------------------------------------	
-	if (strCmpConstStr(&(St->pom[i]), "i") == 0) {
+	if ((strCmpConstStr(&(St->pom[i]), "i") == 0) || (strCmpConstStr(&(St->pom[i]), "d") == 0) || (strCmpConstStr(&(St->pom[i]), "f") == 0) || (strCmpConstStr(&(St->pom[i]), "s") == 0)) {
 
 		if (error != ERR){
 			//Generovani instrukce
@@ -602,7 +666,7 @@ int comp_expr(globalTS *global_table, string *id) {
 	InitialSt(&St);
 	pom = TopT(&St);
 
-	if(token != TOK_RIGHT_BRACKET || token != TOK_SEMICOLON) {
+	if(token != TOK_LEFT_BRACE || token != TOK_SEMICOLON) {
 
 		result = select_ruler(&pom, token);
 
@@ -639,7 +703,7 @@ int comp_expr(globalTS *global_table, string *id) {
 			chba = TPush(&St, global_table, id);
 			if (chba != SUCCESS) return chba;
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-			token = getNextToken(&attr);
+			//token = getNextToken(&attr);
 			break;
 
 		case OTHER:
@@ -651,9 +715,7 @@ int comp_expr(globalTS *global_table, string *id) {
 
 		
 		pom = TopT(&St);	//prvni term.
-	}	
-	
-	while (strCmpConstStr(&St.pom[St.top], "$\0") != 0 || token != TOK_RIGHT_BRACKET || token != TOK_SEMICOLON)
+	}	while (strCmpConstStr(&pom, "$\0") != 0) //|| token != TOK_LEFT_BRACE || token != TOK_SEMICOLON)
 	{
 
 		result = select_ruler(&pom, token);
@@ -667,8 +729,8 @@ int comp_expr(globalTS *global_table, string *id) {
 		switch (vyber) {
 		case TOK_LESS_THAN:
 			GnTerm(&St, '<');
-			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			TPush(&St, global_table, id);
+			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			break;
 
 		case TOK_GREATER_THAN:
@@ -691,7 +753,7 @@ int comp_expr(globalTS *global_table, string *id) {
 			chba = TPush(&St, global_table, id);
 			if (chba != SUCCESS) return chba;
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-			token = getNextToken(&attr);
+			//token = getNextToken(&attr);
 			break;
 
 		case OTHER:
@@ -762,8 +824,8 @@ int _i_prom(globalTS *global_table, string *id){
 			result= comp_expr(global_table, id);
 			if(result !=SYNTAX_OK) return result;
 
-			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-			if(token !=TOK_SEMICOLON) return SYNTAX_ERROR;
+			//if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+			if(token != TOK_SEMICOLON) return SYNTAX_ERROR;
 			
 			return SYNTAX_OK;
 			break;
@@ -879,12 +941,14 @@ int _return(globalTS *global_table, string *id){
 	result= comp_expr(global_table, id);
 	if (result !=SYNTAX_OK) return result;
 
-	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-	if(token !=TOK_SEMICOLON) return SYNTAX_ERROR;
+	//if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+	if(token != TOK_SEMICOLON) return SYNTAX_ERROR;
+	
 	tGData* prom = GtableSearch(global_table, id);
 	string *LastVar = ReadNameVar(prom->LInstr); // funkce na cteni nazvu posledni instrukce
 	Tinst *instrukce = genInstr(IRET, LastVar, NULL, NULL);
     	GtableInsertInstr(global_table, id, instrukce);
+	
 	//return je dobre zapsan, neni co resit
 	return SYNTAX_OK;
 }
@@ -912,7 +976,7 @@ int _for(globalTS *global_table, string *id){
     strInit(&Label_1); //inicializace
     GenNewVariable(&Label_1);  // vygenerovani promenne
     GtableInsertVar(global_table, id, &Label_1, TOK_STRING);
-    //tGData* prom = GtableSearch(global_table, id);
+    tGData* prom = GtableSearch(global_table, id);
     //LtableInsert(prom->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
     //LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
    
@@ -941,7 +1005,7 @@ int _for(globalTS *global_table, string *id){
     instrukce = genInstr(IIFGOTO, LastVar, NULL, &Label_2);
     GtableInsertInstr(global_table, id, instrukce);
      
-	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+	//if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_SEMICOLON) return SYNTAX_ERROR;
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -956,7 +1020,7 @@ int _for(globalTS *global_table, string *id){
 
 	if (result !=SYNTAX_OK) return result;
 
-	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+	//if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_RIGHT_BRACKET) return SYNTAX_ERROR;
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -973,8 +1037,8 @@ int _for(globalTS *global_table, string *id){
     GtableInsertInstr(global_table, id, instrukce);
     
 	if(result !=SYNTAX_OK) return result;
-//    strFree(&Label_1);
-//    strFree(&Label_2);
+    strFree(&Label_1);
+    strFree(&Label_2);
 	//cely for je v tom, ze je to opravdu for a dokonce spravne zapsany >:D
 	return SYNTAX_OK;
 }
@@ -1089,14 +1153,14 @@ int _if(globalTS *global_table, string *id){
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_LEFT_BRACKET) return SYNTAX_ERROR;
 
-	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+	//if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	result = comp_expr(global_table, id);
 
 	if (result !=SYNTAX_OK) return result;
 	//vyraz je ve v poradku uzavru ho
 
-	//if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-	//if (token !=TOK_RIGHT_BRACKET) return SYNTAX_ERROR;
+	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+	if (token != TOK_RIGHT_BRACKET) return SYNTAX_ERROR;
 
     //generovani pomocne promenne
     tGData* prom = GtableSearch(global_table, id);
@@ -1153,8 +1217,8 @@ int _if(globalTS *global_table, string *id){
     instrukce = genInstr(ILABEL, &Label_2, NULL, NULL);
     GtableInsertInstr(global_table, id, instrukce);
 	if(result !=SYNTAX_OK) return result;
-//    strFree(&Label_1);
-//    strFree(&Label_2);
+    strFree(&Label_1);
+    strFree(&Label_2);
 	// konstrukce if je v poradku muze opustit s pozitvni odpovedi
 	return SYNTAX_OK;
 
