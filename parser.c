@@ -715,7 +715,7 @@ int comp_expr(globalTS *global_table, string *id) {
 
 		
 		pom = TopT(&St);	//prvni term.
-	}	while (strCmpConstStr(&pom, "$\0") != 0) //|| token != TOK_LEFT_BRACE || token != TOK_SEMICOLON)
+	}	while (TRUE)   //(strCmpConstStr(&pom, "$\0") != 0) && (token != TOK_LEFT_BRACE || token != TOK_SEMICOLON))
 	{
 
 		result = select_ruler(&pom, token);
@@ -734,11 +734,7 @@ int comp_expr(globalTS *global_table, string *id) {
 			break;
 
 		case TOK_GREATER_THAN:
-			if ((i = FindBrc(&St)) == SYNTAX_ERROR) {
-				SDipose(&St);
-				error = ERR;
-				return SYNTAX_ERROR;
-			}
+			i = FindBrc(&St);			
 			strDelLastChar(&(St.pom[i]));
 			chba = (SReduction_expr(&St, i + 1, global_table, id));
 			if (chba != SYNTAX_OK) {
@@ -765,6 +761,13 @@ int comp_expr(globalTS *global_table, string *id) {
 
 		
 		pom = TopT(&St);	//prvni term.
+		if(strCmpConstStr(&pom, "$\0") == 0)
+			if((token == TOK_LEFT_BRACE) ||(token == TOK_SEMICOLON) || (token == TOK_RIGHT_BRACKET))		
+				break;
+
+		
+		
+				
 	}
 
 
@@ -879,21 +882,21 @@ int list_par(){
 //-----CALLF_DEC->--id--(--LIST_PAR--)--||->EXPR---------------------------------
 int callf_dec(globalTS *global_table, string *id){
 	int result;
-
+	tGData *fnce;
 	switch(token){
 		case TOK_ID:
-			tGData fnce = GtableSearch(global_table, &attr);
-			if(fnce == NULL)
+			fnce = GtableSearch(global_table, &attr);
+			if(fnce != NULL) {
+				if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+				if(token !=TOK_LEFT_BRACKET) return SYNTAX_ERROR;
+
+				if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+			
+				result= list_par();
+				if(result !=SYNTAX_OK) return result; }
+			else {
 				result = comp_expr(global_table, id);
-			
-			else if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-			if(token !=TOK_LEFT_BRACKET) return SYNTAX_ERROR;
-
-			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-			
-			result= list_par();
-			if(result !=SYNTAX_OK) return result;
-
+				if(result !=SYNTAX_OK) return result; }
 			return SYNTAX_OK;
 			break;
 
@@ -919,7 +922,7 @@ int _prom(globalTS *global_table, string *id){
 			result= callf_dec(global_table, id);
 			if(result !=SYNTAX_OK)return result;
 			
-			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+			//if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			if(token !=TOK_SEMICOLON) return SYNTAX_ERROR;
 			
 			return SYNTAX_OK;
@@ -948,10 +951,10 @@ int _return(globalTS *global_table, string *id){
 	//if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if(token != TOK_SEMICOLON) return SYNTAX_ERROR;
 	
-	tGData* prom = GtableSearch(global_table, id);
-	string *LastVar = ReadNameVar(prom->LInstr); // funkce na cteni nazvu posledni instrukce
-	Tinst *instrukce = genInstr(IRET, LastVar, NULL, NULL);
-    	GtableInsertInstr(global_table, id, instrukce);
+	//tGData* prom = GtableSearch(global_table, id);
+	//string *LastVar = ReadNameVar(prom->LInstr); // funkce na cteni nazvu posledni instrukce
+	//Tinst *instrukce = genInstr(IRET, LastVar, NULL, NULL);
+    	//GtableInsertInstr(global_table, id, instrukce);
 	
 	//return je dobre zapsan, neni co resit
 	return SYNTAX_OK;
@@ -976,17 +979,17 @@ int _for(globalTS *global_table, string *id){
 	result= _i_prom(global_table, id);
 	if (result !=SYNTAX_OK) return SYNTAX_ERROR;
 
-    string Label_1; //label, pro navrat
-    strInit(&Label_1); //inicializace
-    GenNewVariable(&Label_1);  // vygenerovani promenne
-    GtableInsertVar(global_table, id, &Label_1, TOK_STRING);
-    tGData* prom = GtableSearch(global_table, id);
+   // string Label_1; //label, pro navrat
+   // strInit(&Label_1); //inicializace
+   // GenNewVariable(&Label_1);  // vygenerovani promenne
+   // GtableInsertVar(global_table, id, &Label_1, TOK_STRING);
+   // tGData* prom = GtableSearch(global_table, id);
     //LtableInsert(prom->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
     //LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
    
     // instrukce pro label
-    Tinst *instrukce = genInstr(ILABEL, &Label_1, NULL, NULL);
-    GtableInsertInstr(global_table, id, instrukce);
+    //Tinst *instrukce = genInstr(ILABEL, &Label_1, NULL, NULL);
+    //GtableInsertInstr(global_table, id, instrukce);
     
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	result= comp_expr(global_table, id);
@@ -994,20 +997,20 @@ int _for(globalTS *global_table, string *id){
     
     // najde promennou ve ktere je vyhodnocena podminka
     //prom = GtableSearch(global_table, id);
-    string *LastVar = ReadNameVar(prom->LInstr);
-    instrukce = genInstr(INOT, LastVar, NULL, LastVar);
-    GtableInsertInstr(global_table, id, instrukce);
+    //string *LastVar = ReadNameVar(prom->LInstr);
+    //instrukce = genInstr(INOT, LastVar, NULL, LastVar);
+    //GtableInsertInstr(global_table, id, instrukce);
     
-    string Label_2; //label, pro navrat
-    strInit(&Label_2); //inicializace
-    GenNewVariable(&Label_2);  // vygenerovani promenne
-    GtableInsertVar(global_table, id, &Label_2, TOK_STRING);
+    //string Label_2; //label, pro navrat
+    //strInit(&Label_2); //inicializace
+    //GenNewVariable(&Label_2);  // vygenerovani promenne
+    //GtableInsertVar(global_table, id, &Label_2, TOK_STRING);
     //prom = GtableSearch(global_table, id);
     //LtableInsert(prom->LTable, &Label_2, TOK_STRING);
     //LtableInsertValue(global_table->data->LTable, &Label_2, Label_2);
     
-    instrukce = genInstr(IIFGOTO, LastVar, NULL, &Label_2);
-    GtableInsertInstr(global_table, id, instrukce);
+    //instrukce = genInstr(IIFGOTO, LastVar, NULL, &Label_2);
+    //GtableInsertInstr(global_table, id, instrukce);
      
 	//if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_SEMICOLON) return SYNTAX_ERROR;
@@ -1025,7 +1028,7 @@ int _for(globalTS *global_table, string *id){
 	if (result !=SYNTAX_OK) return result;
 
 	//if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-	if (token !=TOK_RIGHT_BRACKET) return SYNTAX_ERROR;
+	//if (token !=TOK_RIGHT_BRACKET) return SYNTAX_ERROR;
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_LEFT_BRACE) return SYNTAX_ERROR;
@@ -1034,15 +1037,15 @@ int _for(globalTS *global_table, string *id){
 	if (result != SYNTAX_OK) return result;
 
     // instrukce skoku
-    instrukce = genInstr(IGOTO, NULL, NULL, &Label_1);
-    GtableInsertInstr(global_table, id, instrukce);
+    //instrukce = genInstr(IGOTO, NULL, NULL, &Label_1);
+    //GtableInsertInstr(global_table, id, instrukce);
     //instrukce label pro skonceni cyklu
-    instrukce = genInstr(ILABEL, &Label_2, NULL, NULL);
-    GtableInsertInstr(global_table, id, instrukce);
+    //instrukce = genInstr(ILABEL, &Label_2, NULL, NULL);
+    //GtableInsertInstr(global_table, id, instrukce);
     
 	if(result !=SYNTAX_OK) return result;
-    strFree(&Label_1);
-    strFree(&Label_2);
+    //strFree(&Label_1);
+    //strFree(&Label_2);
 	//cely for je v tom, ze je to opravdu for a dokonce spravne zapsany >:D
 	return SYNTAX_OK;
 }
@@ -1167,43 +1170,43 @@ int _if(globalTS *global_table, string *id){
 	//if (token != TOK_RIGHT_BRACKET) return SYNTAX_ERROR;
 
     //generovani pomocne promenne
-    tGData* prom = GtableSearch(global_table, id);
-    string *LastVar = ReadNameVar(prom->LInstr); // funkce na cteni nazvu posledni instrukce 
-    Tinst *instrukce = genInstr(INOT, LastVar, NULL, LastVar); // negace podminky
-    GtableInsertInstr(global_table, id, instrukce);
+   // tGData* prom = GtableSearch(global_table, id);
+   //string *LastVar = ReadNameVar(prom->LInstr);  funkce na cteni nazvu posledni instrukce 
+    //Tinst *instrukce = genInstr(INOT, LastVar, NULL, LastVar); // negace podminky
+    //GtableInsertInstr(global_table, id, instrukce);
     
-    string Label_1; //novy label, skok na vetev else
-    strInit(&Label_1); //inicializace
-    GenNewVariable(&Label_1);  // vygenerovani promenne
-    GtableInsertVar(global_table, id, &Label_1, TOK_STRING);
+   // string Label_1; //novy label, skok na vetev else
+   // strInit(&Label_1); //inicializace
+   // GenNewVariable(&Label_1);  // vygenerovani promenne
+    //GtableInsertVar(global_table, id, &Label_1, TOK_STRING);
     //prom = GtableSearch(global_table, id);
     //LtableInsert(prom->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
     //LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
     
     //generovani skoku na ELSE vetev
-    instrukce = genInstr(IIFGOTO, LastVar, NULL, &Label_1);
-    GtableInsertInstr(global_table, id, instrukce);
+    //instrukce = genInstr(IIFGOTO, LastVar, NULL, &Label_1);
+    //GtableInsertInstr(global_table, id, instrukce);
 	//telo pokud je v if pravda
-	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+	//if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_LEFT_BRACE) return SYNTAX_ERROR;
 	result= stmnt(global_table, id);
 
 	if (result != SYNTAX_OK) return result;
 
 
-    string Label_2;  // label dva, skok az za else, podminka v IF byla pravda
-    strInit(&Label_2);
-    GenNewVariable(&Label_2);
-    GtableInsertVar(global_table, id, &Label_2, TOK_STRING);
+    //string Label_2;  // label dva, skok az za else, podminka v IF byla pravda
+    //strInit(&Label_2);
+    //GenNewVariable(&Label_2);
+    //GtableInsertVar(global_table, id, &Label_2, TOK_STRING);
     //prom = GtableSearch(global_table, id);
     //LtableInsert(prom->LTable, &Label_2, TOK_STRING);
     //LtableInsertValue(global_table->data->LTable, &Label_2, Label_2);
     
     // skok za ELSE
-    instrukce = genInstr(IGOTO, NULL, NULL, &Label_2);
-    GtableInsertInstr(global_table, id, instrukce);
-    instrukce = genInstr(ILABEL, &Label_1, NULL, NULL); // musime vlozit label za telo IFu
-    GtableInsertInstr(global_table, id, instrukce);
+    //instrukce = genInstr(IGOTO, NULL, NULL, &Label_2);
+    //GtableInsertInstr(global_table, id, instrukce);
+    //instrukce = genInstr(ILABEL, &Label_1, NULL, NULL); // musime vlozit label za telo IFu
+    //GtableInsertInstr(global_table, id, instrukce);
     
 	if(result !=SYNTAX_OK) return result;
 	//vse ok, nasleduje else a za ni else
@@ -1218,11 +1221,11 @@ int _if(globalTS *global_table, string *id){
 	if (result != SYNTAX_OK) return result;
 
     // instrukce pro label_2, sem se skoci jestlize podminka IF byla pravda
-    instrukce = genInstr(ILABEL, &Label_2, NULL, NULL);
-    GtableInsertInstr(global_table, id, instrukce);
+    //instrukce = genInstr(ILABEL, &Label_2, NULL, NULL);
+    //GtableInsertInstr(global_table, id, instrukce);
 	if(result !=SYNTAX_OK) return result;
-    strFree(&Label_1);
-    strFree(&Label_2);
+    //strFree(&Label_1);
+    //strFree(&Label_2);
 	// konstrukce if je v poradku muze opustit s pozitvni odpovedi
 	return SYNTAX_OK;
 
