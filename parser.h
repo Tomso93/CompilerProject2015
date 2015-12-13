@@ -26,7 +26,7 @@ int program(globalTS *global_table);
 
 int func_dclr(globalTS *global_table);
 
-int param();
+int param(globalTS *global_table, string *id);
 
 int param_n();
 
@@ -52,11 +52,11 @@ int _return(globalTS *global_table, string *id);
 
 int _prom(globalTS *global_table, string *id);
 
-int callf_dec(globalTS *global_table, string *id);
+int callf_dec(globalTS *global_table, string *id, string *backid);
 
-int list_par();
+int list_par(globalTS *global_table, string *id, string *funcid);
 
-int list_par_n();
+int list_par_n(globalTS *global_table, string *id, string *funcid);
 
 int _i_prom(globalTS *global_table, string *id);
 
