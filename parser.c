@@ -244,13 +244,12 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			string NewVar; //label, pro navrat
     		strInit(&NewVar); //inicializace
     		GenNewVariable(&NewVar);  // vygenerovani promenne
-    		GtableInsertVar(global_table, id, &NewVar, TOK_INT);
+		GtableInsertVar(global_table, id , &NewVar, TOK_INT);
     		//tGData* prom = GtableSearch(global_table, id);
     		//LtableInsert(prom->LTable, &NewVar, TOK_INT);    // vlozeni do lokalni tabulky symbolu
     		Tvalue value;
-    		value.i = atoi(attr.str);
-    		GtableInsertVarVal(global_table, id, &NewVar, value);
-		//value.s = attr;
+		value.i = atoi(attr.str);
+		GtableInsertVarVal(global_table, id, &NewVar, value);
     		//LtableInsertValue(prom->LTable, &NewVar, value);
     			
 		
@@ -267,13 +266,12 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			string NewVar; //label, pro navrat
 			strInit(&NewVar); //inicializace
 			GenNewVariable(&NewVar);  // vygenerovani promenne
-			GtableInsertVar(global_table, id, &NewVar, TOK_DOUBLE);
+			GtableInsertVar(global_table, id, &NewVar, TOK_DOUBLE);		
 			//tGData* prom = GtableSearch(global_table, id);
 			//LtableInsert(prom->LTable, &NewVar, TOK_DOUBLE);    // vlozeni do lokalni tabulky symbolu
 			Tvalue value;
-			value.d = (double)atof(attr.str);
-    			GtableInsertVarVal(global_table, id, &NewVar, value);
-			//value.s = attr;
+			value.i = atoi(attr.str);
+			GtableInsertVarVal(global_table, id, &NewVar, value);
 			//LtableInsertValue(prom->LTable, &NewVar, value);
 
 			
@@ -340,12 +338,13 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 	// nejlepsi redukce aku svet nezazil
 	// upravit potom pushE, tak aby si predavalo dal ukazatel na data
 	string * value1;
+	string value3;
 	if (error != ERR) {
 		value1 = St->val[i];
-		string value3
+		
     		strInit(&value3); //inicializace
     		GenNewVariable(&value3);  // vygenerovani promenne
-    		GtableInsertVar(global_table, id, &value3, TOK_STRING);
+		GtableInsertVar(global_table, id, &value3, TOK_STRING);
     		//tGData* prom = GtableSearch(global_table, id);
     		//LtableInsert(prom->LTable, &value3, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
   
@@ -372,12 +371,12 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 		if (error != ERR) {
 			value1 = St->val[i + 1];
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(IMOV, value1, NULL, value3);
+			Tinst *instrukce = genInstr(IMOV, value1, NULL, &value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
 		DelI(St, 3);
-		PushE(St, value3);
+		PushE(St, &value3);
 		return SYNTAX_OK;
 	}
 	//------------------------------E-> E*E------------------------------------------	
@@ -390,14 +389,14 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			string *value2 = St->val[i + 2];
 
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(IMUL, value1, value2, value3);
+			Tinst *instrukce = genInstr(IMUL, value1, value2, &value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
 
 		DelI(St, 3);
 		// 3 se ulozi do zasobniku a ceka 
-		PushE(St, value3);
+		PushE(St, &value3);
 		return SYNTAX_OK;
 
 	}
@@ -413,13 +412,13 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 			
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(IDIV,value1, value2, value3);
+			Tinst *instrukce = genInstr(IDIV,value1, value2, &value3);
 			GtableInsertInstr(global_table, id ,instrukce);
 		}
 
 
 		DelI(St, 3);
-		PushE(St, value3);
+		PushE(St, &value3);
 		return SYNTAX_OK;
 
 	}
@@ -434,13 +433,13 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			string *value2 = St->val[i + 2];
 
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(IADD, value1, value2,value3);
+			Tinst *instrukce = genInstr(IADD, value1, value2, &value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
 
 		DelI(St, 3);
-		PushE(St, value3);
+		PushE(St, &value3);
 		return SYNTAX_OK;
 
 	}
@@ -455,13 +454,13 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			string *value2 = St->val[i + 2];
 
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(ISUB,value1, value2, value3);
+			Tinst *instrukce = genInstr(ISUB,value1, value2, &value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
 
 		DelI(St, 3);
-		PushE(St, value3);
+		PushE(St, &value3);
 		return SYNTAX_OK;
 	}
 
@@ -476,13 +475,13 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			string *value2 = St->val[i + 2];
 
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(IBIG, value1, value2, value3);
+			Tinst *instrukce = genInstr(IBIG, value1, value2, &value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
 
 		DelI(St, 3);
-		PushE(St, value3);
+		PushE(St, &value3);
 		return SYNTAX_OK;
 	}
 
@@ -496,14 +495,14 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 
 		
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(IEQBG, value1, value2, value3);
+			Tinst *instrukce = genInstr(IEQBG, value1, value2, &value3);
 			GtableInsertInstr(global_table, id, instrukce);
 
 		}
 
 
 		DelI(St, 3);
-		PushE(St, value3);
+		PushE(St, &value3);
 		return SYNTAX_OK;
 	}
 
@@ -516,13 +515,13 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			string *value2 = St->val[i + 2];
 
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(ISMALL,value1, value2, value3);
+			Tinst *instrukce = genInstr(ISMALL,value1, value2, &value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
 
 		DelI(St, 3);
-		PushE(St, value3);
+		PushE(St, &value3);
 		return SYNTAX_OK;
 	}
 
@@ -536,12 +535,12 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			string *value2 = St->val[i + 2];
 
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(IEQSM, value1,value2, value3);
+			Tinst *instrukce = genInstr(IEQSM, value1, value2, &value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
 		DelI(St, 3);
-		PushE(St, value3);
+		PushE(St, &value3);
 		return SYNTAX_OK;
 	}
 
@@ -555,13 +554,13 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			string *value2 = St->val[i + 2];
 
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(IEQUAL, value1,value2, value3);
+			Tinst *instrukce = genInstr(IEQUAL, value1,value2, &value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
 
 		DelI(St, 3);
-		PushE(St, value3);
+		PushE(St, &value3);
 		return SYNTAX_OK;
 	}
 
@@ -576,13 +575,13 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 			string *value2 = St->val[i + 2];
 
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(INOTEQ, value1, value2, value3);
+			Tinst *instrukce = genInstr(INOTEQ, value1, value2, &value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 
 
 		DelI(St, 3);
-		PushE(St, value3);
+		PushE(St, &value3);
 		return SYNTAX_OK;
 	}
 
@@ -603,7 +602,7 @@ int comp_expr(globalTS *global_table, string *id) {
 	InitialSt(&St);
 	pom = TopT(&St);
 
-	if(token != TOK_LEFT_BRACE || token != TOK_SEMICOLON) {
+	if(token != TOK_RIGHT_BRACKET || token != TOK_SEMICOLON) {
 
 		result = select_ruler(&pom, token);
 
@@ -652,7 +651,9 @@ int comp_expr(globalTS *global_table, string *id) {
 
 		
 		pom = TopT(&St);	//prvni term.
-	}	while (strCmpConstStr(&pom, "$") != 0 && (token != TOK_LEFT_BRACE || token != TOK_SEMICOLON))
+	}	
+	
+	while (strCmpConstStr(&St.pom[St.top], "$\0") != 0 || token != TOK_RIGHT_BRACKET || token != TOK_SEMICOLON)
 	{
 
 		result = select_ruler(&pom, token);
@@ -666,8 +667,8 @@ int comp_expr(globalTS *global_table, string *id) {
 		switch (vyber) {
 		case TOK_LESS_THAN:
 			GnTerm(&St, '<');
-			TPush(&St, global_table, id);
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+			TPush(&St, global_table, id);
 			break;
 
 		case TOK_GREATER_THAN:
@@ -910,8 +911,9 @@ int _for(globalTS *global_table, string *id){
     string Label_1; //label, pro navrat
     strInit(&Label_1); //inicializace
     GenNewVariable(&Label_1);  // vygenerovani promenne
+    GtableInsertVar(global_table, id, &Label_1, TOK_STRING);
     tGData* prom = GtableSearch(global_table, id);
-    LtableInsert(prom->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+    //LtableInsert(prom->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
     //LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
    
     // instrukce pro label
@@ -923,7 +925,7 @@ int _for(globalTS *global_table, string *id){
 	if (result !=SYNTAX_OK) return SYNTAX_ERROR;
     
     // najde promennou ve ktere je vyhodnocena podminka
-    prom = GtableSearch(global_table, id);
+    //prom = GtableSearch(global_table, id);
     string *LastVar = ReadNameVar(prom->LInstr);
     instrukce = genInstr(INOT, LastVar, NULL, LastVar);
     GtableInsertInstr(global_table, id, instrukce);
@@ -931,8 +933,9 @@ int _for(globalTS *global_table, string *id){
     string Label_2; //label, pro navrat
     strInit(&Label_2); //inicializace
     GenNewVariable(&Label_2);  // vygenerovani promenne
-    prom = GtableSearch(global_table, id);
-    LtableInsert(prom->LTable, &Label_2, TOK_STRING);
+    GtableInsertVar(global_table, id, &Label_2, TOK_STRING);
+    //prom = GtableSearch(global_table, id);
+    //LtableInsert(prom->LTable, &Label_2, TOK_STRING);
     //LtableInsertValue(global_table->data->LTable, &Label_2, Label_2);
     
     instrukce = genInstr(IIFGOTO, LastVar, NULL, &Label_2);
@@ -1092,8 +1095,8 @@ int _if(globalTS *global_table, string *id){
 	if (result !=SYNTAX_OK) return result;
 	//vyraz je ve v poradku uzavru ho
 
-	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-	if (token !=TOK_RIGHT_BRACKET) return SYNTAX_ERROR;
+	//if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
+	//if (token !=TOK_RIGHT_BRACKET) return SYNTAX_ERROR;
 
     //generovani pomocne promenne
     tGData* prom = GtableSearch(global_table, id);
@@ -1104,8 +1107,9 @@ int _if(globalTS *global_table, string *id){
     string Label_1; //novy label, skok na vetev else
     strInit(&Label_1); //inicializace
     GenNewVariable(&Label_1);  // vygenerovani promenne
-    prom = GtableSearch(global_table, id);
-    LtableInsert(prom->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+    GtableInsertVar(global_table, id, &Label_1, TOK_STRING);
+    //prom = GtableSearch(global_table, id);
+    //LtableInsert(prom->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
     //LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
     
     //generovani skoku na ELSE vetev
@@ -1122,8 +1126,9 @@ int _if(globalTS *global_table, string *id){
     string Label_2;  // label dva, skok az za else, podminka v IF byla pravda
     strInit(&Label_2);
     GenNewVariable(&Label_2);
-    prom = GtableSearch(global_table, id);
-    LtableInsert(prom->LTable, &Label_2, TOK_STRING);
+    GtableInsertVar(global_table, id, &Label_2, TOK_STRING);
+    //prom = GtableSearch(global_table, id);
+    //LtableInsert(prom->LTable, &Label_2, TOK_STRING);
     //LtableInsertValue(global_table->data->LTable, &Label_2, Label_2);
     
     // skok za ELSE
