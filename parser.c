@@ -1228,16 +1228,17 @@ int _if(globalTS *global_table, string *id){
     Tinst *instrukce = genInstr(INOT, tmp, NULL, tmp); // negace podminky
     GtableInsertInstr(global_table, id, instrukce);
     
-    string Label_1; //novy label, skok na vetev else
-    strInit(&Label_1); //inicializace
-    GenNewVariable(&Label_1);  // vygenerovani promenne
-    GtableInsertVar(global_table, id, &Label_1, TOK_STRING);
+    string *Label_1; //novy label, skok na vetev else
+    Label_1 = malloc(sizeof(string));
+    strInit(Label_1); //inicializace
+    GenNewVariable(Label_1);  // vygenerovani promenne
+    GtableInsertVar(global_table, id, Label_1, TOK_STRING);
     //prom = GtableSearch(global_table, id);
     //LtableInsert(prom->LTable, &Label_1, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
     //LtableInsertValue(global_table->data->LTable, &Label_1, Label_1);
     
     //generovani skoku na ELSE vetev
-    instrukce = genInstr(IIFGOTO, tmp, NULL, &Label_1);
+    instrukce = genInstr(IIFGOTO, tmp, NULL, Label_1);
     GtableInsertInstr(global_table, id, instrukce);
 	//telo pokud je v if pravda
 	//if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -1247,18 +1248,19 @@ int _if(globalTS *global_table, string *id){
 	if (result != SYNTAX_OK) return result;
 
 
-    string Label_2;  // label dva, skok az za else, podminka v IF byla pravda
-    strInit(&Label_2);
-    GenNewVariable(&Label_2);
-    GtableInsertVar(global_table, id, &Label_2, TOK_STRING);
+    string *Label_2;  // label dva, skok az za else, podminka v IF byla pravda
+    Label_2 = malloc(sizeof(string))
+    strInit(Label_2);
+    GenNewVariable(Label_2);
+    GtableInsertVar(global_table, id, Label_2, TOK_STRING);
     //prom = GtableSearch(global_table, id);
     //LtableInsert(prom->LTable, &Label_2, TOK_STRING);
     //LtableInsertValue(global_table->data->LTable, &Label_2, Label_2);
     
     // skok za ELSE
-    instrukce = genInstr(IGOTO, NULL, NULL, &Label_2);
+    instrukce = genInstr(IGOTO, NULL, NULL, Label_2);
     GtableInsertInstr(global_table, id, instrukce);
-    instrukce = genInstr(ILABEL, &Label_1, NULL, NULL); // musime vlozit label za telo IFu
+    instrukce = genInstr(ILABEL, Label_1, NULL, NULL); // musime vlozit label za telo IFu
     GtableInsertInstr(global_table, id, instrukce);
     
 	if(result !=SYNTAX_OK) return result;
@@ -1274,7 +1276,7 @@ int _if(globalTS *global_table, string *id){
 	if (result != SYNTAX_OK) return result;
 
     // instrukce pro label_2, sem se skoci jestlize podminka IF byla pravda
-    instrukce = genInstr(ILABEL, &Label_2, NULL, NULL);
+    instrukce = genInstr(ILABEL, Label_2, NULL, NULL);
     GtableInsertInstr(global_table, id, instrukce);
 	if(result !=SYNTAX_OK) return result;
     //strFree(&Label_1);
