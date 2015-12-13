@@ -332,7 +332,6 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 	// nejlepsi redukce aku svet nezazil
 	// upravit potom pushE, tak aby si predavalo dal ukazatel na data
 	string * value1;
-	string * value3;
 	if (error != ERR) {
 		value1 = St->val[i];
 		string value3
