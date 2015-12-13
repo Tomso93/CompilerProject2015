@@ -255,7 +255,7 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
     			
 		
 			St->val[St->top] = &NewVar;
-			strFree(&NewVar);
+			//strFree(&NewVar);
 		}
 
 		else if (token == TOK_FLOATING_POINT_NUMBER) {
@@ -271,13 +271,13 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			//tGData* prom = GtableSearch(global_table, id);
 			//LtableInsert(prom->LTable, &NewVar, TOK_DOUBLE);    // vlozeni do lokalni tabulky symbolu
 			Tvalue value;
-			value.i = atoi(attr.str);
+			value.d = (double)atof(attr.str);
 			GtableInsertVarVal(global_table, id, &NewVar, value);
 			//LtableInsertValue(prom->LTable, &NewVar, value);
 
 			
 			St->val[St->top] = &NewVar;
-			strFree(&NewVar);
+			//strFree(&NewVar);
 		}
 
 		else if (token == TOK_STR) {
@@ -294,12 +294,14 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			//tGData* prom = GtableSearch(global_table, id);
 			//LtableInsert(prom->LTable, &NewVar, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
 			Tvalue value;
-			value.s = attr;
+			strInit(&value.s);
+			strCopyString(&value.s, &attr);
+			//value.s = attr;
 			GtableInsertVarVal(global_table, id, &NewVar, value);
 			//LtableInsertValue(prom->LTable, &NewVar, value);
 			
 			St->val[St->top] = &NewVar;
-			strFree(&NewVar);
+			//strFree(&NewVar);
 
 		}
 		
