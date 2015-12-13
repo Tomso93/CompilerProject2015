@@ -88,3 +88,5 @@ tLData* LtableSearch (localTS *T, string *key);
 int LtableInsertValue (localTS *T, string *key, Tvalue v);
 //int LtableItemDelete (localTS *T, string *key); jestli bude potreba, dodelam
 //tLData* LtableRead (localTS *T, string key); jestli bude potreba, dodelam
+
+int GtablePrintProms (globalTS *T, string *funcID)i;
