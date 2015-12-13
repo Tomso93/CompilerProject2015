@@ -82,7 +82,7 @@ char select_ruler(string *zas_term, int term){			// prosim nesahat, hotove
 
 	if (strCmpConstStr(zas_term, ")\0")==0  || strCmpConstStr(zas_term, ")<\0") == 0) radek=11;
 
-	if (strCmpConstStr(zas_term, "id\0")==0 || strCmpConstStr(zas_term, "id<\0") == 0) radek=12;
+	if (strCmpConstStr(zas_term, "i\0")==0 || strCmpConstStr(zas_term, "i<\0") == 0) radek=12;
 
 	if (strCmpConstStr(zas_term, "$\0")==0  || strCmpConstStr(zas_term, "$<\0") == 0) radek=13;
 
