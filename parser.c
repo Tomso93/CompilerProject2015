@@ -335,21 +335,24 @@ int SReduction_expr(Tstack* St, int i, globalTS *global_table, string *id) {
 	string * value3;
 	if (error != ERR) {
 		value1 = St->val[i];
-		value3 = malloc(sizeof(string));
-		if (value3 == NULL)
-			return INTERN_ERROR;
+		string value3
+    		strInit(&value3); //inicializace
+    		GenNewVariable(&value3);  // vygenerovani promenne
+    		tGData* prom = GtableSearch(global_table, id);
+    		LtableInsert(prom->LTable, &value3, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
+  
 	}
 	//----------------------------- E-> id------------------------------------------	
 	if (strCmpConstStr(&(St->pom[i]), "i") == 0) {
 
 		if (error != ERR){
 			//Generovani instrukce
-			Tinst *instrukce = genInstr(IMOV, value1, NULL, value3);
+			Tinst *instrukce = genInstr(IMOV, value1, NULL, &value3);
 			GtableInsertInstr(global_table, id, instrukce);
 		}
 			DelI(St, 1);
 
-		PushE(St, value3);
+		PushE(St, &value3);
 		return SYNTAX_OK;
 	}
 	//------------------------------E-> (E)------------------------------------------	
