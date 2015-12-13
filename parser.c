@@ -964,10 +964,11 @@ int _return(globalTS *global_table, string *id){
 	//tGData* prom = GtableSearch(global_table, id);
 	//string *LastVar = ReadNameVar(prom->LInstr); // funkce na cteni nazvu posledni instrukce
         string *LastVar = GtableLastDest(global_table, id);
-	string tmp;
-	strInit(&tmp);
-	strCopyString(&tmp,LastVar);
-	Tinst *instrukce = genInstr(IRET, &tmp, NULL, NULL);
+	string *tmp;
+	tmp = malloc(sizeof(string));
+	strInit(tmp);
+	strCopyString(tmp,LastVar);
+	Tinst *instrukce = genInstr(IRET, tmp, NULL, NULL);
     	GtableInsertInstr(global_table, id, instrukce);
 	
 	//return je dobre zapsan, neni co resit
