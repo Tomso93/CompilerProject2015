@@ -1412,7 +1412,12 @@ int func_dclr(globalTS *global_table){
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token != TOK_ID) return SYNTAX_ERROR;
 	
-	string *id = &attr;
+		//musi byt, jinak nefunguje.
+	string id1;
+	strInit(&id1);
+	strCopyString(&id1, &attr);
+	string *id = &id1;
+//	string *id = &attr;
 	GtableInsert(global_table, id, InternalType);
 ///
 	
