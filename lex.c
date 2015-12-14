@@ -34,7 +34,7 @@ int getNextToken(string *attr){
                 }
                 else if(c == 34) { // "
                     //printf("%c", c);
-                    strAddChar(attr, c);
+                   // strAddChar(attr, c);
 					stav = STATE_STRING;
                 }
                 else {
@@ -103,7 +103,7 @@ int getNextToken(string *attr){
                 break;
             case STATE_STRING:
                 if(c == '"'){
-                    strAddChar(attr, c);
+ //                   strAddChar(attr, c);
                     return TOK_STR;
                 } else if(c == 92){ // ASCII 92 je zpetne lomitko
                     strAddChar(attr, c);
