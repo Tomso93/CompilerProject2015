@@ -825,7 +825,7 @@ int type(){
 }
 
 //-----I_PROM->--=--EXPR--||--eps
-int _i_prom(globalTS *global_table, string *id){
+int _i_prom(globalTS *global_table, string *id, string *backid){
 	int result;
 
 	switch(token){
@@ -838,6 +838,16 @@ int _i_prom(globalTS *global_table, string *id){
 			
 			result= comp_expr(global_table, id);
 			if(result !=SYNTAX_OK) return result;
+
+			//
+		string *LastVar = GtableLastDest(global_table, id);
+    		string *tmp;
+		    tmp = malloc(sizeof(string));
+		    strInit(tmp);
+		    strCopyString(tmp,LastVar);
+		    Tinst *instrukce = genInstr(IMOV, tmp, NULL, backid);
+		    GtableInsertInstr(global_table, id, instrukce);
+		       //
 
 			//if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			if(token != TOK_SEMICOLON) return SYNTAX_ERROR;
@@ -1139,6 +1149,17 @@ int callf_dec(globalTS *global_table, string *id, string *backid){
 				if(result !=SYNTAX_OK) return result; }
 			else {
 				result = comp_expr(global_table, id);
+
+//
+		string *LastVar = GtableLastDest(global_table, id);
+    		string *tmp;
+		    tmp = malloc(sizeof(string));
+		    strInit(tmp);
+		    strCopyString(tmp,LastVar);
+		    Tinst *instrukce = genInstr(IMOV, tmp, NULL, backid);
+		    GtableInsertInstr(global_table, id, instrukce);
+//
+
 				if(result !=SYNTAX_OK) return result; }
 			return SYNTAX_OK;
 			break;
@@ -1178,6 +1199,8 @@ int _prom(globalTS *global_table, string *id){
 	
 	switch(token){
 		case TOK_EQUALS:
+
+
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			
 			result= callf_dec(global_table, id, backid);
@@ -1197,9 +1220,9 @@ int _prom(globalTS *global_table, string *id){
     					strCopyString(tmp,&attr);
     					GtableInsertVar(global_table, id, tmp, typ);
 			
-			
+
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-			result= _i_prom(global_table, id);
+			result= _i_prom(global_table, id, tmp);
 
 			if(result !=SYNTAX_OK) return result;
 
@@ -1238,19 +1261,32 @@ int _return(globalTS *global_table, string *id){
 int _for(globalTS *global_table, string *id){
 	int result; 
 	
+	
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_LEFT_BRACKET) return SYNTAX_ERROR;
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	
 	result= type();
+	//ulozeni promenne
 	if (result !=SYNTAX_OK) return SYNTAX_ERROR;
+
+	int typ = token;
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_ID) return SYNTAX_ERROR;
 
+	string *tmp1;
+	tmp1 = malloc(sizeof(string));
+	strInit(tmp1);
+    	strCopyString(tmp1,&attr);
+    	GtableInsertVar(global_table, id, tmp1, typ);
+
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
-	result= _i_prom(global_table, id);
+	result= _i_prom(global_table, id, tmp1);
+
+
+
 	if (result !=SYNTAX_OK) return SYNTAX_ERROR;
 
     string *Label_1; //label, pro navrat
@@ -1299,12 +1335,26 @@ int _for(globalTS *global_table, string *id){
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_ID) return SYNTAX_ERROR;
 	//if(!(tableSearch(local_table, &attr))) return SEMANTIC_ERROR;
-	
+
+//ulozit id
+    string *backid; //label, pro navrat
+    backid = malloc(sizeof(string));
+    strInit(backid); //inicializace
+    strCopyString(backid, &attr);
+//
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_EQUALS) return SYNTAX_ERROR;
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	result= comp_expr(global_table, id);
+
+//nacist posledni vysledek
+	string *LVar = GtableLastDest(global_table, id);
+       	string *temp;
+       	temp = malloc(sizeof(string));
+	strInit(temp);
+	strCopyString(temp,LVar);
+//
 
 	if (result !=SYNTAX_OK) return result;
 
@@ -1316,6 +1366,12 @@ int _for(globalTS *global_table, string *id){
 	result= stmnt(global_table, id);
 
 	if (result != SYNTAX_OK) return result;
+//ulozit posledni vysledek do backid
+
+    instrukce = genInstr(IMOV, temp, NULL, backid); // negace podminky
+    GtableInsertInstr(global_table, id, instrukce);
+
+//
 
     // instrukce skoku
     instrukce = genInstr(IGOTO, NULL, NULL, Label_1);
@@ -1712,6 +1768,7 @@ int stmnt(globalTS *global_table, string *id){
 		case TOK_DOUBLE:
 		case TOK_AUTO:
 			result= _prom(global_table, id);
+			//
 			if (result != SYNTAX_OK) return result;
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			return stmnt(global_table, id);
@@ -1910,5 +1967,6 @@ int parse(globalTS *ST){
 	strFree(&attr);
 	return result;
 }
+
 
 
