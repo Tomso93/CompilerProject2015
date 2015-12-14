@@ -1337,10 +1337,6 @@ int term_n(globalTS *global_table, string *id){
 			
 			switch (token) {
 			case TOK_ID:
-				string *funcid;
-				funcid = malloc(sizeof(string));
-				strInit(funcid);
-				strCopyString(funcid, id);
 
 				string *tmp;
 				tmp = malloc(sizeof(string));
@@ -1353,10 +1349,6 @@ int term_n(globalTS *global_table, string *id){
 
 				///////////////
 			case TOK_DECIMAL_NUMBER:
-				string *funcid;
-				funcid = malloc(sizeof(string));
-				strInit(funcid);
-				strCopyString(funcid, id);
 
 				string *NewVar;
 				NewVar = malloc(sizeof(string));
@@ -1368,50 +1360,42 @@ int term_n(globalTS *global_table, string *id){
 				v.i = atoi(attr.str);
 				GtableInsertVar(global_table, id, Label_1, v);
 
-				Tinst *instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
+				instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
 				GtableInsertInstr(global_table, id, instrukce);
 				break;
 
 				/////////////////////
 			case TOK_FLOATING_POINT_NUMBER:
-				string *funcid;
-				funcid = malloc(sizeof(string));
-				strInit(funcid);
-				strCopyString(funcid, id);
 
-				string *NewVar;
+			
 				NewVar = malloc(sizeof(string));
 				strInit(NewVar);
 				GenNewVariable(NewVar);
 				GtableInsertVar(global_table, id, Label_1, TOK_INT);
 
-				Tvalue v;
+				
 				v.d = (double)atof(attr.str);
 				GtableInsertVar(global_table, id, Label_1, v);
 
-				Tinst *instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
+				instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
 				GtableInsertInstr(global_table, id, instrukce);
 				break;
 
 				////////////////////////
 			case TOK_STR:
-				string *funcid;
-				funcid = malloc(sizeof(string));
-				strInit(funcid);
-				strCopyString(funcid, id);
 
-				string *NewVar;
+				
 				NewVar = malloc(sizeof(string));
 				strInit(NewVar);
 				GenNewVariable(NewVar);
 				GtableInsertVar(global_table, id, Label_1, TOK_INT);
 
-				Tvalue v;
+				
 				strInit(&v.s);
 				strCopyString(&v.s, &attr);
 				GtableInsertVar(global_table, id, Label_1, v);
 
-				Tinst *instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
+				instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
 				GtableInsertInstr(global_table, id, instrukce);
 				break;
 			}
@@ -1428,6 +1412,7 @@ int term_n(globalTS *global_table, string *id){
 //-----------COUT->--cout--<<--TERM--TERM_N--;--------------------------------
 int _cout(globalTS *global_table, string *id){
 	int result;
+	
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_DOUBLE_ARROW_LEFT) return SYNTAX_ERROR;
@@ -1440,10 +1425,7 @@ int _cout(globalTS *global_table, string *id){
 	// instrukce pro zapis, pokud jich je vice generuji se v term_n()
 	switch (token) {
 		case TOK_ID:
-			string *funcid;
-			funcid = malloc(sizeof(string));
-			strInit(funcid);
-			strCopyString(funcid, id);
+
 
 			string *tmp;
 			tmp = malloc(sizeof(string));
@@ -1456,10 +1438,6 @@ int _cout(globalTS *global_table, string *id){
 		
 		///////////////
 		case TOK_DECIMAL_NUMBER:
-			string *funcid;
-			funcid = malloc(sizeof(string));
-			strInit(funcid);
-			strCopyString(funcid, id);
 
 			string *NewVar;
 			NewVar = malloc(sizeof(string));
@@ -1469,52 +1447,45 @@ int _cout(globalTS *global_table, string *id){
 
 			Tvalue v;
 			v.i = atoi(attr.str);
-			GtableInsertVar(global_table, id, Label_1, v);
+			GtableInsertVarVal(global_table, id, Label_1, v);
 
-			Tinst *instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
+			instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
 			GtableInsertInstr(global_table, id, instrukce);
 			break;
 
 		/////////////////////
 		case TOK_FLOATING_POINT_NUMBER:
-			string *funcid;
-			funcid = malloc(sizeof(string));
-			strInit(funcid);
-			strCopyString(funcid, id);
+			
 
-			string *NewVar;
+			
 			NewVar = malloc(sizeof(string));
 			strInit(NewVar);
 			GenNewVariable(NewVar);
 			GtableInsertVar(global_table, id, Label_1, TOK_INT);
 
-			Tvalue v;
+			
 			v.d = (double)atof(attr.str);
-			GtableInsertVar(global_table, id, Label_1, v);
+			GtableInsertVarVal(global_table, id, Label_1, v);
 
-			Tinst *instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
+			instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
 			GtableInsertInstr(global_table, id, instrukce);
 			break;
 
 		////////////////////////
 		case TOK_STR:
-			string *funcid;
-			funcid = malloc(sizeof(string));
-			strInit(funcid);
-			strCopyString(funcid, id);
 
-			string *NewVar;
+			
 			NewVar = malloc(sizeof(string));
 			strInit(NewVar);
 			GenNewVariable(NewVar);
 			GtableInsertVar(global_table, id, Label_1, TOK_INT);
 
-			Tvalue v;
+			
 			strInit(&v.s);
 			strCopyString(&v.s, &attr);
-			GtableInsertVar(global_table, id, Label_1, v);
+			GtableInsertVarVal(global_table, id, Label_1, v);
 
-			Tinst *instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
+			instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
 			GtableInsertInstr(global_table, id, instrukce);
 			break;
 	}
