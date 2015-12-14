@@ -1895,9 +1895,14 @@ int program(globalTS *global_table){
 	}
 	
 	//generuji konec programu
-	string *id = &attr;
+	  string start;
+  strInit(&start);
+  strAddChar(&start, 'm');
+  strAddChar(&start, 'a');
+  strAddChar(&start, 'i');
+  strAddChar(&start, 'n');
 	Tinst *instrukce = genInstr(IEND,NULL,NULL,NULL);
-	GtableInsertInstr(global_table, id, instrukce);
+	GtableInsertInstr(global_table, &start, instrukce);
 	return SYNTAX_OK;
 	
 }
