@@ -1342,7 +1342,7 @@ int term_n(globalTS *global_table, string *id){
 				tmp = malloc(sizeof(string));
 				strInit(tmp);
 				strCopyString(tmp, attr);
-				Tinst *instrukce = genInstr(IWRITE, NULL, NULL, tmp, );
+				Tinst *instrukce = genInstr(IWRITE, NULL, NULL, tmp);
 				GtableInsertInstr(global_table, id, instrukce);
 				break;
 
@@ -1354,11 +1354,11 @@ int term_n(globalTS *global_table, string *id){
 				NewVar = malloc(sizeof(string));
 				strInit(NewVar);
 				GenNewVariable(NewVar);
-				GtableInsertVar(global_table, id, Label_1, TOK_INT);
+				GtableInsertVar(global_table, id, NewVar, TOK_INT);
 
 				Tvalue v;
 				v.i = atoi(attr.str);
-				GtableInsertVar(global_table, id, Label_1, v);
+				GtableInsertVarVal(global_table, id, NewVar, v);
 
 				instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
 				GtableInsertInstr(global_table, id, instrukce);
@@ -1371,11 +1371,11 @@ int term_n(globalTS *global_table, string *id){
 				NewVar = malloc(sizeof(string));
 				strInit(NewVar);
 				GenNewVariable(NewVar);
-				GtableInsertVar(global_table, id, Label_1, TOK_INT);
+				GtableInsertVar(global_table, id, NewVar, TOK_INT);
 
 				
 				v.d = (double)atof(attr.str);
-				GtableInsertVar(global_table, id, Label_1, v);
+				GtableInsertVarVal(global_table, id, NewVar, v);
 
 				instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
 				GtableInsertInstr(global_table, id, instrukce);
@@ -1388,12 +1388,12 @@ int term_n(globalTS *global_table, string *id){
 				NewVar = malloc(sizeof(string));
 				strInit(NewVar);
 				GenNewVariable(NewVar);
-				GtableInsertVar(global_table, id, Label_1, TOK_INT);
+				GtableInsertVar(global_table, id, NewVar, TOK_INT);
 
 				
 				strInit(&v.s);
 				strCopyString(&v.s, &attr);
-				GtableInsertVar(global_table, id, Label_1, v);
+				GtableInsertVarVal(global_table, id, NewVar, v);
 
 				instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
 				GtableInsertInstr(global_table, id, instrukce);
@@ -1431,7 +1431,7 @@ int _cout(globalTS *global_table, string *id){
 			tmp = malloc(sizeof(string));
 			strInit(tmp);
 			strCopyString(tmp, attr);
-			Tinst *instrukce = genInstr(IWRITE, NULL, NULL, tmp,);
+			Tinst *instrukce = genInstr(IWRITE, NULL, NULL, tmp);
 			GtableInsertInstr(global_table, id, instrukce);
 			break;
 		
@@ -1443,11 +1443,11 @@ int _cout(globalTS *global_table, string *id){
 			NewVar = malloc(sizeof(string));
 			strInit(NewVar);
 			GenNewVariable(NewVar);
-			GtableInsertVar(global_table, id, Label_1, TOK_INT);
+			GtableInsertVar(global_table, id, NewVar, TOK_INT);
 
 			Tvalue v;
 			v.i = atoi(attr.str);
-			GtableInsertVarVal(global_table, id, Label_1, v);
+			GtableInsertVarVal(global_table, id, NewVar, v);
 
 			instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
 			GtableInsertInstr(global_table, id, instrukce);
@@ -1461,11 +1461,11 @@ int _cout(globalTS *global_table, string *id){
 			NewVar = malloc(sizeof(string));
 			strInit(NewVar);
 			GenNewVariable(NewVar);
-			GtableInsertVar(global_table, id, Label_1, TOK_INT);
+			GtableInsertVar(global_table, id, NewVar, TOK_INT);
 
 			
 			v.d = (double)atof(attr.str);
-			GtableInsertVarVal(global_table, id, Label_1, v);
+			GtableInsertVarVal(global_table, id, NewVar, v);
 
 			instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
 			GtableInsertInstr(global_table, id, instrukce);
@@ -1478,12 +1478,12 @@ int _cout(globalTS *global_table, string *id){
 			NewVar = malloc(sizeof(string));
 			strInit(NewVar);
 			GenNewVariable(NewVar);
-			GtableInsertVar(global_table, id, Label_1, TOK_INT);
+			GtableInsertVar(global_table, id, NewVar, TOK_INT);
 
 			
 			strInit(&v.s);
 			strCopyString(&v.s, &attr);
-			GtableInsertVarVal(global_table, id, Label_1, v);
+			GtableInsertVarVal(global_table, id, NewVar, v);
 
 			instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
 			GtableInsertInstr(global_table, id, instrukce);
