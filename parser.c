@@ -1323,6 +1323,10 @@ int _for(globalTS *global_table, string *id){
 //-----------TERM_N->--<<--TERM--TERM_N--||eps--------------------------------
 int term_n(globalTS *global_table, string *id){
 	int result;
+	string *NewVar;
+	string *tmp;
+	Tvalue v;
+	Tinst *instrukce
 
 	switch (token) {
 		case TOK_SEMICOLON:
@@ -1338,11 +1342,11 @@ int term_n(globalTS *global_table, string *id){
 			switch (token) {
 			case TOK_ID:
 
-				string *tmp;
+				
 				tmp = malloc(sizeof(string));
 				strInit(tmp);
-				strCopyString(tmp, attr);
-				Tinst *instrukce = genInstr(IWRITE, NULL, NULL, tmp);
+				strCopyString(tmp, &attr);
+				instrukce = genInstr(IWRITE, NULL, NULL, tmp);
 				GtableInsertInstr(global_table, id, instrukce);
 				break;
 
@@ -1350,13 +1354,13 @@ int term_n(globalTS *global_table, string *id){
 				///////////////
 			case TOK_DECIMAL_NUMBER:
 
-				string *NewVar;
+				
 				NewVar = malloc(sizeof(string));
 				strInit(NewVar);
 				GenNewVariable(NewVar);
 				GtableInsertVar(global_table, id, NewVar, TOK_INT);
 
-				Tvalue v;
+				
 				v.i = atoi(attr.str);
 				GtableInsertVarVal(global_table, id, NewVar, v);
 
@@ -1412,7 +1416,10 @@ int term_n(globalTS *global_table, string *id){
 //-----------COUT->--cout--<<--TERM--TERM_N--;--------------------------------
 int _cout(globalTS *global_table, string *id){
 	int result;
-	
+	string *NewVar;
+	string *tmp;
+	Tvalue v;
+	Tinst *instrukce
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_DOUBLE_ARROW_LEFT) return SYNTAX_ERROR;
@@ -1427,11 +1434,11 @@ int _cout(globalTS *global_table, string *id){
 		case TOK_ID:
 
 
-			string *tmp;
+			
 			tmp = malloc(sizeof(string));
 			strInit(tmp);
-			strCopyString(tmp, attr);
-			Tinst *instrukce = genInstr(IWRITE, NULL, NULL, tmp);
+			strCopyString(tmp, &attr);
+			instrukce = genInstr(IWRITE, NULL, NULL, tmp);
 			GtableInsertInstr(global_table, id, instrukce);
 			break;
 		
@@ -1439,13 +1446,13 @@ int _cout(globalTS *global_table, string *id){
 		///////////////
 		case TOK_DECIMAL_NUMBER:
 
-			string *NewVar;
+			
 			NewVar = malloc(sizeof(string));
 			strInit(NewVar);
 			GenNewVariable(NewVar);
 			GtableInsertVar(global_table, id, NewVar, TOK_INT);
 
-			Tvalue v;
+			
 			v.i = atoi(attr.str);
 			GtableInsertVarVal(global_table, id, NewVar, v);
 
