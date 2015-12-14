@@ -1156,6 +1156,7 @@ int callf_dec(globalTS *global_table, string *id, string *backid){
 //-----PROM->--id--=--CALL_DEF--;||->TYPE--id--I_PROM--;-------------------------
 int _prom(globalTS *global_table, string *id){
 	int result;
+	string *tmp;
 			string *backid;
 			backid = malloc(sizeof(string));
 			strInit(backid);
@@ -1180,7 +1181,7 @@ int _prom(globalTS *global_table, string *id){
 		
 		case TOK_ID:
 
-					string *tmp;
+					
     					tmp = malloc(sizeof(string));
     					strInit(tmp);
     					strCopyString(tmp,&attr);
