@@ -13,7 +13,7 @@
 #include "str.h"
 #include "errors.h"
 #include "instlist.h"
-#include "stable.h"
+#include "ial.h"
 #include "lex.h"
 #include "varframe.h"
 #include "interpret.h"
