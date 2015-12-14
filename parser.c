@@ -1160,6 +1160,8 @@ int _prom(globalTS *global_table, string *id){
 			backid = malloc(sizeof(string));
 			strInit(backid);
 			strCopyString(backid, &attr);
+			
+			int typ = token;
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	
@@ -1178,6 +1180,13 @@ int _prom(globalTS *global_table, string *id){
 		
 		case TOK_ID:
 
+					string *tmp;
+    					tmp = malloc(sizeof(string));
+    					strInit(tmp);
+    					strCopyString(tmp,&attr);
+    					GtableInsertVar(global_table, id, tmp, typ);
+			
+			
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 			result= _i_prom(global_table, id);
 
