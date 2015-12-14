@@ -1326,7 +1326,7 @@ int term_n(globalTS *global_table, string *id){
 	string *NewVar;
 	string *tmp;
 	Tvalue v;
-	Tinst *instrukce
+	Tinst *instrukce;
 
 	switch (token) {
 		case TOK_SEMICOLON:
@@ -1419,7 +1419,7 @@ int _cout(globalTS *global_table, string *id){
 	string *NewVar;
 	string *tmp;
 	Tvalue v;
-	Tinst *instrukce
+	Tinst *instrukce;
 
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
 	if (token !=TOK_DOUBLE_ARROW_LEFT) return SYNTAX_ERROR;
