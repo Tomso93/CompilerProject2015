@@ -1152,7 +1152,7 @@ int callf_dec(globalTS *global_table, string *id, string *backid){
 		    tmp = malloc(sizeof(string));
 		    strInit(tmp);
 		    strCopyString(tmp,LastVar);
-		    instrukce = genInstr(IMOV, tmp, NULL, backid);
+		    Tinst *instrukce = genInstr(IMOV, tmp, NULL, backid);
 		    GtableInsertInstr(global_table, id, instrukce);
 		    ////
 		 	if(result !=SYNTAX_OK) return result;
