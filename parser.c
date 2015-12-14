@@ -1326,20 +1326,87 @@ int term_n(globalTS *global_table, string *id){
 			result = term();
 			if (result != SYNTAX_OK) return result;
 			
-			//generovani instukce
-			string* tmp;
-			tmp = malloc(sizeof(string));
-        		strInit(tmp); 
-        		GenNewVariable(tmp);
-        		GtableInsertVar(global_table, id, tmp, TOK_STRING);
+			switch (token) {
+			case TOK_ID:
+				string *funcid;
+				funcid = malloc(sizeof(string));
+				strInit(funcid);
+				strCopyString(funcid, id);
 
-			Tvalue v;
-			strInit(&v.s);
-			strCopyString(&v.s, &attr);
-        		GtableInsertVarVal(global_table, id, tmp, v);
-	
-			Tinst *instrukce = genInstr(IWRITE, NULL, NULL, tmp);
-			GtableInsertInstr(global_table, id, instrukce);
+				string *tmp;
+				tmp = malloc(sizeof(string));
+				strInit(tmp);
+				strCopyString(tmp, attr);
+				Tinst *instrukce = genInstr(IWRITE, NULL, NULL, tmp, );
+				GtableInsertInstr(global_table, id, instrukce);
+				break;
+
+
+				///////////////
+			case TOK_DECIMAL_NUMBER:
+				string *funcid;
+				funcid = malloc(sizeof(string));
+				strInit(funcid);
+				strCopyString(funcid, id);
+
+				string *NewVar;
+				NewVar = malloc(sizeof(string));
+				strInit(NewVar);
+				GenNewVariable(NewVar);
+				GtableInsertVar(global_table, id, Label_1, TOK_INT);
+
+				Tvalue v;
+				v.i = atoi(attr.str);
+				GtableInsertVar(global_table, id, Label_1, v);
+
+				Tinst *instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
+				GtableInsertInstr(global_table, id, instrukce);
+				break;
+
+				/////////////////////
+			case TOK_FLOATING_POINT_NUMBER:
+				string *funcid;
+				funcid = malloc(sizeof(string));
+				strInit(funcid);
+				strCopyString(funcid, id);
+
+				string *NewVar;
+				NewVar = malloc(sizeof(string));
+				strInit(NewVar);
+				GenNewVariable(NewVar);
+				GtableInsertVar(global_table, id, Label_1, TOK_INT);
+
+				Tvalue v;
+				v.d = (double)atof(attr.str);
+				GtableInsertVar(global_table, id, Label_1, v);
+
+				Tinst *instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
+				GtableInsertInstr(global_table, id, instrukce);
+				break;
+
+				////////////////////////
+			case TOK_STR:
+				string *funcid;
+				funcid = malloc(sizeof(string));
+				strInit(funcid);
+				strCopyString(funcid, id);
+
+				string *NewVar;
+				NewVar = malloc(sizeof(string));
+				strInit(NewVar);
+				GenNewVariable(NewVar);
+				GtableInsertVar(global_table, id, Label_1, TOK_INT);
+
+				Tvalue v;
+				strInit(&v.s);
+				strCopyString(&v.s, &attr);
+				GtableInsertVar(global_table, id, Label_1, v);
+
+				Tinst *instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
+				GtableInsertInstr(global_table, id, instrukce);
+				break;
+			}
+			
 			
 			//mozna jich je jeste vic, radeji si ho zavolam znovu
 			if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;
@@ -1362,19 +1429,86 @@ int _cout(globalTS *global_table, string *id){
 	if(result !=SYNTAX_OK) return result;
 	
 	// instrukce pro zapis, pokud jich je vice generuji se v term_n()
-    	string* tmp;
-	tmp = malloc(sizeof(string));
-        strInit(tmp); 
-        GenNewVariable(tmp);
-        GtableInsertVar(global_table, id, tmp, TOK_STRING);
+	switch (token) {
+		case TOK_ID:
+			string *funcid;
+			funcid = malloc(sizeof(string));
+			strInit(funcid);
+			strCopyString(funcid, id);
 
-	Tvalue v;
-	strInit(&v.s);
-	strCopyString(&v.s, &attr);
-        GtableInsertVarVal(global_table, id, tmp, v);
+			string *tmp;
+			tmp = malloc(sizeof(string));
+			strInit(tmp);
+			strCopyString(tmp, attr);
+			Tinst *instrukce = genInstr(IWRITE, NULL, NULL, tmp,);
+			GtableInsertInstr(global_table, id, instrukce);
+			break;
+		
+		
+		///////////////
+		case TOK_DECIMAL_NUMBER:
+			string *funcid;
+			funcid = malloc(sizeof(string));
+			strInit(funcid);
+			strCopyString(funcid, id);
 
-    	Tinst *instrukce = genInstr(IWRITE, NULL, NULL, tmp);
-   	GtableInsertInstr(global_table, id, instrukce);
+			string *NewVar;
+			NewVar = malloc(sizeof(string));
+			strInit(NewVar);
+			GenNewVariable(NewVar);
+			GtableInsertVar(global_table, id, Label_1, TOK_INT);
+
+			Tvalue v;
+			v.i = atoi(attr.str);
+			GtableInsertVar(global_table, id, Label_1, v);
+
+			Tinst *instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
+			GtableInsertInstr(global_table, id, instrukce);
+			break;
+
+		/////////////////////
+		case TOK_FLOATING_POINT_NUMBER:
+			string *funcid;
+			funcid = malloc(sizeof(string));
+			strInit(funcid);
+			strCopyString(funcid, id);
+
+			string *NewVar;
+			NewVar = malloc(sizeof(string));
+			strInit(NewVar);
+			GenNewVariable(NewVar);
+			GtableInsertVar(global_table, id, Label_1, TOK_INT);
+
+			Tvalue v;
+			v.d = (double)atof(attr.str);
+			GtableInsertVar(global_table, id, Label_1, v);
+
+			Tinst *instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
+			GtableInsertInstr(global_table, id, instrukce);
+			break;
+
+		////////////////////////
+		case TOK_STR:
+			string *funcid;
+			funcid = malloc(sizeof(string));
+			strInit(funcid);
+			strCopyString(funcid, id);
+
+			string *NewVar;
+			NewVar = malloc(sizeof(string));
+			strInit(NewVar);
+			GenNewVariable(NewVar);
+			GtableInsertVar(global_table, id, Label_1, TOK_INT);
+
+			Tvalue v;
+			strInit(&v.s);
+			strCopyString(&v.s, &attr);
+			GtableInsertVar(global_table, id, Label_1, v);
+
+			Tinst *instrukce = genInstr(IWRITE, NULL, NULL, NewVar);
+			GtableInsertInstr(global_table, id, instrukce);
+			break;
+	}
 	
 	//zavolam scanner a jdu zjistit, jestli termu neni vic a jestli jsou ok
 	if ((token = getNextToken(&attr)) == LEX_ERROR) return LEX_ERROR;

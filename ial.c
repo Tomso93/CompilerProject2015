@@ -5,19 +5,21 @@
  *
  */
 
+#include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
 #include "define.h"
 #include "str.h"
-#include "ial.h"
 #include "lex.h"
 #include "varframe.h"
 #include "interpret.h"
 #include "parser.h"
 #include "errors.h"
 #include "instlist.h"
-#include <stdlib.h>
-#include <stdio.h>
+#include "ial.h"
+
+
 
 
 int length(string s)
