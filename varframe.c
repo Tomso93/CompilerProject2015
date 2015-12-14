@@ -19,6 +19,7 @@
 #include "interpret.h"
 #include "parser.h"
 
+
 int StackInit(Tstackframe *S){
   S->top = NULL;
   S->act = NULL;
@@ -66,14 +67,20 @@ struct Frame *FrameCreate(globalTS *GTS, string *funcName){
   func = GtableSearch(GTS, funcName);
   if (func == NULL){
     return NULL;
+  }else{
+   // printf("nalezeno/n");
   }
-
   //copy Ltables (LTable) do LTS
-  localTS LTS;
+  localTS *LTS;
   tLTableItem *prom;
   int i;
 
-  success = LtableInit(&LTS);
+  LTS = malloc(sizeof(localTS));
+  if (LTS == NULL){
+    return NULL;
+  }
+
+  success = LtableInit(LTS);
   if (success != SUCCESS){
     return NULL;
   }
@@ -81,12 +88,12 @@ struct Frame *FrameCreate(globalTS *GTS, string *funcName){
   for(i = 0; i < TABLE_SIZE; i++){
     prom = (*(func->LTable))[i]; 
     while(prom != NULL){
-      success = LtableInsert (&LTS, &prom->key, prom->data.varType);
+      success = LtableInsert (LTS, &prom->key, prom->data.varType);
       if (success != 0){
         return NULL;
       }
       if (prom->data.isinit){
-        success = LtableInsertValue (&LTS, &prom->key, prom->data.varValue);
+        success = LtableInsertValue (LTS, &prom->key, prom->data.varValue);
         if (success != SUCCESS){
           return NULL;
         }
@@ -104,7 +111,7 @@ struct Frame *FrameCreate(globalTS *GTS, string *funcName){
 
   newF->base = true;
   newF->down = NULL;
-  newF->proms = &LTS;
+  newF->proms = LTS;
 
   return newF;
 }
@@ -114,7 +121,7 @@ tLData *VariableSearch(Tstackframe *S, string *varName){
   tLData *result;
   S->act = S->top;
 
-    while(S->act->base == false){
+    while(S->act->base == false && S->act != NULL ){
       if ( (result = LtableSearch(S->act->proms, varName)) != NULL){
         return result;
       }else{
