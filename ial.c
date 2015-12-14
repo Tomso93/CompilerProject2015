@@ -12,13 +12,12 @@
 #include "define.h"
 #include "str.h"
 #include "lex.h"
-#include "varframe.h"
-#include "interpret.h"
-#include "parser.h"
 #include "errors.h"
 #include "instlist.h"
 #include "ial.h"
-
+#include "varframe.h"
+#include "interpret.h"
+#include "parser.h"
 
 
 
