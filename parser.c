@@ -1386,7 +1386,7 @@ int term_n(globalTS *global_table, string *id){
 				NewVar = malloc(sizeof(string));
 				strInit(NewVar);
 				GenNewVariable(NewVar);
-				GtableInsertVar(global_table, id, NewVar, TOK_INT);
+				GtableInsertVar(global_table, id, NewVar, TOK_DOUBLE);
 
 				
 				v.d = (double)atof(attr.str);
@@ -1403,7 +1403,7 @@ int term_n(globalTS *global_table, string *id){
 				NewVar = malloc(sizeof(string));
 				strInit(NewVar);
 				GenNewVariable(NewVar);
-				GtableInsertVar(global_table, id, NewVar, TOK_INT);
+				GtableInsertVar(global_table, id, NewVar, TOK_STRING);
 
 				
 				strInit(&v.s);
@@ -1479,7 +1479,7 @@ int _cout(globalTS *global_table, string *id){
 			NewVar = malloc(sizeof(string));
 			strInit(NewVar);
 			GenNewVariable(NewVar);
-			GtableInsertVar(global_table, id, NewVar, TOK_INT);
+			GtableInsertVar(global_table, id, NewVar, TOK_DOUBLE);
 
 			
 			v.d = (double)atof(attr.str);
@@ -1496,7 +1496,7 @@ int _cout(globalTS *global_table, string *id){
 			NewVar = malloc(sizeof(string));
 			strInit(NewVar);
 			GenNewVariable(NewVar);
-			GtableInsertVar(global_table, id, NewVar, TOK_INT);
+			GtableInsertVar(global_table, id, NewVar, TOK_STRING);
 
 			
 			strInit(&v.s);
