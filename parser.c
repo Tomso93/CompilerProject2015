@@ -251,7 +251,7 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			NewVar = malloc(sizeof(string));
     		strInit(NewVar); //inicializace
     		GenNewVariable(NewVar);  // vygenerovani promenne
-		GtableInsertVar(global_table, id , NewVar, TOK_AUTO);
+		GtableInsertVar(global_table, id , NewVar, TOK_INT);
     		//tGData* prom = GtableSearch(global_table, id);
     		//LtableInsert(prom->LTable, &NewVar, TOK_INT);    // vlozeni do lokalni tabulky symbolu
     		Tvalue value;
@@ -274,7 +274,7 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			NewVar = malloc(sizeof(string));
 			strInit(NewVar); //inicializace
 			GenNewVariable(NewVar);  // vygenerovani promenne
-			GtableInsertVar(global_table, id, NewVar, TOK_AUTO);		
+			GtableInsertVar(global_table, id, NewVar, TOK_DOUBLE);		
 			//tGData* prom = GtableSearch(global_table, id);
 			//LtableInsert(prom->LTable, &NewVar, TOK_DOUBLE);    // vlozeni do lokalni tabulky symbolu
 			Tvalue value;
@@ -298,7 +298,7 @@ int TPush(Tstack *St, globalTS *global_table, string *id) {
 			NewVar = malloc(sizeof(string));
 			strInit(NewVar); //inicializace
 			GenNewVariable(NewVar);  // vygenerovani promenne
-			GtableInsertVar(global_table, id, NewVar, TOK_AUTO);
+			GtableInsertVar(global_table, id, NewVar, TOK_STRING);
 			//tGData* prom = GtableSearch(global_table, id);
 			//LtableInsert(prom->LTable, &NewVar, TOK_STRING);    // vlozeni do lokalni tabulky symbolu
 			Tvalue value;
@@ -922,7 +922,7 @@ int list_par_n(globalTS *global_table, string *id, string *funcid){
 				NewVar = malloc(sizeof(string));
 				strInit(NewVar);
 				GenNewVariable(NewVar);
-				GtableInsertVar(global_table, id, NewVar, TOK_INT);
+				GtableInsertVar(global_table, id, NewVar, TOK_DOUBLE);
 				
 				//Tvalue v;
 				v.d = (double)atof(attr.str);
@@ -949,7 +949,7 @@ int list_par_n(globalTS *global_table, string *id, string *funcid){
 				NewVar = malloc(sizeof(string));
 				strInit(NewVar);
 				GenNewVariable(NewVar);
-				GtableInsertVar(global_table, id, NewVar, TOK_INT);
+				GtableInsertVar(global_table, id, NewVar, TOK_STRING);
 				
 				//Tvalue v;
 				strInit(&v.s);
@@ -1044,7 +1044,7 @@ int list_par(globalTS *global_table, string *id, string *funcid){
 				NewVar = malloc(sizeof(string));
 				strInit(NewVar);
 				GenNewVariable(NewVar);
-				GtableInsertVar(global_table, id, NewVar, TOK_INT);
+				GtableInsertVar(global_table, id, NewVar, TOK_DOUBLE);
 				
 				//Tvalue v;
 				v.d = (double)atof(attr.str);
@@ -1070,7 +1070,7 @@ int list_par(globalTS *global_table, string *id, string *funcid){
 				NewVar = malloc(sizeof(string));
 				strInit(NewVar);
 				GenNewVariable(NewVar);
-				GtableInsertVar(global_table, id, NewVar, TOK_INT);
+				GtableInsertVar(global_table, id, NewVar, TOK_STRING);
 				
 				//Tvalue v;
 				strInit(&v.s);
