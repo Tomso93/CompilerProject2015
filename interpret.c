@@ -9,10 +9,9 @@
 #include <string.h>
 #include <stdbool.h>
 #include "define.h" //definice konstant
-#include "str.h" 
-#include "ial.h" //funkce find a sort a hashovaci tabulka
+#include "str.h"
 #include "instlist.h" //seznamem instrukci
-#include "stable.h" //tabulka symbolu
+#include "ial.h" //funkce find a sort a hashovaci tabulka
 #include "varframe.h" //ramec promennych
 #include "errors.h" 
 #include "interpret.h"
