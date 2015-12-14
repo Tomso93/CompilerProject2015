@@ -1145,6 +1145,16 @@ int callf_dec(globalTS *global_table, string *id, string *backid){
 
 		 default:
 		 	result= comp_expr(global_table, id);
+		 	
+		 	////
+		string *LastVar = GtableLastDest(global_table, id);
+    		string *tmp;
+		    tmp = malloc(sizeof(string));
+		    strInit(tmp);
+		    strCopyString(tmp,LastVar);
+		    Tinst *instrukce = genInstr(IMOV, tmp, NULL, backid);
+		    GtableInsertInstr(global_table, id, instrukce);
+		    ////
 		 	if(result !=SYNTAX_OK) return result;
 
 		 	return SYNTAX_OK;

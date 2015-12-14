@@ -1,0 +1,67 @@
+funkce main
+main variables:
+int #72 = 0
+auto #81
+auto #82
+int #91 = 1
+int vysl
+null
+string #1 = "Zadejte cislo pro vypocet faktorialu: "
+auto #2
+int #3 = 0
+auto #4
+auto #5
+auto #6
+string #7
+string #8 = "Faktorial nelze spocitat!\n"
+int #01 = 1
+string #9
+auto #02
+auto #11
+auto #12
+string #21
+auto #22
+auto #31
+auto #32
+int #41 = 0
+auto #42
+auto #51
+int a
+string #52 = "Vysledek je: "
+auto #61
+string #62 = "\n"
+string #71
+917,	NULL,	NULL,	#1
+918,	a,	NULL,	NULL
+900,	a,	NULL,	#2
+900,	#3,	NULL,	#4
+906,	#2,	#4,	#5
+900,	#5,	NULL,	#6
+911,	#6,	NULL,	#6
+916,	#6,	NULL,	#7
+917,	NULL,	NULL,	#8
+915,	NULL,	NULL,	#9
+914,	#7,	NULL,	NULL
+900,	#01,	NULL,	#11
+914,	#21,	NULL,	NULL
+900,	a,	NULL,	#31
+900,	#41,	NULL,	#51
+907,	#31,	#51,	#61
+911,	#61,	NULL,	#61
+916,	#61,	NULL,	#71
+900,	a,	NULL,	#81
+900,	#91,	NULL,	#02
+902,	#81,	#02,	#12
+900,	vysl,	NULL,	#22
+900,	a,	NULL,	#32
+903,	#22,	#32,	#42
+915,	NULL,	NULL,	#21
+914,	#71,	NULL,	NULL
+917,	NULL,	NULL,	#52
+917,	NULL,	NULL,	vysl
+917,	NULL,	NULL,	#62
+914,	#9,	NULL,	NULL
+900,	#72,	NULL,	#82
+932,	#82,	NULL,	NULL
+924,	NULL,	NULL,	NULL
+"Zadejte cislo pro vypocet faktorialu: "

@@ -9,10 +9,9 @@
 #include <string.h>
 #include <stdbool.h>
 #include "define.h" //definice konstant
-#include "str.h" 
-#include "ial.h" //funkce find a sort a hashovaci tabulka
+#include "str.h"
 #include "instlist.h" //seznamem instrukci
-#include "stable.h" //tabulka symbolu
+#include "ial.h" //funkce find a sort a hashovaci tabulka
 #include "varframe.h" //ramec promennych
 #include "errors.h" 
 #include "interpret.h"
@@ -30,6 +29,9 @@ int interpret (globalTS *GTS){
   tGData *source4;
   int counter;
 
+//GtablePrintVarsAll (GTS);
+
+
   //vytvori seznam instrukci  
   TinstList LOI;
   ListInit(&LOI);
@@ -46,7 +48,9 @@ int interpret (globalTS *GTS){
   strAddChar(&start, 'i');
   strAddChar(&start, 'n');
 
-  //vyhleda funkci main v globalni tabulce symbolu
+//GTablePrintInst (GTS, &start);
+
+//vyhleda funkci main v globalni tabulce symbolu
   func = GtableSearch(GTS, &start);
   if (func == NULL){
     return SEMANTIC_ERROR;
@@ -80,89 +84,125 @@ int interpret (globalTS *GTS){
     return INTERN_ERROR;
   }
 
+
+// LtablePrintVars (SF->top->proms);
+//  string start;
+/*
+  strInit(&start);
+  strAddChar(&start, '#');
+  strAddChar(&start, '1');
+  source1 = LtableSearch (SF.top->proms, &start);
+  printf("%s\n", source1->varValue.s.str);
+
+char *str1;
+char *str2;
+char *str3;
+
+  if (instr->src1 == NULL){
+      str1 = "NULL\0";
+    }else{
+      str1 = instr->src1->str;
+    }
+    if (instr->src2 == NULL){
+      str2 = "NULL\0";
+    }else{
+      str2 = instr->src2->str;
+    }
+    if (instr->dest == NULL){
+      str3 = "NULL\0";
+    }else{
+      str3 = instr->dest->str;
+    }
+    printf("%d,\t%s,\t%s,\t%s\n", instr->itype, str1, str2, str3);
+
+  source1 = LtableSearch (SF.top->proms, instr->dest);
+  printf("%s\n", source1->varValue.s.str);
+*/
+
   //zavola funkci, ktera provede prislusnou instrukci
   while ( instr->itype != IEND ){
+
     switch (instr->itype){
 
       case IMOV:
-        source1 = VariableSearch(&SF, instr->src1);
-        destination = VariableSearch(&SF, instr->dest);
+        source1 = LtableSearch (SF.top->proms, instr->src1);
+        destination = LtableSearch (SF.top->proms, instr->dest);
         success = move(source1, destination);
       break;
 
       case IADD:
-        source1 = VariableSearch(&SF, instr->src1);
-        source2 = VariableSearch(&SF, instr->src2);
-        destination = VariableSearch(&SF, instr->dest);
+        source1 = LtableSearch (SF.top->proms, instr->src1);
+        source2 = LtableSearch (SF.top->proms, instr->src2);
+        destination = LtableSearch (SF.top->proms, instr->dest);
         success = addition(source1, source2, destination);
       break;
 
       case ISUB:
-        source1 = VariableSearch(&SF, instr->src1);
-        source2 = VariableSearch(&SF, instr->src2);
-        destination = VariableSearch(&SF, instr->dest);
+        source1 = LtableSearch (SF.top->proms, instr->src1);
+        source2 = LtableSearch (SF.top->proms, instr->src2);
+        destination = LtableSearch (SF.top->proms, instr->dest);
         success = substraction(source1, source2, destination);
       break;
 
       case IMUL:
-        source1 = VariableSearch(&SF, instr->src1);
-        source2 = VariableSearch(&SF, instr->src2);
-        destination = VariableSearch(&SF, instr->dest);
+        source1 = LtableSearch (SF.top->proms, instr->src1);
+        source2 = LtableSearch (SF.top->proms, instr->src2);
+        destination = LtableSearch (SF.top->proms, instr->dest);
         success = multiplication(source1, source2, destination);
       break;
 
       case IDIV:
-        source1 = VariableSearch(&SF, instr->src1);
-        source2 = VariableSearch(&SF, instr->src2);
-        destination = VariableSearch(&SF, instr->dest);
+        source1 = LtableSearch (SF.top->proms, instr->src1);
+        source2 = LtableSearch (SF.top->proms, instr->src2);
+        destination = LtableSearch (SF.top->proms, instr->dest);
         success = division(source1, source2, destination);
       break;
 
       case IEQUAL:
-        source1 = VariableSearch(&SF, instr->src1);
-        source2 = VariableSearch(&SF, instr->src2);
-        destination = VariableSearch(&SF, instr->dest);
+        source1 = LtableSearch (SF.top->proms, instr->src1);
+        source2 = LtableSearch (SF.top->proms, instr->src2);
+        destination = LtableSearch (SF.top->proms, instr->dest);
         success = equal(source1, source2, destination);
       break;
 
       case ISMALL:
-        source1 = VariableSearch(&SF, instr->src1);
-        source2 = VariableSearch(&SF, instr->src2);
-        destination = VariableSearch(&SF, instr->dest);
+        source1 = LtableSearch (SF.top->proms, instr->src1);
+        source2 = LtableSearch (SF.top->proms, instr->src2);
+        destination = LtableSearch (SF.top->proms, instr->dest);
         success = smaller(source1, source2, destination);
       break;
 
       case IBIG:
-        source1 = VariableSearch(&SF, instr->src1);
-        source2 = VariableSearch(&SF, instr->src2);
-        destination = VariableSearch(&SF, instr->dest);
+        source1 = LtableSearch (SF.top->proms, instr->src1);
+        source2 = LtableSearch (SF.top->proms, instr->src2);
+        destination = LtableSearch (SF.top->proms, instr->dest);
         success = bigger(source1, source2, destination);
       break;
 
       case IEQSM:
-        source1 = VariableSearch(&SF, instr->src1);
-        source2 = VariableSearch(&SF, instr->src2);
-        destination = VariableSearch(&SF, instr->dest);
+        source1 = LtableSearch (SF.top->proms, instr->src1);
+        source2 = LtableSearch (SF.top->proms, instr->src2);
+        destination = LtableSearch (SF.top->proms, instr->dest);
         success = equalsmaller(source1, source2, destination);
       break;
 
       case IEQBG:
-        source1 = VariableSearch(&SF, instr->src1);
-        source2 = VariableSearch(&SF, instr->src2);
-        destination = VariableSearch(&SF, instr->dest);
+        source1 = LtableSearch (SF.top->proms, instr->src1);
+        source2 = LtableSearch (SF.top->proms, instr->src2);
+        destination = LtableSearch (SF.top->proms, instr->dest);
         success = equalbigger(source1, source2, destination);
       break;
 
       case INOTEQ:
-        source1 = VariableSearch(&SF, instr->src1);
-        source2 = VariableSearch(&SF, instr->src2);
-        destination = VariableSearch(&SF, instr->dest);
+        source1 = LtableSearch (SF.top->proms, instr->src1);
+        source2 = LtableSearch (SF.top->proms, instr->src2);
+        destination = LtableSearch (SF.top->proms, instr->dest);
         success = notequal(source1, source2, destination);
       break;
 
       case INOT:
-        source1 = VariableSearch(&SF, instr->src1);
-        destination = VariableSearch(&SF, instr->dest);
+        source1 = LtableSearch (SF.top->proms, instr->src1);
+        destination = LtableSearch (SF.top->proms, instr->dest);
         success = negation(source1, destination);
       break;
 
@@ -174,64 +214,64 @@ int interpret (globalTS *GTS){
       break;
 
       case IIFGOTO:
-        source1 = VariableSearch(&SF, instr->src1);
+        source1 = LtableSearch (SF.top->proms, instr->src1);
         success = jumpif(source1, instr->dest, &LOI);
       break;
 
       case IREADI:
-        destination = VariableSearch(&SF, instr->dest);
+        destination = LtableSearch (SF.top->proms, instr->dest);
         success = readint(destination);
       break;
 
       case IREADD:
-        destination = VariableSearch(&SF, instr->dest);  
+        destination = LtableSearch (SF.top->proms, instr->dest);  
         success = readdouble(destination);
       break;
 
       case IREADS:
-        destination = VariableSearch(&SF, instr->dest);  
+        destination = LtableSearch (SF.top->proms, instr->dest);  
         success = readstring(destination);
       break;
 
-      case IREAD: 
-        destination = VariableSearch(&SF, instr->dest);
+      case IREAD:
+        destination = LtableSearch (SF.top->proms, instr->src1);
         success = read(destination);
       break;
 
       case IWRITE:
-        source1 = VariableSearch(&SF, instr->src1);  
+        source1 = LtableSearch (SF.top->proms, instr->dest);  
         success = write(source1);
       break;
 
       case IFIND:
-        source1 = VariableSearch(&SF, instr->src1);
-        source2 = VariableSearch(&SF, instr->src2);
-        destination = VariableSearch(&SF, instr->dest);
+        source1 = LtableSearch (SF.top->proms, instr->src1);
+        source2 = LtableSearch (SF.top->proms, instr->src2);
+        destination = LtableSearch (SF.top->proms, instr->dest);
         success = findme(source1, source2, destination);
       break;
 
       case ISORT:
-        source1 = VariableSearch(&SF, instr->src1);
-        destination = VariableSearch(&SF, instr->dest);
+        source1 = LtableSearch (SF.top->proms, instr->src1);
+        destination = LtableSearch (SF.top->proms, instr->dest);
         success = sortme(source1, destination);
       break;
 
       case ICAT:
-        source1 = VariableSearch(&SF, instr->src1);
-        source2 = VariableSearch(&SF, instr->src2);
-        destination = VariableSearch(&SF, instr->dest);
+        source1 = LtableSearch (SF.top->proms, instr->src1);
+        source2 = LtableSearch (SF.top->proms, instr->src2);
+        destination = LtableSearch (SF.top->proms, instr->dest);
         success = concatenate(source1, source2, destination);
       break;
 
       case ILENGTH:
-        source1 = VariableSearch(&SF, instr->src1);
-        destination = VariableSearch(&SF, instr->dest);
+        source1 = LtableSearch (SF.top->proms, instr->src1);
+        destination = LtableSearch (SF.top->proms, instr->dest);
         success = lengthstring(source1, destination);
       break;
 
       case ISUBSTR1:
-        source1 = VariableSearch(&SF, instr->src1);
-        destination = VariableSearch(&SF, instr->dest);
+        source1 = LtableSearch (SF.top->proms, instr->src1);
+        destination = LtableSearch (SF.top->proms, instr->dest);
         //nacte dalsi instrukci (ocekava ISUBSTR2)
         ListSucc(&LOI);
         instr = ListGetInst(&LOI);
@@ -241,8 +281,8 @@ int interpret (globalTS *GTS){
         }
         //pokud byla ISUBSTR2 provede funkci. jinak chyba.
         if (instr->itype == ISUBSTR2){
-          source2 = VariableSearch(&SF, instr->src1);
-          source3 = VariableSearch(&SF, instr->src2);
+          source2 = LtableSearch (SF.top->proms, instr->src1);
+          source3 = LtableSearch (SF.top->proms, instr->src2);
           success = substring(source1, source2, source3, destination);
         }else{
           success = INTERN_ERROR;
@@ -256,7 +296,7 @@ int interpret (globalTS *GTS){
 
       case IPAR:
         source4 = GtableSearch(GTS, instr->src1);
-        source2 = VariableSearch(&SF, instr->src2);
+        source2 = LtableSearch (SF.top->proms, instr->src2);
         success = parametr(source4, source2, newF, counter);
         counter++;
       break;
@@ -267,7 +307,7 @@ int interpret (globalTS *GTS){
       break;
 
       case IRET:
-        source1 = VariableSearch(&SF, instr->src1);        
+        source1 = LtableSearch (SF.top->proms, instr->src1);        
         success = ret(source1, &SF);
       break;
 
@@ -1449,7 +1489,7 @@ int jumpif(tLData *src1, string *dest, TinstList *LOI){
   if (!src1->isinit){
     return UNINIT_ERROR;
 
-  }else if (src1->varValue.i) {
+  }else if (src1->varValue.i == 1) {
     return ListGoto(LOI, dest);
   }else{
     return SUCCESS;
@@ -1465,6 +1505,7 @@ int readint(tLData *dest){
     return READ_NUM_ERROR;
   }
   dest->isinit = true;
+//  printf("nacteno\n");
   return SUCCESS;
 }
 
