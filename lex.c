@@ -106,7 +106,7 @@ int getNextToken(string *attr){
  //                   strAddChar(attr, c);
                     return TOK_STR;
                 } else if(c == 92){ // ASCII 92 je zpetne lomitko
-                    strAddChar(attr, c);
+ //                   strAddChar(attr, c);
                     stav = STATE_ESCAPE_SEQUENCE;
                 } else if (c == EOF){
                     ungetc(c, sourceFile);
@@ -119,10 +119,20 @@ int getNextToken(string *attr){
                 }
                 break;
             case STATE_ESCAPE_SEQUENCE:
-                if(c == 'n' || c == 92 || c == 't' || c == '"'){
-                    strAddChar(attr, c);
+                if(c == 'n'){
+         	    strAddChar(attr, '\n');
+                    stav = STATE_STRING;
+		} else if (c == 92){
+		    strAddChar(attr, '\\');
+                    stav = STATE_STRING;
+		} else if (c == 't'){
+		    strAddChar(attr, '\t');
+                    stav = STATE_STRING;
+		} else if (c == '"'){
+//                    strAddChar(attr, c);
                     stav = STATE_STRING;
                 } else if (c == 'x'){
+                    strAddChar(attr, 92);
                     strAddChar(attr, c);
                     stav = STATE_HEXA_CHAR;
                 } else {
