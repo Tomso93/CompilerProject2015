@@ -58,7 +58,7 @@ int list_par(globalTS *global_table, string *id, string *funcid);
 
 int list_par_n(globalTS *global_table, string *id, string *funcid);
 
-int _i_prom(globalTS *global_table, string *id);
+int _i_prom(globalTS *global_table, string *id, string *backid);
 
 int type();
 
