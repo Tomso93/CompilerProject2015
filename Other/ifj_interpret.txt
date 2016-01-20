@@ -1,0 +1,7 @@
+Interpret je poslední fází pøekladaèe. 
+Prvnì vyhledá v globální tabulce symbolù funkci main. Její lokální tabulku symbolù uloží na zásobník a zaène provádìt instrukce na její instrukèní pásce, dokud nenarazí na konec.
+Pøi provádìní instrukcí kontroluje nìkteré sémantické chyby, jako jsou práce s neinicializovanou promennou nebo typová kompatibilita operací.
+Pøí volání funkce dojde k vložení lokální tabulky symbolù volané funkce na vrchol zásobníku. A k naètení její instrukèní pásky.
+Po dokonèení instrukcí volané funkce se odstraní její tabulka symbolù ze zásobníku. Návratová hodnota funce je vždy uložena v promìnné #RETURN.
+Pokraèuje se na následující instrukci volající funkce.
+ 

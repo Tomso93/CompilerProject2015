@@ -1,0 +1,9 @@
+První cástí interpretu je Lexikální analyzátor, který zpracovává
+kód ze vstupního souboru a delí ho na jednotlivé jednotky, neboli tokeny.
+Nejlépe bývá implementován pomocí tzv. konecného automatu, což jsme zvolili i my. 
+Pro jednoduchou predstavu jsme uvedli následujicí kód, jedná se o jednoduchou deklaraci a inicializaci promnené.
+Lexikální analýza nejprve tento kód zbavý komentáru a nepotrebných bílých znaku. 
+Dále pak je kód po jednotlivých znacích nacítán a pomocí ruzných stavu identifikován.
+Tento zjednodušený diagram našeho konecného automatu "pozvedni ruku a ukaž na diagram unicorne! :D "
+názorne ukazuje jak lexikální analýza identifikuje
+klícové slova a identifikátory.

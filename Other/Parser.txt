@@ -1,0 +1,11 @@
+Další èástí, nejdùležijtìjší je parser. Parser si volá postupnì volá tokeny, které zpracovává. Pokud jsou tokeny správné, 
+tak si parser vytváøí derivaèní strom. Pokud mu dojde token, který není oèekáván, dojde ke syntaktické chybì a program
+je ukonèen se syntaktickou chybou a pøeklad se dál neprovádí. To znamená, že v parseru není uvažováno žádné zotavení.
+Pareser je tvoøen rekurzivním sestupem, který jak už bylo øeèeno vytvoøí derivaèní strom. Pro rekurzní sestup námi byla
+navrhnuta LL gramatika, která odpovídá interpretu IFJ15. To znamená, že implentovány jednotlivé Neterminály byly reprezentovány
+jednotlivými funkcemi, které byly v pøípadì daného pravidla volané. Gramatika neobsahuje žádné rozšíøení. Správnou syntaxi výrazù
+kontroluje precedenèní syntaktická analýza, pro kterou byla navržena precedenèní tabulka symbolù. Samotná precedeèní analýza
+je založena na zásboníku, do kterého si ukládáme terminály, s ktrými dále pracuje, redukujem. Bìhem kontroly syntatické analýzy 
+se provadí ukládáná do tabulky symbolù. 
+Dále se kontroluje sémantika, pøedevším, zda identifikátor stejného názvu nebyl již uložen do tabulky symbolù. Souèástí parseru
+je taky generování instrukcí na intrukèní pásku, kterou si dále zároveò s tabulkou symbolù zpracovává interpret,........
